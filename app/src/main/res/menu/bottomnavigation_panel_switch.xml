@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/mainPanelFragment"
+        android:icon="@drawable/main"
+        android:title="Main Panel" />
+    <item
+        android:id="@+id/billingPanelFragment"
+        android:icon="@drawable/billing"
+        android:title="Billing Panel" />
+    <item
+        android:id="@+id/retailerPanelFragment"
+        android:icon="@drawable/retailer"
+        android:title="Retailer Panel" />
+
+</menu>

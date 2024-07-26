@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainPanelFragment">
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+
+        <LinearLayout
+            android:id="@+id/topLayout"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            android:background="@color/white"
+            app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.2"
+                    android:layout_height="match_parent"
+                    android:text="Total Stocks \n \n 40"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"
+
+                    />
+
+            <StackView
+                android:id="@+id/idStackView"
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                tools:listitem="@layout/category_stocks"
+
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
+
+                android:layout_height="match_parent"
+                android:text="Total sold\n \n120"
+                android:padding="10dp"
+                android:layout_marginTop="10dp"
+
+                />
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/device_name_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/topLayout"
+
+            app:layout_constraintRight_toRightOf="parent"
+  >
+
+            <!-- Inside text input layout add
+                  an auto complete text view
+                    and make its input type to none-->
+            <AutoCompleteTextView
+                android:id="@+id/device_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:inputType="none"
+                android:text="Select Device Name"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/device_model_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+           app:layout_constraintTop_toBottomOf="@id/device_name_layout">
+
+            <!-- Inside text input layout add
+                  an auto complete text view
+                    and make its input type to none-->
+            <AutoCompleteTextView
+                android:id="@+id/device_model"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:inputType="none"
+                android:text="Select Device Model"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <EditText
+            android:id="@+id/quantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/device_model_layout"
+            android:layout_marginTop="40dp"
+            android:hint="Quantity"
+            />
+        <Button
+            android:id="@+id/button_first"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

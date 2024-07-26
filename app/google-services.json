@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "576503878859",
+    "firebase_url": "https://imagine-bc615-default-rtdb.firebaseio.com",
+    "project_id": "imagine-bc615",
+    "storage_bucket": "imagine-bc615.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576503878859:android:f43e322f03e6ce347ef74e",
+        "android_client_info": {
+          "package_name": "com.isar.imagine"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDS-2I1vnITe1WdOMCCH-lyKOD83cX_ces"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

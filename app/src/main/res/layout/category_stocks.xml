@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="200dp"
+    android:layout_height="100dp"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:gravity="center">
+    <!-- on below line creating an image view for displaying an image -->
+
+    <TextView
+        android:id="@+id/count"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:padding="10dp"
+        android:layout_centerInParent="true"
+        android:text="1213fagfffd"
+        android:maxLines="1"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+/>
+    <TextView
+        android:id="@+id/brandName"
+        android:layout_width="200dp"
+        android:layout_height="30dp"
+        android:text="Samsung"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:textSize="18sp"/>
+
+</LinearLayout>
