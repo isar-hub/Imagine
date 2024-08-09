@@ -374,6 +374,7 @@ listViewInitialize(view = binding.root)
 
             }.show()
     }
+    // TODO : add save button functon camera properly and generate bill and  
     private fun showItemDialog(serialNum: String, message: String, positive: String) {
 
         AlertDialog.Builder(this@BillingPanelFragment).setTitle(serialNum).setMessage(message)
