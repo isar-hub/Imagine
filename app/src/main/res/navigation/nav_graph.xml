@@ -3,21 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainPanelFragment">
+    app:startDestination="@+id/retailerPanelFragment"
+   >
 
-    <fragment
-        android:id="@+id/mainPanelFragment"
-        android:name="com.isar.imagine.MainPanelFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
-
-    </fragment>
-    <fragment
-        android:id="@+id/billingPanelFragment"
-        android:name="com.isar.imagine.BillingPanelFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-    </fragment>
     <fragment
         android:id="@+id/retailerPanelFragment"
         android:name="com.isar.imagine.RetailerPanelFragment"

@@ -10,9 +10,9 @@ import com.isar.imagine.responses.StackViewList
 
 class StackViewAdapter
     (
-    var con : Context,
-    var resource: Int ,
-    var list: ArrayList<StackViewList>,
+    private var con : Context,
+    private var resource: Int,
+    private var list: ArrayList<StackViewList>,
 ) : ArrayAdapter<Any?>(
     con,resource, list as List<Any?>
 ) {

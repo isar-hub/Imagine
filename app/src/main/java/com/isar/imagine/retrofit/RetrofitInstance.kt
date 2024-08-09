@@ -5,8 +5,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance{
-    private const val BASE_URL ="https://mobile-phone-specs-database.p.rapidapi.com/gsm/"
+    private const val BASE_URL ="https://restapitutorial-production.up.railway.app/"
 
+
+    //https://restapitutorial-production.up.railway.app/
     fun getInstance(): Retrofit {
         val client = OkHttpClient()
         val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -18,6 +20,9 @@ object RetrofitInstance{
             .client(clientBuilder.build())
             .build()
     }
+
+
+
 
      fun getApiInterface(): ApiInterface {
        return RetrofitInstance.getInstance().create(ApiInterface::class.java)

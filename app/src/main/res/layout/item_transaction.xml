@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:background="?android:attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/textview_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Date"
+        android:textStyle="bold"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/textview_brand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Brand"/>
+
+    <TextView
+        android:id="@+id/textview_model"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Model"/>
+
+    <TextView
+        android:id="@+id/textview_variant"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Variant"/>
+
+    <TextView
+        android:id="@+id/textview_color"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Color"/>
+
+    <TextView
+        android:id="@+id/textview_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quantity"/>
+
+    <TextView
+        android:id="@+id/textview_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Price"/>
+
+    <TextView
+        android:id="@+id/textview_total_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Price"/>
+
+    <TextView
+        android:id="@+id/textview_condition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Condition"/>
+
+    <TextView
+        android:id="@+id/textview_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"/>
+</LinearLayout>

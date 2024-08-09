@@ -59,6 +59,13 @@
                 android:hint="Name"
                 android:inputType="textPersonName"
                 android:paddingBottom="8dp" />
+            <EditText
+                android:id="@+id/etCustomerEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textPersonName"
+                android:paddingBottom="8dp" />
 
             <EditText
                 android:id="@+id/etMobileNumber"
@@ -98,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:hint="PinCode"
                     android:layout_marginStart="5dp"
-                    android:inputType="textPostalAddress"
+                    android:inputType="phone"
                     android:paddingBottom="16dp" />
             </LinearLayout>
 
@@ -110,7 +117,7 @@
 
           >
                 <AutoCompleteTextView
-                    android:id="@+id/device_model"
+                    android:id="@+id/state"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -171,6 +178,10 @@
                 android:background="@color/ColorPrimary"
                 android:text="Click here to Upload Signature" />
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+               >
             <Button
                 android:id="@+id/btnSubmit"
                 android:layout_width="match_parent"
@@ -179,6 +190,16 @@
                 android:textStyle="bold"
                 android:textColor="@android:color/white" />
 
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progress_circular"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:indicatorColor="@color/black"
+                    android:layout_centerInParent="true"
+                    android:visibility="gone"
+
+                    />
+            </RelativeLayout>
 
         </LinearLayout>
 

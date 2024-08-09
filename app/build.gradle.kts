@@ -7,10 +7,12 @@ plugins {
 android {
     namespace = "com.isar.imagine"
     compileSdk = 34
-
+    packagingOptions {
+        exclude ("META-INF/*")
+    }
     defaultConfig {
         applicationId = "com.isar.imagine"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -71,4 +73,14 @@ dependencies {
     implementation (libs.converter.gson)
     implementation (libs.logging.interceptor)
     implementation (libs.core)
+    implementation (libs.pdfview.android)
+    //firebse
+        implementation(platform(libs.firebase.bom))
+        implementation(libs.firebase.storage)
+    implementation(libs.poi.v530)
+    implementation(libs.poi.ooxml)
+    implementation (libs.pdf.invoice.generator)
+
+
+
 }

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.InventoryFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Brand Name Spinner -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="Brand Name" />
+
+            <!-- Model Spinner -->
+            <Spinner
+                android:id="@+id/spinner_brand_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:prompt="@string/brand" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="Model" />
+
+            <Spinner
+                android:id="@+id/spinner_model"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:prompt="@string/model"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Variant Spinner -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="Variant" />
+
+            <Spinner
+                android:id="@+id/spinner_variant"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:prompt="@string/variant"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Color Spinner -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="Color" />
+
+            <Spinner
+                android:id="@+id/spinner_color"
+                style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:prompt="@string/color"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Condition Spinner -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="Condition" />
+
+            <Spinner
+                android:id="@+id/spinner_condition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:prompt="@string/condition"
+                android:layout_marginBottom="16dp" />
+
+
+
+
+            <!-- Price EditText -->
+            <!-- Price EditText -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="Purchase Price" />
+
+            <EditText
+                android:id="@+id/edittext_purchase_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="Enter Purchase price"
+                android:inputType="numberDecimal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="Selling Price" />
+
+            <EditText
+                android:id="@+id/edittext_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="Enter Selling price"
+                android:inputType="numberDecimal" />
+
+
+            <!-- Quantity EditText -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="Quantity" />
+
+            <EditText
+                android:id="@+id/edittext_quantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="Enter quantity"
+                android:inputType="number" />
+            <!-- Description EditText -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="Notes" />
+
+            <EditText
+                android:id="@+id/edittext_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="Enter Notes" />
+            <!-- Add Button -->
+            <Button
+                android:id="@+id/buttonAdd"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Add" />
+
+
+            <TextView
+                android:id="@+id/text_total_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Total :" />
+
+
+            <ExpandableListView
+                android:id="@+id/listView"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginTop="16dp"
+                android:nestedScrollingEnabled="true"
+                 />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
+
+
+                <Button
+                    android:id="@+id/button_save"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Save" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:progressBackgroundTint="@color/black"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</FrameLayout>

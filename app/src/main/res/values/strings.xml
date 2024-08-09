@@ -8,14 +8,16 @@
     <string name="previous">Previous</string>
 
 
-
-
-
     <string name="hint_sign">Get Signature</string>
     <string name="dialog_title">SIGN HERE</string>
     <string name="hint_cancel">Cancel</string>
     <string name="hint_clear">Clear</string>
     <string name="hint_save">Save</string>
+    <string name="condition">Please Select Condition</string>
+    <string name="brand">Please Select Brand Name</string>
+    <string name="model">Please Select Model Name</string>
+    <string name="variant">Please Select Variation</string>
+    <string name="color">Please Select Color</string>
 
     <string-array name="programming_languages">
         <item>vivo</item>
@@ -69,6 +71,7 @@
 
     </string-array>
 
+    <string name="totalCountPlaceHolder" formatted="true">Total Count \n\n %s</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_login">LoginActivity</string>
@@ -80,4 +83,5 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="long_message">isar\n</string>
 </resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:id="@+id/drawer_menu_top"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/dashboard"
+            android:title="Dashboard"
+            android:checked="true"
+            android:icon="@drawable/logo"
+            />
+        <item
+            android:id="@+id/inventory"
+            android:title="Inventory"
+            android:icon="@drawable/logo"
+           />
+        <item
+            android:id="@+id/transactions"
+            android:title="Transactions"
+            android:icon="@drawable/logo"
+            />
+        <item
+
+            android:id="@+id/warranty"
+            android:title="Warranty"
+            android:icon="@drawable/logo"
+         />
+    </group>
+
+    <group
+        android:id="@+id/drawer_menu_bottom"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/retailer"
+            android:title="Retailers"
+            android:icon="@drawable/logo"
+            />
+        <item  android:id="@+id/customer"
+            android:title="Customers"
+            android:icon="@drawable/logo"
+            />
+    </group>
+</menu>

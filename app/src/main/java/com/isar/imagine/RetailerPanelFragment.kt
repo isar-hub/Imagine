@@ -80,11 +80,6 @@ class RetailerPanelFragment : Fragment() {
 
         binding.scanDevice.setOnClickListener{
             checkForPermissions()
-
-
-
-
-
         }
 
     }
@@ -192,6 +187,9 @@ class RetailerPanelFragment : Fragment() {
                     //Don't forget to add this line printing value or finishing activity must run on main thread
                     activity?.runOnUiThread {
                         cameraSource.stop()
+                        
+
+
                         Toast.makeText(context, "value- $scannedValue", Toast.LENGTH_SHORT).show()
                         val intent = Intent(activity,UserDetailsActivity::class.java).apply {
                             putExtra("id", scannedValue)
@@ -199,7 +197,7 @@ class RetailerPanelFragment : Fragment() {
                         startActivity(intent)
 
                     }
-                }else
+                }else   
                 {
 
                     Toast.makeText(context, "value- else", Toast.LENGTH_SHORT).show()

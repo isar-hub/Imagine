@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.isar.imagine.Fragments.DashboardFragment"
+        android:label="dashboard"
+        tools:layout="@layout/fragment_dashboard"/>
+
+    <fragment
+        android:id="@+id/inventoryFragment"
+        android:name="com.isar.imagine.Fragments.InventoryFragment"
+        android:label="inventory"
+
+        tools:layout="@layout/fragment_inventory">
+
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/transactionsFragment"
+        android:name="com.isar.imagine.Fragments.TransactionsFragment"
+        android:label="transactions"
+        tools:layout="@layout/fragment_transactions"/>
+    <fragment
+        android:id="@+id/warrantyFragment"
+        android:name="com.isar.imagine.Fragments.WarrantyFragment"
+        android:label="warranty"
+        tools:layout="@layout/fragment_warranty"/>
+    <fragment
+        android:id="@+id/retailerFragment"
+        android:name="com.isar.imagine.Fragments.RetailerFragment"
+        android:label="retailers"
+        tools:layout="@layout/fragment_retailer"/>
+    <fragment
+        android:id="@+id/customerFragment"
+        android:name="com.isar.imagine.Fragments.CustomerFragment"
+        android:label="customers"
+        tools:layout="@layout/fragment_customer"/>
+
+</navigation>

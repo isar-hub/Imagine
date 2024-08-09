@@ -1,5 +1,6 @@
 package com.isar.imagine
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -36,11 +37,11 @@ class MainActivity : AppCompatActivity() {
         when (userName) {
             "3" -> {
                 Log.e("Test", "Navigating to mainPanelFragment")
-                navController.navigate(R.id.mainPanelFragment)
+                startActivity(Intent(this@MainActivity,MainPanelFragment::class.java))
             }
             "2" -> {
                 Log.e("Test", "Navigating to billingPanelFragment")
-                navController.navigate(R.id.billingPanelFragment)
+                startActivity(Intent(this@MainActivity, BillingPanelFragment::class.java))
             }
             "1" -> {
                 Log.e("Test", "Navigating to retailerPanelFragment")

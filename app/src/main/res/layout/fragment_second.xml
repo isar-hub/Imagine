@@ -1,43 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".BillingPanelFragment">
 
-
-
-    <SurfaceView
-        android:id="@+id/cameraSurfaceView"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:titleTextColor="@android:color/white"
+        app:navigationIcon="@drawable/baseline_arrow_back_ios_new_24">
+
+    </androidx.appcompat.widget.Toolbar>
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:layout_width="200dp"
         android:layout_height="200dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_below="@+id/toolbar"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
 
-    <View
-        android:id="@+id/barcode_line"
+        >
+
+        <SurfaceView
+            android:id="@+id/cameraSurfaceView"
+            android:layout_width="200dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            android:layout_height="200dp" />
+
+        <View
+            android:id="@+id/barcode_line"
+            android:layout_width="200dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_centerInParent="true"
+            android:background="#951C1C"
+            />
+        <!-- Barcode Input -->
+
+    </RelativeLayout>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:background="#951C1C"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relative"
+        android:id="@+id/scrollable"
+        >
+
+        <LinearLayout
+
+            android:id="@+id/linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <ExpandableListView
+                android:id="@+id/listViewBilling"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="16dp"
+                android:nestedScrollingEnabled="true"
+                android:layout_below="@+id/scrollable"
+                />
 
 
-<!--        <Button-->
-<!--            android:id="@+id/button_second"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/previous"-->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                >
 
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Select Retailer"
+                    />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.textfield.TextInputLayout>
+            <!-- Send Bill -->
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Add Quantity"
+                android:inputType="number"
+                android:layout_marginTop="16dp"/>
+
+            <Button
+                android:id="@+id/btnSendBill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="Save" />
+
+
+            <Button
+                android:id="@+id/Save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="Send Bill" />
+
+
+        </LinearLayout>
+
+
+
+
+    </ScrollView>
+
+</RelativeLayout>

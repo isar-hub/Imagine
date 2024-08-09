@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.RetailerFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".Fragments.RetailerFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Search Retailer Section -->
+            <SearchView
+                android:id="@+id/svRetailerSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:queryHint="Search Retailer"/>
+
+            <!-- RecyclerView to List Retailers -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRetailers"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="16dp"/>
+
+            <!-- Retailer Details Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:id="@+id/tvRetailerDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Retailer Details"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/tvWarrantyPhones"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total Phones in Warranty: 0"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/tvTotalItems"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total Items Given to Retailer: 0"
+                    android:textSize="16sp"/>
+            </LinearLayout>
+
+            <!-- Add New Retailer Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="32dp">
+
+                <TextView
+                    android:id="@+id/tvAddRetailer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add New Retailer"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
+
+                <EditText
+                    android:id="@+id/etRetailerName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Retailer Name"
+                    android:inputType="textPersonName"/>
+
+                <Button
+                    android:id="@+id/btnAddRetailer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Retailer"
+                    android:layout_marginTop="16dp"/>
+            </LinearLayout>
+
+            <!-- Generate ID and Password Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="32dp">
+
+                <TextView
+                    android:id="@+id/tvGenerateIdPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Generate ID &amp; Password"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
+
+                <Button
+                    android:id="@+id/btnGenerateIdPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Generate"/>
+            </LinearLayout>
+
+            <!-- Send Notification Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="32dp">
+
+                <TextView
+                    android:id="@+id/tvSendNotification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Send Notification"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"/>
+
+                <Button
+                    android:id="@+id/btnSendNotification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Send"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>
