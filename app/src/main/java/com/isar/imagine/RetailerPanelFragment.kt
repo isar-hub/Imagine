@@ -18,12 +18,14 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
+import com.isar.imagine.databinding.ActivityMainBinding
 import com.isar.imagine.databinding.FragmentFirstBinding
 import com.isar.imagine.databinding.FragmentRetailerPanelBinding
 import com.karumi.dexter.Dexter
@@ -34,17 +36,10 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 import java.io.IOException
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-private val requestCodeCameraPermission = 1001
-lateinit var cameraSource: CameraSource
-private lateinit var barcodeDetector: BarcodeDetector
-private var scannedValue = ""
 
-class RetailerPanelFragment : Fragment() {
+
+class RetailerPanelFragment :AppCompatActivity() {
     private var _binding: FragmentRetailerPanelBinding? = null
 
     // This property is only valid between onCreateView and
@@ -53,6 +48,9 @@ class RetailerPanelFragment : Fragment() {
 
     private lateinit var context : Context
     lateinit var dexter : Dexter
+    lateinit var cameraSource: CameraSource
+    private lateinit var barcodeDetector: BarcodeDetector
+    private var scannedValue = ""
 
 
 
@@ -60,29 +58,19 @@ class RetailerPanelFragment : Fragment() {
             result -> dexter.check()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
 
-        _binding = FragmentRetailerPanelBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    }
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        this.context = context
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentRetailerPanelBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
 
         binding.scanDevice.setOnClickListener{
             checkForPermissions()
         }
-
     }
+
 
 
     private fun checkForPermissions() {
@@ -142,7 +130,7 @@ class RetailerPanelFragment : Fragment() {
             .setAutoFocusEnabled(true) //you should add this feature
             .build()
 
-        binding.cameraSurfaceView.getHolder().addCallback(object : SurfaceHolder.Callback {
+        binding.cameraSurfaceView.holder.addCallback(object : SurfaceHolder.Callback {
             @SuppressLint("MissingPermission")
             override fun surfaceCreated(holder: SurfaceHolder) {
                 try {
@@ -179,19 +167,19 @@ class RetailerPanelFragment : Fragment() {
                     .show()
             }
 
-            override fun receiveDetections(detections: com.google.android.gms.vision.Detector.Detections<Barcode>) {
+            override fun receiveDetections(detections: Detector.Detections<Barcode>) {
                 val barcodes = detections.detectedItems
                 if (barcodes.size() == 1) {
                     scannedValue = barcodes.valueAt(0).rawValue
 
                     //Don't forget to add this line printing value or finishing activity must run on main thread
-                    activity?.runOnUiThread {
+                    runOnUiThread {
                         cameraSource.stop()
                         
 
 
                         Toast.makeText(context, "value- $scannedValue", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(activity,UserDetailsActivity::class.java).apply {
+                        val intent = Intent(this@RetailerPanelFragment,UserDetailsActivity::class.java).apply {
                             putExtra("id", scannedValue)
                         }
                         startActivity(intent)
@@ -207,17 +195,10 @@ class RetailerPanelFragment : Fragment() {
         })
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         _binding = null
         cameraSource.stop()
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        _binding = null
-
-        cameraSource.stop()
-
-    }
 }

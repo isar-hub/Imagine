@@ -1,6 +1,7 @@
 package com.isar.imagine
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.media.ToneGenerator
@@ -19,6 +20,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.camera.core.CameraProvider
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.app.DialogCompat
 import androidx.core.content.ContextCompat
@@ -27,6 +33,7 @@ import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.util.concurrent.ListenableFuture
 import com.isar.imagine.Adapters.InventoryExpandableListAdapter
 import com.isar.imagine.data.Retailer
 import com.isar.imagine.data.model.InventoryItem
@@ -39,6 +46,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class BillingPanelFragment : AppCompatActivity() {
 
@@ -52,6 +61,7 @@ class BillingPanelFragment : AppCompatActivity() {
     private lateinit var binding: FragmentSecondBinding
 
     private lateinit var inventoryItem: MutableList<ItemWithSerialResponse>
+    private lateinit var cameraExecutor: ExecutorService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,11 +71,9 @@ class BillingPanelFragment : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
 
-        toneGen1 = ToneGenerator(AudioManager.STREAM_MUSIC, 100)
-        surfaceView = binding.cameraSurfaceView
 
         Log.d("BillingPanelFragment", "Checking camera permission")
-
+        cameraExecutor = Executors.newSingleThreadExecutor()
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.CAMERA
             ) != PackageManager.PERMISSION_GRANTED
@@ -83,7 +91,7 @@ listViewInitialize(view = binding.root)
         setupListeners()
 
         val aniSlide: Animation =
-            AnimationUtils.loadAnimation(this, com.isar.imagine.R.anim.scanner_animation)
+            AnimationUtils.loadAnimation(this, R.anim.scanner_animation)
         binding.barcodeLine.startAnimation(aniSlide)
     }
 
@@ -105,80 +113,54 @@ listViewInitialize(view = binding.root)
                 setupControls()
 
             } else {
-                Log.d("BillingPanelFragment", "Camera permission denied")
-                Toast.makeText(this, "Camera permission is required", Toast.LENGTH_LONG).show()
+                AlertDialog.Builder(this)
+                    .setTitle("Permission required")
+                    .setMessage("This application needs to access the camera to process barcodes")
+                    .setPositiveButton("Ok") { _, _ ->
+                        // Keep asking for permission until granted
+                        askForCameraPermission()
+                    }
+                    .setCancelable(false)
+                    .create()
+                    .apply {
+                        setCanceledOnTouchOutside(false)
+                        show()
+                    }
             }
         }
     }
 
     private fun setupControls() {
         Log.d("BillingPanelFragment", "Setting up barcode detector and camera source")
-        binding.cameraSurfaceView.visibility = View.VISIBLE
-
-
-        barcodeDetector =
-            BarcodeDetector.Builder(this).setBarcodeFormats(Barcode.ALL_FORMATS).build()
-
-        cameraSource = CameraSource.Builder(this, barcodeDetector).setAutoFocusEnabled(true).build()
-
-        surfaceView.holder.addCallback(object : SurfaceHolder.Callback {
-            override fun surfaceCreated(holder: SurfaceHolder) {
-                Log.d("BillingPanelFragment", "Surface created, starting camera")
-                try {
-                    if (ActivityCompat.checkSelfPermission(
-                            this@BillingPanelFragment, Manifest.permission.CAMERA
-                        ) == PackageManager.PERMISSION_GRANTED
-                    ) {
-                        cameraSource.start(surfaceView.holder)
-                        Log.d("BillingPanelFragment", "Camera started successfully")
-                    } else {
-                        Log.d(
-                            "BillingPanelFragment",
-                            "Camera permission not granted, requesting permission"
-                        )
-                        askForCameraPermission()
-                    }
-                } catch (e: IOException) {
-                    Log.e("BillingPanelFragment", "Error starting camera", e)
-                    e.printStackTrace()
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+        cameraProviderFuture.addListener({
+            val cameraProvider = cameraProviderFuture.get()
+            val preview = Preview.Builder()
+                .build()
+                .also {
+                    it.setSurfaceProvider(binding.previewView.surfaceProvider)
                 }
-            }
-
-            override fun surfaceChanged(
-                holder: SurfaceHolder, format: Int, width: Int, height: Int
-            ) {
-                Log.d("BillingPanelFragment", "Surface changed")
-            }
-
-            override fun surfaceDestroyed(holder: SurfaceHolder) {
-                Log.d("BillingPanelFragment", "Surface destroyed, stopping camera")
-                cameraSource.stop()
-            }
-        })
-
-        barcodeDetector.setProcessor(object : Detector.Processor<Barcode> {
-            override fun release() {
-                Log.d("BillingPanelFragment", "Releasing barcode detector resources")
-            }
-
-            override fun receiveDetections(detections: Detector.Detections<Barcode>) {
-                val barcodes = detections.detectedItems
-                if (barcodes.size() > 0) {
-                    scannedValue = barcodes.valueAt(0).displayValue
-                    Log.d("BillingPanelFragment", "Barcode detected: $scannedValue")
-
-                    if (scannedValue.isNotEmpty() && scannedValue.length == 14) {
-                        callApiForSearch(scannedValue)
-                    } else
-                    {
-                        runOnUiThread {
-                            showItemDialog("Error !!", "Please Scan Barcode correctly ${scannedValue}", "Ok")
-
-                        }
-                    }
+            val imageAnalyzer = ImageAnalysis.Builder()
+                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .build()
+                .also {
+//                    it.setAnalyzer(cameraExecutor, BarCodeAnalyzer())
                 }
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            try {
+                // Unbind use cases before rebinding
+                cameraProvider.unbindAll()
+
+                // Bind use cases to camera
+                cameraProvider.bindToLifecycle(
+                    this, cameraSelector, preview, imageAnalyzer
+                )
+
+            } catch (exc: Exception) {
+                exc.printStackTrace()
             }
-        })
+        }, ContextCompat.getMainExecutor(this))
+
     }
 
 
@@ -222,7 +204,7 @@ listViewInitialize(view = binding.root)
         )
 
         val pdfGenerator = InvoiceGenerator(this).apply {
-            setInvoiceLogo(com.isar.imagine.R.drawable.app_logo) // Set invoice logo
+            setInvoiceLogo(R.drawable.app_logo) // Set invoice logo
             setCurrency("₹") // Set invoice currency
             setInvoiceColor("#FFFFFF") // Set invoice color
         }
@@ -308,7 +290,7 @@ listViewInitialize(view = binding.root)
                 // Handle query submission if needed
                 if (!query.isNullOrEmpty() && query.length == 14) {
                     Log.e("Search", "new text ${query}")
-                    callApiForSearch(query);
+                    callApiForSearch(query)
                 } else if (query.isNullOrEmpty()) {
                     showItemDialog("Error!!", "Please write Serial Number", "Ok")
 
@@ -374,7 +356,7 @@ listViewInitialize(view = binding.root)
 
             }.show()
     }
-    // TODO : add save button functon camera properly and generate bill and  
+    // TODO : add save button function camera properly and generate bill and
     private fun showItemDialog(serialNum: String, message: String, positive: String) {
 
         AlertDialog.Builder(this@BillingPanelFragment).setTitle(serialNum).setMessage(message)

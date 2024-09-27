@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -55,32 +56,43 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.activity)
     implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.object1.detection.common)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.functions)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-//camera
-
-    implementation( libs.androidx.camera.camera2)
-    implementation( libs.androidx.camera.lifecycle)
-    implementation(libs.androidx.camera.view)
-    implementation (libs.androidx.camera.extensions)
 
     //dexter
-    implementation (libs.dexter)
-    implementation (libs.retrofit)
-    implementation (libs.play.services.vision)
+    implementation(libs.dexter)
+    implementation(libs.retrofit)
+    implementation(libs.play.services.vision)
     // gson converter
-    implementation (libs.converter.gson)
-    implementation (libs.logging.interceptor)
-    implementation (libs.core)
-    implementation (libs.pdfview.android)
-    //firebse
-        implementation(platform(libs.firebase.bom))
-        implementation(libs.firebase.storage)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+    implementation(libs.core)
+    //firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.storage)
+
+    //poi for creating excel
     implementation(libs.poi.v530)
     implementation(libs.poi.ooxml)
-    implementation (libs.pdf.invoice.generator)
+    //pdf generator library
+    implementation(libs.pdf.invoice.generator)
 
 
+// Barcode scanning API
+    implementation(libs.barcode.scanning.v1703)
+// CameraX library
+
+    implementation(libs.androidx.camera.camera2.v101)
+    implementation(libs.androidx.camera.lifecycle.v101)
+    implementation(libs.androidx.camera.view.v100alpha28)
+
+
+
+    implementation(libs.guava) // Use the latest version available
 
 }

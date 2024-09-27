@@ -180,7 +180,7 @@ class DashboardFragment : Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                Log.e("test","error")
             }
 
 

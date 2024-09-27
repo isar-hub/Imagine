@@ -230,7 +230,7 @@ class UserDetailsActivity : AppCompatActivity() {
             // Get the download URL
             imageRef.downloadUrl.addOnSuccessListener { uri ->
                 onComplete(uri.toString(),true)
-                Log.e("test","url ${uri.toString()}")
+                Log.e("test","url $uri")
             }.addOnFailureListener {
 
             }

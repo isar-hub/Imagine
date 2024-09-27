@@ -44,6 +44,8 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+        <activity android:name=".RetailerPanelFragment"
+            android:exported="false"/>
         <activity
             android:name=".LoginActivity"
             android:exported="true"
@@ -55,8 +57,17 @@
             </intent-filter>
         </activity>
         <activity android:name=".BillingPanelFragment"/>
-
-
+        <activity
+            android:name=".barcode.SettingsActivity"
+            android:exported="false"
+            android:label="@string/settings_title"
+            android:screenOrientation="fullSensor">
+        </activity>
+        <activity
+            android:name=".BarCodeScanningActivity"
+            android:exported="false"
+            android:screenOrientation="portrait">
+        </activity>
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
             android:value="barcode" />

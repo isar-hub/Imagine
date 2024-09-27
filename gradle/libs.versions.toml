@@ -2,11 +2,16 @@
 agp = "8.5.1"
 androidPdfViewer = "2.8.2"
 androidPdfViewerVersion = "3.2.0-beta.1"
-cameraCamera2 = "1.3.4"
+barcodeScanning = "17.3.0"
+barcodeScanningVersion = "17.0.3"
+cameraCamera2Version = "1.0.1"
+cameraLifecycle = "1.0.1"
+cameraView = "1.3.4"
 cardStackView = "2.3.4"
 core = "3.2.1"
 dexter = "6.2.3"
 firebaseBom = "33.1.2"
+guava = "32.1.3-android"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -18,6 +23,8 @@ material = "1.12.0"
 constraintlayout = "2.1.4"
 navigationFragmentKtx = "2.7.7"
 navigationUiKtx = "2.7.7"
+objectDetection = "17.0.2"
+objectDetectionCustom = "17.0.2"
 pdfInvoiceGenerator = "1.0.1"
 pdfviewAndroid = "1.1.0"
 playServicesVision = "20.1.3"
@@ -33,21 +40,26 @@ lifecycleLivedataKtx = "2.8.3"
 lifecycleViewmodelKtx = "2.8.3"
 activity = "1.9.0"
 firebaseCrashlyticsBuildtools = "3.0.2"
+preferenceKtx = "1.2.1"
+objectDetectionCommon = "18.0.0"
+firebaseFirestore = "25.1.0"
+firebaseFunctions = "21.0.0"
 
 [libraries]
-android-pdf-viewer = { module = "com.github.barteksc:android-pdf-viewer", version.ref = "androidPdfViewer" }
 android-pdf-viewer-v320beta1 = { module = "com.github.barteksc:android-pdf-viewer", version.ref = "androidPdfViewerVersion" }
-androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCamera2" }
-androidx-camera-extensions = { module = "androidx.camera:camera-extensions", version.ref = "cameraCamera2" }
-androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraCamera2" }
-androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraCamera2" }
+androidx-camera-camera2-v101 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCamera2Version" }
+androidx-camera-lifecycle-v101 = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraLifecycle" }
+androidx-camera-view-v100alpha28 = { module = "androidx.camera:camera-view", version.ref = "cameraView" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "barcodeScanning" }
+barcode-scanning-v1703 = { module = "com.google.mlkit:barcode-scanning", version.ref = "barcodeScanningVersion" }
 card-stack-view = { module = "com.yuyakaido.android:card-stack-view", version.ref = "cardStackView" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 core = { module = "com.google.zxing:core", version.ref = "core" }
 dexter = { module = "com.karumi:dexter", version.ref = "dexter" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-storage = { module = "com.google.firebase:firebase-storage" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -57,6 +69,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
+object-detection = { module = "com.google.mlkit:object-detection", version.ref = "objectDetection" }
+object-detection-custom = { module = "com.google.mlkit:object-detection-custom", version.ref = "objectDetectionCustom" }
 pdf-invoice-generator = { module = "com.github.kariot:pdf-invoice-generator", version.ref = "pdfInvoiceGenerator" }
 pdfview-android = { module = "com.dmitryborodin:pdfview-android", version.ref = "pdfviewAndroid" }
 play-services-vision = { module = "com.google.android.gms:play-services-vision", version.ref = "playServicesVision" }
@@ -71,9 +85,14 @@ androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecy
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
+androidx-preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "preferenceKtx" }
+object1-detection-common = { group = "com.google.mlkit", name = "object-detection-common", version.ref = "objectDetectionCommon" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+firebase-functions = { group = "com.google.firebase", name = "firebase-functions", version.ref = "firebaseFunctions" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+
 

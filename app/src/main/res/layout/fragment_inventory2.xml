@@ -57,20 +57,7 @@
                 android:prompt="@string/variant"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Color Spinner -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
-                android:text="Color" />
 
-            <Spinner
-                android:id="@+id/spinner_color"
-                style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:prompt="@string/color"
-                android:layout_marginBottom="16dp" />
 
             <!-- Condition Spinner -->
             <TextView
@@ -142,7 +129,7 @@
                 android:text="Notes" />
 
             <EditText
-                android:id="@+id/edittext_description"
+                android:id="@+id/notes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -168,8 +155,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
                 android:layout_marginTop="16dp"
-                android:nestedScrollingEnabled="true"
-                 />
+                android:nestedScrollingEnabled="true" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -6,10 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.snackbar.Snackbar
 
 class LoginActivity : AppCompatActivity() {
@@ -25,7 +22,6 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_login2)
 
         intialization()
@@ -46,16 +42,10 @@ class LoginActivity : AppCompatActivity() {
                     .show()
             }
         }
-
-
-
-
-
-
     }
     fun destination()
     {
-        Log.e("Test","destination ${userName.text.toString()}")
+        Log.e("Test","destination ${userName.text}")
         if(userName.text.toString() == user1){
             val intent = Intent(this, MainActivity::class.java).apply {
                 putExtra("username", "3")

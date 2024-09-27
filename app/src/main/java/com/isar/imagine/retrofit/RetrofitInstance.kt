@@ -5,6 +5,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitInstance{
+    //
     private const val BASE_URL ="https://restapitutorial-production.up.railway.app/"
 
 
@@ -13,7 +14,7 @@ object RetrofitInstance{
         val client = OkHttpClient()
         val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val clientBuilder: OkHttpClient.Builder =
-            client.newBuilder().addInterceptor(interceptor as HttpLoggingInterceptor)
+            client.newBuilder().addInterceptor(interceptor)
 
         return Retrofit.Builder().baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -25,6 +26,6 @@ object RetrofitInstance{
 
 
      fun getApiInterface(): ApiInterface {
-       return RetrofitInstance.getInstance().create(ApiInterface::class.java)
+       return getInstance().create(ApiInterface::class.java)
     }
 }

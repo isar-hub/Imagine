@@ -4,7 +4,6 @@ data class InventoryItem(
     val brand: String,
     val model: String,
     val variant: String,
-    val color: String,
     val condition: String,
     var purchasePrice: Double,
     var sellingPrice: Double,
@@ -45,7 +44,3 @@ data class Variant(
     val _id : String
 
 )
-//billing panel search action bar for product id search
-data class SearchId(
-        val id: String
-        )
