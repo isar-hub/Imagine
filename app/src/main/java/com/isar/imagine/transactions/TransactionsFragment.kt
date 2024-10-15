@@ -1,20 +1,14 @@
-package com.isar.imagine.Fragments
+package com.isar.imagine.transactions
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.isar.imagine.Adapters.TransactionAdapter
 import com.isar.imagine.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 
 class TransactionsFragment : Fragment() {
 
@@ -26,10 +20,6 @@ class TransactionsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_transactions, container, false)
-
 
         return inflater.inflate(R.layout.fragment_transactions, container, false)
     }
@@ -48,33 +38,48 @@ class TransactionsFragment : Fragment() {
     private fun getDummyTransactions(): List<Transaction> {
         return listOf(
             Transaction(
-                id = "1",
+                id = "11111111111111",
                 date = "2024-08-01",
-                brand = "Samsung",
-                model = "Galaxy S21",
-                variant = "8GB/128GB",
-                color = "Phantom Gray",
                 quantity = 2,
-                price = 70000.0,
                 totalPrice = 140000.0,
-                condition = "Best",
-                description = "Purchased for office use"
+                retailer = "Best",
             ),
             Transaction(
-                id = "2",
-                date = "2024-07-30",
-                brand = "Apple",
-                model = "iPhone 13",
-                variant = "256GB",
-                color = "Midnight",
-                quantity = 1,
-                price = 80000.0,
-                totalPrice = 80000.0,
-                condition = "Good",
-                description = "Gift for family"
+                id = "11111111111111",
+                date = "2024-08-01",
+                quantity = 2,
+                totalPrice = 140000.0,
+                retailer = "Best",
+            ),
+            Transaction(
+                id = "11111111111111",
+                date = "2024-08-01",
+                quantity = 2,
+                totalPrice = 140000.0,
+                retailer = "Best",
+            ),
+            Transaction(
+                id = "11111111111111",
+                date = "2024-08-01",
+                quantity = 2,
+                totalPrice = 140000.0,
+                retailer = "Best",
+            ),
+            Transaction(
+                id = "11111111111111",
+                date = "2024-08-01",
+                quantity = 2,
+                totalPrice = 140000.0,
+                retailer = "Best",
+            ),
+            Transaction(
+                id = "11111111111111",
+                date = "2024-08-01",
+                quantity = 2,
+                totalPrice = 140000.0,
+                retailer = "Best",
             ),
             // Add more dummy transactions as needed
         )
     }
-
 }

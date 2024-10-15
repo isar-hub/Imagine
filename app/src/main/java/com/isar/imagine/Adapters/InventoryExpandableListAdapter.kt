@@ -74,7 +74,6 @@ class InventoryExpandableListAdapter(
         val item = getChild(listPosition, expandedListPosition) as InventoryItem
         val modelTextView = view!!.findViewById<TextView>(R.id.model)
         val variantTextView = view.findViewById<TextView>(R.id.variant)
-        val colorTextView = view.findViewById<TextView>(R.id.color)
         val conditionTextView = view.findViewById<TextView>(R.id.condition)
         val purchasePriceTextView = view.findViewById<TextView>(R.id.purchasePrice)
         val sellingPriceTextView = view.findViewById<TextView>(R.id.sellingPrice)
@@ -83,7 +82,6 @@ class InventoryExpandableListAdapter(
 
         "Model: ${item.model}".also { modelTextView.text = it }
         "Variant: ${item.variant}".also { variantTextView.text = it }
-        "Color: ${item.color}".also { colorTextView.text = it }
         "Condition: ${item.condition}".also { conditionTextView.text = it }
         "Purchase Price: ${item.purchasePrice}".also { purchasePriceTextView.text = it }
         "Selling Price: ${item.sellingPrice}".also { sellingPriceTextView.text = it }
@@ -96,17 +94,19 @@ class InventoryExpandableListAdapter(
     override fun getGroupView(
         listPosition: Int, isExpanded: Boolean,
         convertView: View?, parent: ViewGroup?
-    ): View {
+    ): View? {
         Log.e(TAG, "getGroupView: Creating view for group at position $listPosition, isExpanded: $isExpanded")
 
         var view = convertView
         if (view == null) {
             val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            view = layoutInflater.inflate(android.R.layout.simple_expandable_list_item_1, null)
+            view = layoutInflater.inflate(R.layout.expandable_list_header, null)
         }
         val listTitle = getGroup(listPosition) as String
-        val listTitleTextView = view!!.findViewById<TextView>(android.R.id.text1)
-        listTitleTextView.text = listTitle
+        val listTitleTextView = view?.findViewById<TextView>(R.id.header)
+        if (listTitleTextView != null) {
+            listTitleTextView.text = listTitle
+        }
         return view
     }
 

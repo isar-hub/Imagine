@@ -3,6 +3,7 @@ package com.isar.imagine.Fragments
 import android.content.Context
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,11 +40,6 @@ import java.io.FileOutputStream
 //left to implement post data
 class InventoryFragment : Fragment() {
 
-    private lateinit var context: Context
-    private lateinit var variantList: List<VariantWithID>
-    private lateinit var inventoryList: MutableList<InventoryItem>
-    private val TAG = "InventoryFragment"
-    private val conditionList = listOf("Good", "Best", "Bad")
 
     //
     private lateinit var viewModel: InventoryViewModel
@@ -68,17 +64,17 @@ class InventoryFragment : Fragment() {
         val repository = InventoryRepositoryImpl(FirebaseFirestore.getInstance())
         val factory = MobileViewModelFactory(repository)
         viewModel = factory.create(InventoryViewModel::class.java)
-
-
-
-        inventoryList = mutableListOf()
+        // add item to list
 
 
         //
+
         calculateTotalPrice()
         onSaveClick()
         addItemToExpandableList()
         observeFireBaseData()
+
+
         //
     }
 
@@ -90,9 +86,12 @@ class InventoryFragment : Fragment() {
                 saveBarcodesToExcel(barcodes)
             }
         }
-        showProgressBar()
-        val quantity = Integer.parseInt(binding.edittextQuantity.text.toString())
-        viewModel.generateUniqueBarcodes(quantity)
+//        showProgressBar()
+
+        val quantity = binding.edittextQuantity.text.toString()
+        if (quantity.isNotBlank()){
+            viewModel.generateUniqueBarcodes(Integer.parseInt(quantity))
+        }
     }
 
 
@@ -100,6 +99,14 @@ class InventoryFragment : Fragment() {
 
     // on click add button check required item is not empty
     private fun addItemToExpandableList() {
+        for (i in 1..10){
+            Log.e("inventory","adding data at $i")
+            viewModel.addItem("Samsung$i","M32$i","8-128,black$i","Gold", 1000000.00, 1000000000.00,10, "nothing")
+        }
+        viewModel.inventoryList.observe(viewLifecycleOwner) { inventoryList ->
+            updateExpandableListAdapter(inventoryList)
+        }
+
         binding.buttonAdd.setOnClickListener {
             if (isNotEmptyEditText()) {
                 //adding item to list
@@ -269,7 +276,6 @@ class InventoryFragment : Fragment() {
 
     // sending data to expandable list adapter
     private fun updateExpandableListAdapter(inventoryList: List<InventoryItem>) {
-
         //separating tittle and details to show it
         val expandableListTitle = inventoryList.map { it.brand }.distinct()
         val expandableListDetail = inventoryList.groupBy { it.brand }
@@ -335,7 +341,7 @@ class InventoryFragment : Fragment() {
 
         val file = File(directory, fileName)
         createExcelFile(file.absolutePath, barCodeList)
-        hideProgressBar()
+//        hideProgressBar()
 
         // Notify the user
         println("Excel file with barcodes saved at: ${file.absolutePath}")
@@ -343,22 +349,16 @@ class InventoryFragment : Fragment() {
 
 
     // Function to show the ProgressBar
-    private fun showProgressBar() {
-        binding.progressBar.visibility = View.VISIBLE
-        binding.buttonSave.isEnabled = false
-    }
-
-    // Function to hide the ProgressBar
-    private fun hideProgressBar() {
-        binding.progressBar.visibility = View.GONE
-        binding.buttonSave.isEnabled = true
-    }
-
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        this.context = context
-    }
+//    private fun showProgressBar() {
+//        binding.progressBar.visibility = View.VISIBLE
+//        binding.buttonSave.isEnabled = false
+//    }
+//
+//    // Function to hide the ProgressBar
+//    private fun hideProgressBar() {
+//        binding.progressBar.visibility = View.GONE
+//        binding.buttonSave.isEnabled = true
+//    }
 
 
     private fun calculateTotalPrice() {

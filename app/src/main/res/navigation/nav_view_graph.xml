@@ -24,12 +24,12 @@
 
     <fragment
         android:id="@+id/transactionsFragment"
-        android:name="com.isar.imagine.Fragments.TransactionsFragment"
+        android:name="com.isar.imagine.transactions.TransactionsFragment"
         android:label="transactions"
         tools:layout="@layout/fragment_transactions"/>
     <fragment
         android:id="@+id/warrantyFragment"
-        android:name="com.isar.imagine.Fragments.WarrantyFragment"
+        android:name="com.isar.imagine.warranty.WarrantyFragment"
         android:label="warranty"
         tools:layout="@layout/fragment_warranty"/>
     <fragment

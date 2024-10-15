@@ -1,144 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/red"
     tools:context=".Fragments.RetailerFragment">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".Fragments.RetailerFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+
+        <!-- Search Retailer Section -->
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/svRetailerSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search"
+            android:queryHint="Search Retailer"
+            app:searchIcon="@drawable/search_icon" />
+        <!-- Add New Retailer Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_margin="10dp"
 
-            <!-- Search Retailer Section -->
-            <SearchView
-                android:id="@+id/svRetailerSearch"
-                android:layout_width="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:queryHint="Search Retailer"/>
+                android:layout_weight="1"
+                android:text="Retailer List"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-            <!-- RecyclerView to List Retailers -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddRetailer"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/black"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="50dp"
+                app:icon="@drawable/add_retailer_icon"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconSize="20dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:backgroundTint="@color/black"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="50dp"
+                app:icon="@drawable/generate_id_icon"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconSize="20dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:backgroundTint="@color/black"
+                android:insetLeft="0dp"
+                android:insetTop="0dp"
+                android:insetRight="0dp"
+                android:insetBottom="0dp"
+                app:cornerRadius="50dp"
+                app:icon="@drawable/send_notification_icon"
+                app:iconGravity="textStart"
+                app:iconPadding="0dp"
+                app:iconSize="20dp" />
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foreground="@drawable/card_background"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="4dp"
+
+            >
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvRetailers"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="16dp"/>
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                tools:listitem="@layout/item_retailer" />
 
-            <!-- Retailer Details Section -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="16dp">
 
-                <TextView
-                    android:id="@+id/tvRetailerDetails"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Retailer Details"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="8dp"/>
+        </androidx.cardview.widget.CardView>
 
-                <TextView
-                    android:id="@+id/tvWarrantyPhones"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Total Phones in Warranty: 0"
-                    android:textSize="16sp"/>
+        <!-- RecyclerView to List Retailers -->
 
-                <TextView
-                    android:id="@+id/tvTotalItems"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Total Items Given to Retailer: 0"
-                    android:textSize="16sp"/>
-            </LinearLayout>
+        <!-- Send Notification Section -->
 
-            <!-- Add New Retailer Section -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="32dp">
 
-                <TextView
-                    android:id="@+id/tvAddRetailer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Add New Retailer"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="16dp"/>
-
-                <EditText
-                    android:id="@+id/etRetailerName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Retailer Name"
-                    android:inputType="textPersonName"/>
-
-                <Button
-                    android:id="@+id/btnAddRetailer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Add Retailer"
-                    android:layout_marginTop="16dp"/>
-            </LinearLayout>
-
-            <!-- Generate ID and Password Section -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="32dp">
-
-                <TextView
-                    android:id="@+id/tvGenerateIdPassword"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Generate ID &amp; Password"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="16dp"/>
-
-                <Button
-                    android:id="@+id/btnGenerateIdPassword"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Generate"/>
-            </LinearLayout>
-
-            <!-- Send Notification Section -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="32dp">
-
-                <TextView
-                    android:id="@+id/tvSendNotification"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Send Notification"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="16dp"/>
-
-                <Button
-                    android:id="@+id/btnSendNotification"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Send"/>
-            </LinearLayout>
-
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
 </FrameLayout>

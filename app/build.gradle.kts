@@ -91,7 +91,7 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle.v101)
     implementation(libs.androidx.camera.view.v100alpha28)
 
-
+    implementation (libs.mpandroidchart)
 
     implementation(libs.guava) // Use the latest version available
 

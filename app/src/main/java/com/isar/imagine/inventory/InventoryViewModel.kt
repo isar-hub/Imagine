@@ -80,6 +80,7 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
         notes: String
     ) {
 
+
         //new item of inventory item with method parameters
         val newItem = InventoryItem(
             name, model,  variant, condition, purchasePrice, sellingPrice, quantity, notes
@@ -158,8 +159,8 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
     val postInventoryItem: LiveData<String> get() = _postInventoryItem
 
      fun postInventory(item: DataClass.InventoryData): String?{
-        var result: String? = null
-            viewModelScope.launch {
+        lateinit var result: String
+         viewModelScope.launch {
                 result = try {
                     repository.saveInventory(item)
 

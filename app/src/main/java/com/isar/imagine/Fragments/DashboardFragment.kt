@@ -1,143 +1,279 @@
 package com.isar.imagine.Fragments
 
-import StackViewAdapter
-import android.content.ContentValues
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Button
-import android.widget.EditText
-import android.widget.StackView
-import android.widget.TextView
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.Firebase
+import androidx.fragment.app.Fragment
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.database
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.MultiFormatWriter
 import com.isar.imagine.R
-import com.isar.imagine.responses.BrandNameResponseItem
-import com.isar.imagine.responses.DeviceInformation
+import com.isar.imagine.databinding.FragmentDashboard2Binding
 import com.isar.imagine.responses.InventoryCountResponses
-import com.isar.imagine.responses.StackViewList
-import com.isar.imagine.retrofit.RetrofitInstance
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
+import java.util.ArrayList
 import java.util.Random
 
 
 class DashboardFragment : Fragment() {
 
-
-
-    lateinit var totalItemTextView : TextView
-    lateinit var stackView : StackView
-    lateinit var totalSoldTextView : TextView
-    lateinit var deviceNameOptions : AutoCompleteTextView
-    lateinit var deviceModelOptions : AutoCompleteTextView
-    lateinit var quantityEditText : EditText
-    lateinit var submitButton : Button
-    lateinit var stackViewAdapter: StackViewAdapter
-    lateinit var myView: View
     private lateinit var myDB: DatabaseReference
+    private lateinit var binding: FragmentDashboard2Binding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dashboard2, container, false)
+        binding = FragmentDashboard2Binding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
 
-        this.myView = view
-        initialization(view)
-
-        submitButton.setOnClickListener {
-
-            val num = generateRandom16DigitNumber()
 
 
-
-            if (!deviceNameOptions.text.isEmpty() && !deviceModelOptions.text.isEmpty() && !quantityEditText.text.isEmpty()) {
-                var number = generateRandom16DigitNumber()
-                val device = DeviceInformation(
-                    deviceNameOptions.text.toString(),
-                    deviceModelOptions.text.toString(),
-                    "Good",
-                    "10000",
-                    quantityEditText.text.toString()
-                )
-                myDB.child(number).setValue(device).addOnCompleteListener {
-                    genBarcode(number)
-                    deviceModelOptions.clearListSelection()
-                    deviceNameOptions.clearListSelection()
-                    quantityEditText.text.clear()
-                }
-
-
-            } else Snackbar.make(view, "Some Error Occurred", Snackbar.LENGTH_LONG)
-                .setAction("OK") {
-                    // Handle the action here
-                    // e.g., retrying an operation
-                }.show()
-        }
+        horizontalBarChartData()
+        pieChartData()
+        lineCharData()
+        barChart()
 
     }
 
+
+
+
+
+    fun barChart(){
+        // Assuming you're using MPAndroidChart
+        val barChart = binding.salesBarChart
+        val barChart1 = binding.modelWiseStockBarChart
+
+        // Sample data for phone models and their stock
+        val modelNames = listOf("Model A", "Model B", "Model C", "Model D", "Model E", "Model F")
+        val stockValues = listOf(10f, 310f, 330f, 30f, 20f, 50f)
+
+        val list = ArrayList<BarEntry>()
+        for (i in stockValues.indices) {
+            list.add(BarEntry(i.toFloat(), stockValues[i]))
+        }
+
+        val set = BarDataSet(list, "Phone Models Stock").apply {
+            color = R.color.ColorPrimary // Set the bar color
+            valueTextColor = R.color.white // Color of value text on bars
+            valueTextSize = 16f // Size of value text on bars
+        }
+
+        // Create a BarData object and customize its appearance
+        val barData = BarData(set).apply {
+            barWidth = 0.4f // Adjust bar width as needed
+        }
+
+        // Set the data to the chart
+        barChart.data = barData
+        barChart1.data = barData
+
+        // Customize the chart appearance
+        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(modelNames) // Set model names on X-axis
+        barChart.xAxis.granularity = 1f // Show one label per bar
+        barChart.axisRight.isEnabled = false // Disable right Y-axis
+        barChart.animateY(1000) // Add animation for bar chart
+
+        // Refresh the chart
+        barChart.invalidate() // Refresh the chart to reflect the changes
+
+
+    }
+
+
+    fun pieChartData(){
+
+        val pieChart = binding.conditionWiseSalesPieChart
+        val pieChart1 = binding.conditionWiseStockPieChart
+
+        // Sample data for phone conditions
+        val conditionNames = listOf("Gold", "Silver", "Platinum")
+        val conditionValues = listOf(150f, 80f, 30f) // Replace with actual stock numbers
+
+        // Create a list of PieEntry objects
+        val pieEntries = ArrayList<PieEntry>()
+        for (i in conditionValues.indices) {
+            pieEntries.add(PieEntry(conditionValues[i], conditionNames[i]))
+        }
+
+        // Create a PieDataSet
+        val dataSet = PieDataSet(pieEntries, "Condition Wise Stock").apply {
+            colors = listOf(Color.YELLOW, Color.LTGRAY, Color.DKGRAY) // Set colors for each condition
+            valueTextColor = Color.BLACK // Color of value text
+            valueTextSize = 16f // Size of value text
+        }
+
+        // Create PieData and set it to the chart
+        val pieData = PieData(dataSet)
+        pieChart.data = pieData
+        pieChart1.data = pieData
+
+        // Customize the chart appearance
+        pieChart.setUsePercentValues(true) // Show values in percentages
+        pieChart.description.isEnabled = false // Disable the description
+        pieChart.legend.isEnabled = true // Enable legend
+        pieChart.animateY(1000) // Add animation for pie chart
+
+        // Refresh the chart
+        pieChart.invalidate() // Refresh the chart to reflect the changes
+
+    }
+
+
+    fun horizontalBarChartData(){
+        // Initialize your HorizontalBarChart
+        val horizontalBarChart = binding.areaWiseHorizontalChart
+
+// Sample data for phone conditions
+        val conditionNames = listOf("Gold", "Silver", "Platinum")
+        val conditionValues = listOf(150f, 80f, 30f)
+
+// Create a list of BarEntry objects for horizontal bar chart
+        val barEntries = ArrayList<BarEntry>()
+        for (i in conditionValues.indices) {
+            barEntries.add(BarEntry(conditionValues[i], i.toFloat()))
+        }
+
+// Create a BarDataSet
+        val barDataSet = BarDataSet(barEntries, "Condition Wise Stock").apply {
+            colors = ColorTemplate.MATERIAL_COLORS.toList() // Set colors for each condition
+            valueTextColor = Color.WHITE
+            valueTextSize = 16f
+        }
+
+// Create BarData and set it to the chart
+        val barData = BarData(barDataSet)
+        horizontalBarChart.data = barData
+
+// Customize the chart appearance
+        horizontalBarChart.axisLeft.isEnabled = false // Disable left Y-axis
+        horizontalBarChart.axisRight.isEnabled = false // Disable right Y-axis
+        horizontalBarChart.xAxis.valueFormatter = IndexAxisValueFormatter(conditionNames) // Set condition names
+        horizontalBarChart.xAxis.granularity = 1f
+        horizontalBarChart.description.isEnabled = false // Disable description
+        horizontalBarChart.animateY(1000) // Add animation for horizontal bar chart
+
+// Refresh the chart
+        horizontalBarChart.invalidate() // Refresh the chart to reflect the changes
+    }
+
+
+
+    fun lineCharData(){
+        val lineChart = binding.topModelWiseLineChart
+
+        // Sample data for the line chart (could be daily stock counts, for example)
+        val lineConditionNames = listOf("Gold", "Silver", "Platinum")
+        val lineConditionValues = listOf(150f, 80f, 30f)
+
+        // Create a list of Entry objects for line chart
+        val lineEntries = ArrayList<Entry>()
+        for (i in lineConditionValues.indices) {
+            lineEntries.add(Entry(i.toFloat(), lineConditionValues[i]))
+        }
+
+        // Create a LineDataSet
+        val lineDataSet = LineDataSet(lineEntries, "Condition Wise Stock").apply {
+            color = Color.BLUE // Line color
+            valueTextColor = Color.WHITE // Value text color
+            valueTextSize = 16f // Size of value text
+            lineWidth = 2f // Width of the line
+            circleRadius = 4f // Size of the circles on points
+            setCircleColor(Color.BLUE) // Circle color
+        }
+
+        // Create LineData and set it to the chart
+        val lineData = LineData(lineDataSet)
+        lineChart.data = lineData
+
+        // Customize the chart appearance
+        lineChart.xAxis.valueFormatter = IndexAxisValueFormatter(lineConditionNames) // Set condition names
+        lineChart.xAxis.granularity = 1f
+        lineChart.description.isEnabled = false // Disable description
+        lineChart.animateXY(1000, 1000) // Add animation for line chart
+
+        // Refresh the chart
+        lineChart.invalidate()
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private fun initialization(view : View) {
 
-        stackView = view.findViewById(R.id.idStackView)
-        totalItemTextView = view.findViewById(R.id.totalItem)
-        totalSoldTextView = view.findViewById(R.id.totalSold)
-        deviceNameOptions = view.findViewById(R.id.device_name)
-        deviceModelOptions = view.findViewById(R.id.device_model)
-        submitButton = view.findViewById(R.id.button_first)
-        quantityEditText = view.findViewById(R.id.quantity)
+//        stackView = view.findViewById(R.id.idStackView)
+//        totalItemTextView = view.findViewById(R.id.totalItem)
+//        totalSoldTextView = view.findViewById(R.id.totalSold)
+//        deviceNameOptions = view.findViewById(R.id.device_name)
+//        deviceModelOptions = view.findViewById(R.id.device_model)
+//        submitButton = view.findViewById(R.id.button_first)
+//        quantityEditText = view.findViewById(R.id.quantity)
 
 
-        stackView()
-
-
-        val database = Firebase.database
-        myDB = database.getReference("Device")
-
-
-        val languages = resources.getStringArray(R.array.programming_languages)
-        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_menu, languages)
-
-        deviceNameOptions.setAdapter(arrayAdapter)
-
-
-        val languages1 = resources.getStringArray(R.array.device_model)
-        getAllUserIds()
-        val arrayAdapter1 =
-            ArrayAdapter(requireContext(), R.layout.dropdown_menu, languages1)
-        deviceModelOptions.setAdapter(arrayAdapter1)
-
-
+//        stackView()
+//
+//
+//        val database = Firebase.database
+//        myDB = database.getReference("Device")
+//
+//
+//        val languages = resources.getStringArray(R.array.programming_languages)
+//        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_menu, languages)
+//
+//        deviceNameOptions.setAdapter(arrayAdapter)
+//
+//
+//        val languages1 = resources.getStringArray(R.array.device_model)
+//        getAllUserIds()
+//        val arrayAdapter1 =
+//            ArrayAdapter(requireContext(), R.layout.dropdown_menu, languages1)
+//        deviceModelOptions.setAdapter(arrayAdapter1)
+//
+//
 
 
     }
@@ -191,157 +327,157 @@ class DashboardFragment : Fragment() {
 
         var list: InventoryCountResponses? = null
 
-        val brandCountCall = RetrofitInstance.getApiInterface().getItemCount()
-        brandCountCall.enqueue(object : Callback<InventoryCountResponses> {
-            override fun onResponse(
-                call: Call<InventoryCountResponses>, response: Response<InventoryCountResponses>
-            ) {
-                if (response.isSuccessful && response.body() != null) {
-
-                    list = response.body()
-                    Log.e("Failure", "Error in getting item Count : ${list?.totalBrands}")
-                    val numberList: ArrayList<StackViewList> = ArrayList()
-
-                    val temp: String = getString(
-                        R.string.totalCountPlaceHolder,
-                        list?.totalBrands.toString()
-                    )
-                    totalItemTextView.text = temp
-
-                    list?.brands?.forEach { brand ->
-                        Log.e("test", "item ${brand.name + brand.totalModels}")
-                        numberList.add(StackViewList(brand.name, brand.totalModels))
-                    }
-                    Log.e("test", "item $numberList")
-
-                    // Setting up the adapter for StackView
-                    stackViewAdapter = StackViewAdapter(
-                        context!!, R.layout.category_stocks, numberList
-                    )
-                    stackView.adapter = stackViewAdapter
-
-                }
-            }
-
-            override fun onFailure(call: Call<InventoryCountResponses>, t: Throwable) {
-                Log.e("Failure", "Error in getting item Count : ${t.message}")
-            }
-
-        })
-
+//        val brandCountCall = RetrofitInstance.getApiInterface().getItemCount()
+//        brandCountCall.enqueue(object : Callback<InventoryCountResponses> {
+//            override fun onResponse(
+//                call: Call<InventoryCountResponses>, response: Response<InventoryCountResponses>
+//            ) {
+//                if (response.isSuccessful && response.body() != null) {
+//
+//                    list = response.body()
+//                    Log.e("Failure", "Error in getting item Count : ${list?.totalBrands}")
+//                    val numberList: ArrayList<StackViewList> = ArrayList()
+//
+//                    val temp: String = getString(
+//                        R.string.totalCountPlaceHolder,
+//                        list?.totalBrands.toString()
+//                    )
+//                    totalItemTextView.text = temp
+//
+//                    list?.brands?.forEach { brand ->
+//                        Log.e("test", "item ${brand.name + brand.totalModels}")
+//                        numberList.add(StackViewList(brand.name, brand.totalModels))
+//                    }
+//                    Log.e("test", "item $numberList")
+//
+//                    // Setting up the adapter for StackView
+//                    stackViewAdapter = StackViewAdapter(
+//                        context!!, R.layout.category_stocks, numberList
+//                    )
+//                    stackView.adapter = stackViewAdapter
+//
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<InventoryCountResponses>, t: Throwable) {
+//                Log.e("Failure", "Error in getting item Count : ${t.message}")
+//            }
+//
+//        })
+//
 
     }
+//
+//    private fun getExampleData() {
+//        val call = RetrofitInstance.getApiInterface().getExampleData()
+//        call.enqueue(object : Callback<ArrayList<BrandNameResponseItem>> {
+//            override fun onResponse(
+//                call: Call<ArrayList<BrandNameResponseItem>>,
+//                response: Response<ArrayList<BrandNameResponseItem>>
+//            ) {
+//                if (response.isSuccessful && response.body() != null) {
+//                    // TODO: Process data
+//                    Log.d("RetrofitTest", "response size ${response.body()!!.size}")
+//                    Log.d("RetrofitTest", "response 1st ${response.body()!!.get(0)}")
+//                } else {
+//                    Log.d("RetrofitTest", "response failed 1${response.code()}")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ArrayList<BrandNameResponseItem>>, t: Throwable) {
+//                Log.d("RetrofitTest", "response failed ${t.message}")
+//            }
+//        })
+//    }
 
-    private fun getExampleData() {
-        val call = RetrofitInstance.getApiInterface().getExampleData()
-        call.enqueue(object : Callback<ArrayList<BrandNameResponseItem>> {
-            override fun onResponse(
-                call: Call<ArrayList<BrandNameResponseItem>>,
-                response: Response<ArrayList<BrandNameResponseItem>>
-            ) {
-                if (response.isSuccessful && response.body() != null) {
-                    // TODO: Process data
-                    Log.d("RetrofitTest", "response size ${response.body()!!.size}")
-                    Log.d("RetrofitTest", "response 1st ${response.body()!!.get(0)}")
-                } else {
-                    Log.d("RetrofitTest", "response failed 1${response.code()}")
-                }
-            }
-
-            override fun onFailure(call: Call<ArrayList<BrandNameResponseItem>>, t: Throwable) {
-                Log.d("RetrofitTest", "response failed ${t.message}")
-            }
-        })
-    }
-
-
-    private fun genBarcode(inputValue: String) {
-
-        if (inputValue.isNotEmpty()) {
-            // Initializing a MultiFormatWriter to encode the input value
-            val mwriter = MultiFormatWriter()
-
-            try {
-                // Generating a barcode matrix
-                val matrix = mwriter.encode(inputValue.toString(), BarcodeFormat.CODE_128, 200, 200)
-
-                // Creating a bitmap to represent the barcode
-                val bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.RGB_565)
-
-                // Iterating through the matrix and set pixels in the bitmap
-                for (i in 0 until 200) {
-                    for (j in 0 until 200) {
-                        bitmap.setPixel(i, j, if (matrix[i, j]) Color.BLACK else Color.WHITE)
-                    }
-                }
-
-                // Seting the bitmap as the image resource of the ImageView
-                saveImage(bitmap)
-            } catch (e: Exception) {
-
-                Snackbar.make(myView, "Exception $e", Snackbar.LENGTH_LONG).setAction("OK") {
-                    // Handle the action here
-                    // e.g., retrying an operation
-                }.show()
-            }
-        } else {
-            // Showing an error message if the EditText is empty
-            Snackbar.make(myView, "Error in getting ID ", Snackbar.LENGTH_LONG)
-                .setAction("OK") {
-                    // Handle the action here
-                    // e.g., retrying an operation
-                }.show()
-        }
-    }
-
-    fun saveImage(bitmap: Bitmap) {
-        //Generating a file name
-        val filename = "${System.currentTimeMillis()}.jpg"
-
-        //Output stream
-        var fos: OutputStream? = null
-
-        //For devices running android >= Q
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            //getting the contentResolver
-            requireContext().contentResolver?.also { resolver ->
-
-                //Content resolver will process the contentvalues
-                val contentValues = ContentValues().apply {
-
-                    //putting file information in content values
-                    put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
-                    put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
-                    put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
-                }
-
-                //Inserting the contentValues to contentResolver and getting the Uri
-                val imageUri: Uri? =
-                    resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-
-                //Opening an outputstream with the Uri that we got
-                fos = imageUri?.let { resolver.openOutputStream(it) }
-            }
-        } else {
-            //These for devices running on android < Q
-            //So I don't think an explanation is needed here
-            val imagesDir =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-            val image = File(imagesDir, filename)
-            fos = FileOutputStream(image)
-        }
-
-        fos?.use {
-            //Finally writing the bitmap to the output stream that we opened
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
-
-            Snackbar.make(myView, "Saved to Photos", Snackbar.LENGTH_LONG).setAction("OK") {
-                // Handle the action here
-                // e.g., retrying an operation
-            }.show()
-
-        }
-    }
+//
+//    private fun genBarcode(inputValue: String) {
+//
+//        if (inputValue.isNotEmpty()) {
+//            // Initializing a MultiFormatWriter to encode the input value
+//            val mwriter = MultiFormatWriter()
+//
+//            try {
+//                // Generating a barcode matrix
+//                val matrix = mwriter.encode(inputValue.toString(), BarcodeFormat.CODE_128, 200, 200)
+//
+//                // Creating a bitmap to represent the barcode
+//                val bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.RGB_565)
+//
+//                // Iterating through the matrix and set pixels in the bitmap
+//                for (i in 0 until 200) {
+//                    for (j in 0 until 200) {
+//                        bitmap.setPixel(i, j, if (matrix[i, j]) Color.BLACK else Color.WHITE)
+//                    }
+//                }
+//
+//                // Seting the bitmap as the image resource of the ImageView
+//                saveImage(bitmap)
+//            } catch (e: Exception) {
+//
+//                Snackbar.make(myView, "Exception $e", Snackbar.LENGTH_LONG).setAction("OK") {
+//                    // Handle the action here
+//                    // e.g., retrying an operation
+//                }.show()
+//            }
+//        } else {
+//            // Showing an error message if the EditText is empty
+//            Snackbar.make(myView, "Error in getting ID ", Snackbar.LENGTH_LONG)
+//                .setAction("OK") {
+//                    // Handle the action here
+//                    // e.g., retrying an operation
+//                }.show()
+//        }
+//    }
+//
+//    fun saveImage(bitmap: Bitmap) {
+//        //Generating a file name
+//        val filename = "${System.currentTimeMillis()}.jpg"
+//
+//        //Output stream
+//        var fos: OutputStream? = null
+//
+//        //For devices running android >= Q
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//            //getting the contentResolver
+//            requireContext().contentResolver?.also { resolver ->
+//
+//                //Content resolver will process the contentvalues
+//                val contentValues = ContentValues().apply {
+//
+//                    //putting file information in content values
+//                    put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
+//                    put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
+//                    put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+//                }
+//
+//                //Inserting the contentValues to contentResolver and getting the Uri
+//                val imageUri: Uri? =
+//                    resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+//
+//                //Opening an outputstream with the Uri that we got
+//                fos = imageUri?.let { resolver.openOutputStream(it) }
+//            }
+//        } else {
+//            //These for devices running on android < Q
+//            //So I don't think an explanation is needed here
+//            val imagesDir =
+//                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+//            val image = File(imagesDir, filename)
+//            fos = FileOutputStream(image)
+//        }
+//
+//        fos?.use {
+//            //Finally writing the bitmap to the output stream that we opened
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, it)
+//
+//            Snackbar.make(myView, "Saved to Photos", Snackbar.LENGTH_LONG).setAction("OK") {
+//                // Handle the action here
+//                // e.g., retrying an operation
+//            }.show()
+//
+//        }
+//    }
 
 
 }

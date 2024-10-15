@@ -65,7 +65,10 @@ class RetailerPanelFragment :AppCompatActivity() {
         _binding = FragmentRetailerPanelBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        val intent = Intent(this@RetailerPanelFragment,UserDetailsActivity::class.java).apply {
+            putExtra("id", scannedValue)
+        }
+        startActivity(intent)  
         binding.scanDevice.setOnClickListener{
             checkForPermissions()
         }

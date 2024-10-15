@@ -189,36 +189,37 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
         workflowModel?.detectedBarcode?.observe(this, Observer { barcode ->
             if (barcode != null) {
 //                val barcodeFieldList = ArrayList<BarcodeField>()
-                callApiForSearch(barcode.rawValue ?: "")
+                startActivity(Intent(this@BarCodeScanningActivity,BillingPanelFragment::class.java))
+
 //                barcodeFieldList.add(BarcodeField("Raw Value", barcode.rawValue?: ""))
 //                BarcodeResultFragment.show(supportFragmentManager, barcodeFieldList)
             }
         })
     }
     private fun callApiForSearch(serialNum: String) {
-        RetrofitInstance.getApiInterface().getItemWithId(serialNum)
-            .enqueue(object : Callback<ItemWithSerialResponse> {
-                override fun onResponse(
-                    call: Call<ItemWithSerialResponse>, response: Response<ItemWithSerialResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val item = response.body()
-                        item?.let {
-                            showSuccessItemDialog(it)
-                        }
-                    } else {
-
-
-                        onResume()
-                        Toast.makeText(applicationContext,"Doesn't Exist $serialNum",Toast.LENGTH_SHORT).show()
-                        Log.e("API Error", "Response Code: ${response.code()} $serialNum")
-                    }
-                }
-
-                override fun onFailure(call: Call<ItemWithSerialResponse>, t: Throwable) {
-                    Log.e("API Error", "Failed to fetch item", t)
-                }
-            })
+//        RetrofitInstance.getApiInterface().getItemWithId(serialNum)
+//            .enqueue(object : Callback<ItemWithSerialResponse> {
+//                override fun onResponse(
+//                    call: Call<ItemWithSerialResponse>, response: Response<ItemWithSerialResponse>
+//                ) {
+//                    if (response.isSuccessful) {
+//                        val item = response.body()
+//                        item?.let {
+//                            showSuccessItemDialog(it)
+//                        }
+//                    } else {
+//
+//
+//                        onResume()
+//                        Toast.makeText(applicationContext,"Doesn't Exist $serialNum",Toast.LENGTH_SHORT).show()
+//                        Log.e("API Error", "Response Code: ${response.code()} $serialNum")
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<ItemWithSerialResponse>, t: Throwable) {
+//                    Log.e("API Error", "Failed to fetch item", t)
+//                }
+//            })
     }
 
     private fun showSuccessItemDialog(item: ItemWithSerialResponse) {

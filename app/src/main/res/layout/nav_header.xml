@@ -5,13 +5,14 @@
     android:orientation="vertical"
     android:gravity="center_vertical"
     android:padding="16dp"
-    android:background="?attr/colorPrimary">
+    android:background="@color/black">
 
     <ImageView
         android:id="@+id/logo"
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:src="@drawable/app_logo"
+        android:src="@drawable/imagine_logo"
+        android:padding="40dp"
         android:layout_gravity="center"/>
 
 

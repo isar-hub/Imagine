@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.SearchView
 import android.widget.TextView
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.isar.imagine.Adapters.RetailerAdapter
@@ -23,7 +23,7 @@ class RetailerFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var tvWarrantyPhones: TextView
     private lateinit var tvTotalItems: TextView
-    private lateinit var searchView: SearchView
+    private lateinit var searchView: androidx.appcompat.widget.SearchView
     private lateinit var adapter: RetailerAdapter
     private val retailerList = mutableListOf<Retailer>()
     private lateinit var btnAddRetailer : Button
@@ -33,7 +33,7 @@ class RetailerFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState:      Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_retailer, container, false)
@@ -43,8 +43,6 @@ class RetailerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView = view.findViewById(R.id.rvRetailers)
-        tvWarrantyPhones = view.findViewById(R.id.tvWarrantyPhones)
-        tvTotalItems = view.findViewById(R.id.tvTotalItems)
         searchView = view.findViewById(R.id.svRetailerSearch)
         btnAddRetailer = view.findViewById(R.id.btnAddRetailer)
         btnAddRetailer.setOnClickListener{

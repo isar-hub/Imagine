@@ -26,7 +26,10 @@ class LoginActivity : AppCompatActivity() {
 
         intialization()
 
-
+        val intent = Intent(this, MainActivity::class.java).apply {
+            putExtra("username", "2")
+        }
+        startActivity(intent)
 
         loginButton.setOnClickListener{
             if (userName.text.isNotEmpty() && password.text.isNotEmpty()) {

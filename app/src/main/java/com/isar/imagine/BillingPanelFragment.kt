@@ -57,7 +57,7 @@ class BillingPanelFragment : AppCompatActivity() {
     private val requestCodeCameraPermission = 1001
     private lateinit var toneGen1: ToneGenerator
     private var scannedValue = ""
-    lateinit var expandableListView : ExpandableListView
+    private lateinit var expandableListView : ExpandableListView
     private lateinit var binding: FragmentSecondBinding
 
     private lateinit var inventoryItem: MutableList<ItemWithSerialResponse>
@@ -68,7 +68,6 @@ class BillingPanelFragment : AppCompatActivity() {
         binding = FragmentSecondBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
 
 
 
@@ -88,11 +87,11 @@ class BillingPanelFragment : AppCompatActivity() {
 listViewInitialize(view = binding.root)
 
 
-        setupListeners()
+
 
         val aniSlide: Animation =
             AnimationUtils.loadAnimation(this, R.anim.scanner_animation)
-        binding.barcodeLine.startAnimation(aniSlide)
+
     }
 
     private fun askForCameraPermission() {
@@ -138,7 +137,7 @@ listViewInitialize(view = binding.root)
             val preview = Preview.Builder()
                 .build()
                 .also {
-                    it.setSurfaceProvider(binding.previewView.surfaceProvider)
+
                 }
             val imageAnalyzer = ImageAnalysis.Builder()
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
@@ -163,12 +162,6 @@ listViewInitialize(view = binding.root)
 
     }
 
-
-    private fun setupListeners() {
-        binding.btnSendBill.setOnClickListener {
-            sendBill("Retailer 1")
-        }
-    }
 
 
     private fun sendBill(retailerName: String) {
@@ -204,7 +197,7 @@ listViewInitialize(view = binding.root)
         )
 
         val pdfGenerator = InvoiceGenerator(this).apply {
-            setInvoiceLogo(R.drawable.app_logo) // Set invoice logo
+            setInvoiceLogo(R.drawable.imagine_logo) // Set invoice logo
             setCurrency("₹") // Set invoice currency
             setInvoiceColor("#FFFFFF") // Set invoice color
         }
@@ -259,7 +252,6 @@ listViewInitialize(view = binding.root)
                 brand = item.brand, // Assuming `ItemWithSerialResponse` has a `brand` field
                 model = item.model, // Assuming `ItemWithSerialResponse` has a `model` field
                 variant = item.variant.toString(), // Assuming `ItemWithSerialResponse` has a `variant` field
-                color = item.color, // Assuming `ItemWithSerialResponse` has a `color` field
                 condition = item.condition, // Assuming `ItemWithSerialResponse` has a `condition` field
                 purchasePrice = 0.0, // Replace with actual value or handle appropriately
                 sellingPrice = item.sellingPrice, // Assuming `ItemWithSerialResponse` has a `sellingPrice` field

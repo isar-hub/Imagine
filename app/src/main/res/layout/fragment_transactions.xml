@@ -3,32 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.TransactionsFragment">
+    android:background="@color/red"
+    tools:context=".transactions.TransactionsFragment">
 
-    <LinearLayout
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_transaction_history"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <TextView
-            android:id="@+id/textview_transaction_history_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Transaction History"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_gravity="center"
-            android:paddingBottom="16dp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerview_transaction_history"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="vertical"/>
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        tools:listitem="@layout/item_transaction"
+        />
 
 
 </FrameLayout>

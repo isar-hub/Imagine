@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Imagine" parent="Base.Theme.Imagine">
+        <!-- Transparent system bars for edge-to-edge. -->
+        <item name="android:windowSplashScreenBackground">@color/red</item>
+        <item name="android:windowSplashScreenAnimationDuration">1</item>
+        <item name="android:colorPrimary">@color/red</item>
+        <item name="android:colorSecondary">@color/black</item>
+
+    </style>
+</resources>

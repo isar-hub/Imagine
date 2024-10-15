@@ -1,136 +1,320 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.DashboardFragment">
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    android:background="@color/red"
+    tools:context=".Fragments.DashboardFragment"
+>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-       >
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        >
+
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="10dp"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="14dp"
+
+        >
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp">
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:orientation="vertical"
 
+            >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Inventory Stock"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:padding="12dp"
+                />
 
             <LinearLayout
-                android:id="@+id/topLayout"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:orientation="horizontal"
-                android:weightSum="1"
-                android:background="@color/white"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/totalItem"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.2"
-                    android:layout_height="match_parent"
-                    android:text="Total Stocks"
-                    android:padding="10dp"
-                    android:layout_marginTop="10dp"
-
-                    />
-
-                <StackView
-                    android:id="@+id/idStackView"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.6"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal"
-                    tools:listitem="@layout/category_stocks"
-
-                    />
-                <TextView
-                    android:id="@+id/totalSold"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.2"
-
-                    android:layout_height="match_parent"
-                    android:text="Total sold\n \n120"
-                    android:padding="10dp"
-                    android:layout_marginTop="10dp"
-
-                    />
-            </LinearLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/device_name_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/topLayout"
-
-                app:layout_constraintRight_toRightOf="parent"
+                android:background="@color/white"
+                android:orientation="vertical"
                 >
 
-                <!-- Inside text input layout add
-                      an auto complete text view
-                        and make its input type to none-->
-                <AutoCompleteTextView
-                    android:id="@+id/device_name"
+
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:inputType="none"
-                    android:text="Select Device Name"
+                    android:layout_height="wrap_content"
+                    android:text="Total Stock : 200"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:padding="12dp"
                     />
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:columnCount="1"
+                    android:rowCount="2"
+                    android:alignmentMode="alignMargins"
+                    android:rowOrderPreserved="false"
+                    android:useDefaultMargins="true"
+                    >
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/modelWiseStockBarChart"
+                        android:layout_width="0dp"
+                        android:layout_columnWeight="1"
+                        android:layout_height="200dp"
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/device_model_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+
+
+                        />
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/conditionWiseStockPieChart"
+                        android:layout_width="0dp"
+                        android:layout_height="200dp"
+                        android:layout_columnWeight="1"
+
+                        />
+
+                </GridLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="10dp"
+        app:cardCornerRadius="14dp"
+        android:layout_margin="20dp"
+
+
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            android:orientation="vertical"
+
+            >
+
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/device_name_layout">
+                android:text="Inventory Stock"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:padding="12dp"
+                />
 
-                <!-- Inside text input layout add
-                      an auto complete text view
-                        and make its input type to none-->
-                <AutoCompleteTextView
-                    android:id="@+id/device_model"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:inputType="none"
-                    android:text="Select Device Model"
-                    />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <EditText
-                android:id="@+id/quantity"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/device_model_layout"
-                android:layout_marginTop="40dp"
-                android:hint="Quantity"
-                />
-            <Button
-                android:id="@+id/button_first"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/save"
+                android:background="@color/white"
+                android:orientation="vertical"
+                >
 
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                />
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:columnCount="1"
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:rowCount="4"
+                    android:alignmentMode="alignMargins"
+                    android:rowOrderPreserved="false"
+                    android:useDefaultMargins="true"
+                    >
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/salesBarChart"
+                        android:layout_width="0dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:layout_height="200dp"
 
-</FrameLayout>
+
+                        />
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/conditionWiseSalesPieChart"
+                        android:layout_width="0dp"
+                        android:layout_height="200dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+
+                        />
+
+                    <com.github.mikephil.charting.charts.HorizontalBarChart
+                        android:id="@+id/areaWiseHorizontalChart"
+                        android:layout_width="0dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+                        android:layout_height="200dp"
+
+
+
+                        />
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/topModelWiseLineChart"
+                        android:layout_width="0dp"
+                        android:layout_height="200dp"
+                        android:layout_columnWeight="1"
+                        android:layout_rowWeight="1"
+
+                        />
+
+                </GridLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--       >-->
+
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:padding="16dp">-->
+
+
+<!--            <LinearLayout-->
+<!--                android:id="@+id/topLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="100dp"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:weightSum="1"-->
+<!--                android:background="@color/white"-->
+<!--                app:layout_constraintTop_toTopOf="parent">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/totalItem"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_weight="0.2"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:text="Total Stocks"-->
+<!--                    android:padding="10dp"-->
+<!--                    android:layout_marginTop="10dp"-->
+
+<!--                    />-->
+
+<!--                <StackView-->
+<!--                    android:id="@+id/idStackView"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_weight="0.6"-->
+<!--                    android:layout_height="100dp"-->
+<!--                    android:layout_gravity="center_horizontal"-->
+<!--                    tools:listitem="@layout/category_stocks"-->
+
+<!--                    />-->
+<!--                <TextView-->
+<!--                    android:id="@+id/totalSold"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_weight="0.2"-->
+
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:text="Total sold\n \n120"-->
+<!--                    android:padding="10dp"-->
+<!--                    android:layout_marginTop="10dp"-->
+
+<!--                    />-->
+<!--            </LinearLayout>-->
+
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:id="@+id/device_name_layout"-->
+<!--                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="20dp"-->
+<!--                app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/topLayout"-->
+
+<!--                app:layout_constraintRight_toRightOf="parent"-->
+<!--                >-->
+
+<!--                &lt;!&ndash; Inside text input layout add-->
+<!--                      an auto complete text view-->
+<!--                        and make its input type to none&ndash;&gt;-->
+<!--                <AutoCompleteTextView-->
+<!--                    android:id="@+id/device_name"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:inputType="none"-->
+<!--                    android:text="Select Device Name"-->
+<!--                    />-->
+
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:id="@+id/device_model_layout"-->
+<!--                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="20dp"-->
+<!--                app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                app:layout_constraintRight_toRightOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/device_name_layout">-->
+
+<!--                &lt;!&ndash; Inside text input layout add-->
+<!--                      an auto complete text view-->
+<!--                        and make its input type to none&ndash;&gt;-->
+<!--                <AutoCompleteTextView-->
+<!--                    android:id="@+id/device_model"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:inputType="none"-->
+<!--                    android:text="Select Device Model"-->
+<!--                    />-->
+
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+
+
+<!--            <EditText-->
+<!--                android:id="@+id/quantity"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/device_model_layout"-->
+<!--                android:layout_marginTop="40dp"-->
+<!--                android:hint="Quantity"-->
+<!--                />-->
+<!--            <Button-->
+<!--                android:id="@+id/button_first"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/save"-->
+
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                />-->
+
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+    </LinearLayout>
+
+</ScrollView>
