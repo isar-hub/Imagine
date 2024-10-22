@@ -272,9 +272,9 @@ listViewInitialize(view = binding.root)
 
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.search_menu_billing, menu)
+        menuInflater.inflate(R.menu.menu_main, menu)
 
-        val searchItem = menu?.findItem(R.id.action_search)
+        val searchItem = menu?.findItem(R.id.action_settings)
         val searchView = searchItem?.actionView as SearchView
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -309,7 +309,6 @@ listViewInitialize(view = binding.root)
                 override fun onResponse(
                     call: Call<ItemWithSerialResponse>, response: Response<ItemWithSerialResponse>
                 ) {
-
                     if (response.isSuccessful) {
                         val item = response.body()
 

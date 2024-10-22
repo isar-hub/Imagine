@@ -8,57 +8,59 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.isar.imagine.data.model.InventoryItem
 import com.isar.imagine.inventory.models.DataClass
+import com.isar.imagine.utils.Results
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlin.random.Random
 
 class InventoryViewModel(private val repository: InventoryRepository) : ViewModel() {
 
-    private val _brands = MutableLiveData<List<DataClass.Brand>>()
-    val brands: LiveData<List<DataClass.Brand>> = _brands
+    private val _brands = MutableLiveData<Results<List<DataClass.Brand>>>()
+    val brands: LiveData<Results<List<DataClass.Brand>>> = _brands
 
-    private val _models = MutableLiveData<List<DataClass.Model>>()
-    val models: LiveData<List<DataClass.Model>> = _models
+    private val _models = MutableLiveData<Results<List<DataClass.Model>>>()
+    val models: LiveData<Results<List<DataClass.Model>>> = _models
 
-    private val _variants = MutableLiveData<List<DataClass.Variant>>()
-    val variants: LiveData<List<DataClass.Variant>> = _variants
-
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String> = _error
+    private val _variants = MutableLiveData<Results<List<DataClass.Variant>>>()
+    val variants: LiveData<Results<List<DataClass.Variant>>> = _variants
 
     init {
         fetchBrands()
+        _brands.postValue(Results.Loading())
     }
 
     private fun fetchBrands() {
         viewModelScope.launch {
             try {
                 val brandsList = repository.getBrands()
-                _brands.value = brandsList
+                _brands.postValue(Results.Success(brandsList))
             } catch (e: Exception) {
-                _error.value = "Failed to load brands: ${e.message}"
+                _brands.postValue(Results.Error("Failed to load brands: ${e.message}"))
+
             }
         }
     }
 
     fun fetchModels(brandId: String) {
+        _models.postValue(Results.Loading())
         viewModelScope.launch {
             try {
                 val modelsList = repository.getModels(brandId)
-                _models.value = modelsList
+                _models.postValue(Results.Success(modelsList))
             } catch (e: Exception) {
-                _error.value = "Failed to load models: ${e.message}"
+                _models.postValue(Results.Error("Failed to load brands: ${e.message}"))
             }
         }
     }
 
     fun fetchVariants(brandId: String, modelId: String) {
+        _variants.postValue(Results.Loading())
         viewModelScope.launch {
             try {
                 val variantsList = repository.getVariants(brandId, modelId)
-                _variants.value = variantsList
+                _variants.postValue(Results.Success(variantsList))
             } catch (e: Exception) {
-                _error.value = "Failed to load variants: ${e.message}"
+                _models.postValue(Results.Error("Failed to load brands: ${e.message}"))
             }
         }
     }
@@ -158,7 +160,7 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
     private val _postInventoryItem = MutableLiveData<String>()
     val postInventoryItem: LiveData<String> get() = _postInventoryItem
 
-     fun postInventory(item: DataClass.InventoryData): String?{
+     fun postInventory(item: DataClass.InventoryData): String{
         lateinit var result: String
          viewModelScope.launch {
                 result = try {

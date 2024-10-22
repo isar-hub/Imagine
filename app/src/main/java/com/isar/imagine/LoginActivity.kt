@@ -15,9 +15,8 @@ class LoginActivity : AppCompatActivity() {
     lateinit var password : EditText
     lateinit var loginButton : Button
 
-    val user1 = "main"
-    val user2 = "billing"
-    val user3 = "retailer"
+    val user1 = "main1"
+    val user2 = "billing2"
     val pass = "1234"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
         intialization()
 
         val intent = Intent(this, MainActivity::class.java).apply {
-            putExtra("username", "2")
+            putExtra("username", "1")
         }
         startActivity(intent)
 
@@ -51,19 +50,13 @@ class LoginActivity : AppCompatActivity() {
         Log.e("Test","destination ${userName.text}")
         if(userName.text.toString() == user1){
             val intent = Intent(this, MainActivity::class.java).apply {
-                putExtra("username", "3")
+                putExtra("username", "1")
             }
             startActivity(intent)
         }
         else if(userName.text.toString() == user2){
             val intent = Intent(this, MainActivity::class.java).apply {
                 putExtra("username", "2")
-            }
-            startActivity(intent)
-        }
-        else if(userName.text.toString()== user3){
-            val intent = Intent(this, MainActivity::class.java).apply {
-                putExtra("username", "1")
             }
             startActivity(intent)
         }

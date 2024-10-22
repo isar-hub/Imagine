@@ -45,6 +45,7 @@ preferenceKtx = "1.2.1"
 objectDetectionCommon = "18.0.0"
 firebaseFirestore = "25.1.0"
 firebaseFunctions = "21.0.0"
+firebaseAuthKtx = "23.0.0"
 
 [libraries]
 android-pdf-viewer-v320beta1 = { module = "com.github.barteksc:android-pdf-viewer", version.ref = "androidPdfViewerVersion" }
@@ -91,6 +92,7 @@ androidx-preference-ktx = { group = "androidx.preference", name = "preference-kt
 object1-detection-common = { group = "com.google.mlkit", name = "object-detection-common", version.ref = "objectDetectionCommon" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 firebase-functions = { group = "com.google.firebase", name = "firebase-functions", version.ref = "firebaseFunctions" }
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

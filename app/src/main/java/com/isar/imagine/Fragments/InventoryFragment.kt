@@ -1,6 +1,6 @@
 package com.isar.imagine.Fragments
 
-import android.content.Context
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -19,6 +19,7 @@ import com.isar.imagine.inventory.InventoryRepositoryImpl
 import com.isar.imagine.inventory.InventoryViewModel
 import com.isar.imagine.inventory.MobileViewModelFactory
 import com.isar.imagine.inventory.models.DataClass
+import com.isar.imagine.utils.Results
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.Font
@@ -28,6 +29,7 @@ import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import java.io.File
 import java.io.FileOutputStream
+
 
 /**
  * RoadMap :
@@ -47,6 +49,9 @@ class InventoryFragment : Fragment() {
 
     private var selectedBrand: DataClass.Brand? = null
     private var selectedModel: DataClass.Model? = null
+    private lateinit var progressDialog: ProgressDialog
+
+    var items: MutableList<DataClass.InventoryData> = mutableListOf()
 
     //
     override fun onCreateView(
@@ -66,13 +71,18 @@ class InventoryFragment : Fragment() {
         viewModel = factory.create(InventoryViewModel::class.java)
         // add item to list
 
+        progressDialog = ProgressDialog(context)
 
         //
 
         calculateTotalPrice()
-        onSaveClick()
+        binding.submit.setOnClickListener{
+            onSaveClick()
+        }
+
         addItemToExpandableList()
         observeFireBaseData()
+        populateConditionSpinner()
 
 
         //
@@ -84,6 +94,12 @@ class InventoryFragment : Fragment() {
             // Call the save method when new barcodes are generated
             if (barcodes.isNotEmpty()) {
                 saveBarcodesToExcel(barcodes)
+
+                viewModel.inventoryList.value?.forEach{ _ ->
+//                    item.add()
+                }
+
+
             }
         }
 //        showProgressBar()
@@ -99,14 +115,13 @@ class InventoryFragment : Fragment() {
 
     // on click add button check required item is not empty
     private fun addItemToExpandableList() {
-        for (i in 1..10){
-            Log.e("inventory","adding data at $i")
-            viewModel.addItem("Samsung$i","M32$i","8-128,black$i","Gold", 1000000.00, 1000000000.00,10, "nothing")
-        }
+
         viewModel.inventoryList.observe(viewLifecycleOwner) { inventoryList ->
             updateExpandableListAdapter(inventoryList)
         }
-
+        binding.listView.setOnGroupExpandListener { value->
+            Log.e("groupTag","is Clicked $value")
+        }
         binding.buttonAdd.setOnClickListener {
             if (isNotEmptyEditText()) {
                 //adding item to list
@@ -121,37 +136,72 @@ class InventoryFragment : Fragment() {
 
 
         viewModel.brands.observe(viewLifecycleOwner) { brands ->
-            if (brands.isNotEmpty()) {
-                populateBrandSpinner(brands)
+            when(brands){
+                is Results.Loading ->{
+                    showDialog("Loading brand")
+                }
+                is Results.Success-> {
+                    progressDialog.hide()
+                    if (brands.data != null && brands.data.isNotEmpty()){
+                        populateBrandSpinner(brands.data)
+                    }
+                }
+                is Results.Error ->{
+                    progressDialog.hide()
+                    Toast.makeText(context, "Error in fetching brands ${brands.data}",Toast.LENGTH_LONG).show()
+                }
             }
+
+
         }
 
         // Observe models
         viewModel.models.observe(viewLifecycleOwner) { models ->
-            if (models.isNotEmpty()) {
-                binding.spinnerModel.visibility = View.VISIBLE
-                populateModelSpinner(models)
-            } else {
-                binding.spinnerModel.visibility = View.GONE
+            when(models){
+                is Results.Loading ->{
+                    showDialog("Loading Models")
+                }
+                is Results.Success-> {
+                    progressDialog.hide()
+                    if (!models.data.isNullOrEmpty()){
+                        populateModelSpinner(models.data)
+                    }
+                }
+                is Results.Error ->{
+                    progressDialog.hide()
+                    Toast.makeText(context, "Error in fetching brands ${models.data}",Toast.LENGTH_LONG).show()
+                }
             }
+
         }
 
-        // Observe variants
         viewModel.variants.observe(viewLifecycleOwner) { variants ->
-            if (variants.isNotEmpty()) {
-                binding.spinnerVariant.visibility = View.VISIBLE
-                populateVariantSpinner(variants)
-            } else {
-                binding.spinnerVariant.visibility = View.GONE
+            when(variants){
+                is Results.Loading ->{
+                    showDialog("Loading Variants")
+                }
+                is Results.Success-> {
+                    progressDialog.hide()
+                    if (!variants.data.isNullOrEmpty()){
+                        populateVariantSpinner(variants.data)
+                    }
+                }
+                is Results.Error ->{
+                    progressDialog.hide()
+                    Toast.makeText(context, "Error in fetching brands ${variants.data}",Toast.LENGTH_LONG).show()
+                }
             }
-        }
 
-        // Observe errors
-        viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
-            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
         }
 
 
+
+
+
+    }
+    private fun showDialog(text :String ){
+        progressDialog.setMessage(text);
+        progressDialog.show()
     }
 
     private fun populateBrandSpinner(brands: List<DataClass.Brand>) {
@@ -176,9 +226,7 @@ class InventoryFragment : Fragment() {
                     viewModel.fetchModels(selectedBrand!!.id)
                     // Reset downstream selections
                     binding.spinnerModel.adapter = null
-                    binding.spinnerModel.visibility = View.GONE
                     binding.spinnerVariant.adapter = null
-                    binding.spinnerVariant.visibility = View.GONE
                 }
             }
     }
@@ -198,15 +246,22 @@ class InventoryFragment : Fragment() {
             override fun onItemSelected(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-                selectedModel = models.get(position)
+                selectedModel = models[position]
                 // Fetch variants for selected model
                 viewModel.fetchVariants(selectedBrand!!.id, selectedModel!!.id)
                 // Reset downstream selections
                 binding.spinnerVariant.adapter = null
-                binding.spinnerVariant.visibility = View.GONE
 
             }
         }
+    }
+    private fun populateConditionSpinner() {
+        val condition = listOf("Silver","Gold","Platinum")
+        val adapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, condition)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerCondition.adapter = adapter
+
     }
 
 
@@ -252,10 +307,10 @@ class InventoryFragment : Fragment() {
 
     private fun addItemToList() {
 
-        // observing inventory list to set in expandable list
-        viewModel.inventoryList.observe(viewLifecycleOwner) { inventoryList ->
-            updateExpandableListAdapter(inventoryList)
-        }
+//        // observing inventory list to set in expandable list
+//        viewModel.inventoryList.observe(viewLifecycleOwner) { inventoryList ->
+//            updateExpandableListAdapter(inventoryList)
+//        }
 
         //getting item from input fields
         val name = binding.spinnerBrandName.selectedItem.toString()
@@ -280,11 +335,14 @@ class InventoryFragment : Fragment() {
         val expandableListTitle = inventoryList.map { it.brand }.distinct()
         val expandableListDetail = inventoryList.groupBy { it.brand }
 
+        Log.e("getGroupCount", "Titles: $expandableListTitle")
+        Log.e("getGroupCount", "Details: $expandableListDetail")
         // adapter of recyclerview
         val expandableListAdapter = InventoryExpandableListAdapter(
             requireContext(), expandableListTitle, expandableListDetail
         )
         binding.listView.setAdapter(expandableListAdapter)
+
     }
 
 

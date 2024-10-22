@@ -29,17 +29,13 @@ class MainActivity : AppCompatActivity() {
         val userName = intent.getStringExtra("username")
         Log.e("Test","reached main activity ${userName.toString()}")
         when (userName) {
-            "3" -> {
+            "1" -> {
                 Log.e("Test", "Navigating to mainPanelFragment")
                 startActivity(Intent(this@MainActivity,MainPanelFragment::class.java))
             }
             "2" -> {
                 Log.e("Test", "Navigating to billingPanelFragment")
                 startActivity(Intent(this@MainActivity, BarCodeScanningActivity::class.java))
-            }
-            "1" -> {
-                Log.e("Test", "Navigating to retailerPanelFragment")
-                startActivity(Intent(this@MainActivity, RetailerPanelFragment::class.java))
             }
             else -> println("Other number")
         }
