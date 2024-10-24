@@ -12,8 +12,8 @@ import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
 import com.isar.imagine.R
-import com.isar.imagine.data.Retailer
-
+//import com.isar.imagine.data.Retailer
+data class  Retailer(val name :String)
 class RetailerAdapter(
     private var retailers: List<Retailer>,
     private val listener: (Retailer) -> Unit

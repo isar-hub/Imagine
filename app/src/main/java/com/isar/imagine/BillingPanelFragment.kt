@@ -35,7 +35,7 @@ import com.google.android.gms.vision.barcode.BarcodeDetector
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.util.concurrent.ListenableFuture
 import com.isar.imagine.Adapters.InventoryExpandableListAdapter
-import com.isar.imagine.data.Retailer
+import com.isar.imagine.Adapters.Retailer
 import com.isar.imagine.data.model.InventoryItem
 import com.isar.imagine.data.model.ItemWithSerialResponse
 import com.isar.imagine.databinding.FragmentSecondBinding
@@ -167,7 +167,7 @@ listViewInitialize(view = binding.root)
     private fun sendBill(retailerName: String) {
         // Implementation for sending bill
         val retailer = Retailer(
-            name = retailerName, warrantyPhones = 1234567890, totalItems = 2345
+            name = retailerName
         )
         val billUri = generateBillDetails(retailer)
         // Use the generated bill URI for sharing or further actions
@@ -178,7 +178,7 @@ listViewInitialize(view = binding.root)
             "Item", "Description", "Quantity"
         )
         val customerInfo = ModelInvoiceInfo.ModelCustomerInfo(
-            retailer.name, retailer.warrantyPhones.toString(), "City", "Country"
+            retailer.name,
         )
         val invoiceInfo = ModelInvoiceInfo(
             customerInfo, "123456798", "07-08-24", "500"

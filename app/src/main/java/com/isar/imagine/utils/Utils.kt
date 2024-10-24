@@ -1,5 +1,7 @@
 package com.isar.imagine.utils
 
+import android.app.Dialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
@@ -11,6 +13,8 @@ import android.graphics.YuvImage
 import android.hardware.Camera
 import android.preference.PreferenceManager
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.TextView
 import com.google.android.gms.common.images.Size
 import com.google.mlkit.vision.barcode.common.Barcode
 import androidx.annotation.StringRes
@@ -160,5 +164,32 @@ object Utils {
             .putString(context.getString(prefKeyId), value)
             .apply()
     }
+
+    fun showProgressDialog(textmessage : String){
+
+    }
+
 }
 
+
+object CustomProgressBar {
+
+    private var dialog: Dialog? = null
+
+    fun show(context: Context, message: String) {
+        if (dialog == null) {
+            dialog = Dialog(context).apply {
+                setCancelable(false)
+                setContentView(LayoutInflater.from(context).inflate(R.layout.progress_dialog, null))
+            }
+        }
+
+        dialog?.findViewById<TextView>(R.id.progress_message)?.text = message
+        dialog?.show()
+    }
+
+    fun dismiss() {
+        dialog?.dismiss()
+        dialog = null
+    }
+}

@@ -1,5 +1,6 @@
 package com.isar.imagine.screens
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Build
@@ -14,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.isar.imagine.LoginActivity
 import com.isar.imagine.R
 
+@SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
