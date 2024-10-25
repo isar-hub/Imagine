@@ -130,7 +130,7 @@
                 android:textSize="12sp"
                 android:textColorHint="@color/white"
                 android:hint=" Selling price"
-                android:inputType="numberDecimal" />
+                android:inputType="number" />
 
 
 <!--            &lt;!&ndash; Quantity EditText &ndash;&gt;-->

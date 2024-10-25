@@ -11,6 +11,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.isar.imagine.Adapters.InventoryExpandableListAdapter
 import com.isar.imagine.data.model.InventoryItem
@@ -20,6 +21,7 @@ import com.isar.imagine.inventory.InventoryViewModel
 import com.isar.imagine.inventory.MobileViewModelFactory
 import com.isar.imagine.inventory.models.DataClass
 import com.isar.imagine.utils.Results
+import kotlinx.coroutines.launch
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellStyle
 import org.apache.poi.ss.usermodel.Font
@@ -73,45 +75,69 @@ class InventoryFragment : Fragment() {
 
         progressDialog = ProgressDialog(context)
 
-        //
 
-        calculateTotalPrice()
-        binding.submit.setOnClickListener{
-            onSaveClick()
-        }
+        getUserInput()
+        addItem()
+        saveData()
 
-        addItemToExpandableList()
+
+    }
+
+    private fun getUserInput(){
+
         observeFireBaseData()
         populateConditionSpinner()
 
 
-        //
+
+    }
+    private fun addItem(){
+        addItemToExpandableList()
+        calculateTotalPrice()
+
+
     }
 
-    private fun onSaveClick() {
-
-        viewModel.generatedBarcodes.observe(viewLifecycleOwner) { barcodes ->
-            // Call the save method when new barcodes are generated
-            if (barcodes.isNotEmpty()) {
-                saveBarcodesToExcel(barcodes)
-
-                viewModel.inventoryList.value?.forEach{ _ ->
-//                    item.add()
-                }
-
-
-            }
-        }
-//        showProgressBar()
-
-        val quantity = binding.edittextQuantity.text.toString()
-        if (quantity.isNotBlank()){
-            viewModel.generateUniqueBarcodes(Integer.parseInt(quantity))
+    private fun saveData(){
+        binding.submit.setOnClickListener{
+            onSaveClick()
         }
     }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private  fun onSaveClick() {
+
+        viewModel.viewModelScope.launch {
+            viewModel.onSave()
+
+        }
+        viewModel.inventoryListFinal.observe(viewLifecycleOwner){ items->
+            Log.e("itemFinal","List final is $items")
+        }
+//        viewModel.inventoryList.value?.forEach{ _item ->
+//            viewModel.generateUniqueBarcodes()
+//
+//
+//        }
+////
+////        viewModel.generatedBarcodes.observe(viewLifecycleOwner) { barcodes ->
+////            // Call the save method when new barcodes are generated
+////            if (barcodes.isNotEmpty()) {
+////                saveBarcodesToExcel(barcodes)
+////
+////
+////
+////
+////            }
+////        }
+//
+//        val quantity = binding.edittextQuantity.text.toString()
+//        if (quantity.isNotBlank()){
+//            viewModel.generateUniqueBarcodes(Integer.parseInt(quantity))
+//        }
+    }
+
+
 
     // on click add button check required item is not empty
     private fun addItemToExpandableList() {
@@ -133,7 +159,6 @@ class InventoryFragment : Fragment() {
 
     //get brand model variant  data and show in dropdown
     private fun observeFireBaseData() {
-
 
         viewModel.brands.observe(viewLifecycleOwner) { brands ->
             when(brands){
@@ -288,7 +313,6 @@ class InventoryFragment : Fragment() {
     }
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //check if quantity and selling price is not empty
     private fun isNotEmptyEditText(): Boolean {

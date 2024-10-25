@@ -73,7 +73,6 @@ class InventoryRepositoryImpl(private val firestore: FirebaseFirestore) : Invent
         try {
             // Generate a document reference for the new inventory item
             val inventoryRef = firestore.collection("inventory").document()
-            // Set the item data
             inventoryRef.set(item).addOnSuccessListener {
                     // Handle success (e.g., show a toast)
                 response = "Item Added Successfully"

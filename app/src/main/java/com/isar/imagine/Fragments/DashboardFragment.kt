@@ -61,7 +61,7 @@ class DashboardFragment : Fragment() {
 
 
 
-    fun barChart(){
+    fun     barChart(){
         // Assuming you're using MPAndroidChart
         val barChart = binding.salesBarChart
         val barChart1 = binding.modelWiseStockBarChart

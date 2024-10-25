@@ -61,7 +61,6 @@ class RetailerPanelFragment :AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         _binding = FragmentRetailerPanelBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -73,7 +72,6 @@ class RetailerPanelFragment :AppCompatActivity() {
             checkForPermissions()
         }
     }
-
 
 
     private fun checkForPermissions() {

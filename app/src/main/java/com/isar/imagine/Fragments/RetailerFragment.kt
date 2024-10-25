@@ -19,6 +19,7 @@ import com.isar.imagine.Adapters.Retailer
 import com.isar.imagine.Adapters.RetailerAdapter
 import com.isar.imagine.R
     import com.isar.imagine.databinding.FragmentRetailerBinding
+import com.isar.imagine.inventory.models.DataClass
 import com.isar.imagine.utils.CustomProgressBar
 import com.isar.imagine.utils.Results
 import com.isar.imagine.viewmodels.RetailerFragmentViewHolder
@@ -51,6 +52,7 @@ class RetailerFragment() : Fragment() {
         binding.btnAddRetailer.setOnClickListener { showCreateUserDialog() }
         observers()
     }
+
 
     private fun observers() {
         viewModel.inventoryList.observe(viewLifecycleOwner) {
