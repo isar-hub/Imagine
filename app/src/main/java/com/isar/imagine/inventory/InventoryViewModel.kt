@@ -117,13 +117,15 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
     private val _inventoryListFinal = MutableLiveData<List<DataClass.InventoryData>>()
     val inventoryListFinal : LiveData<List<DataClass.InventoryData>> get() = _inventoryListFinal
 
+    private val _responsePost = MutableLiveData<Boolean>(false)
+    val responsePost : MutableLiveData<Boolean> get() = _responsePost
+
      suspend fun onSave() {
         Log.d("Inventory", "Starting to save inventory items")
 
          val items = getItems()
          for (item in items){
-             val response = postInventory(item)
-             Log.e("submission", "Final post response is $response" )
+            _responsePost.value = postInventory(item)
 
          }
 
@@ -142,7 +144,7 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
 
                 Log.d("Inventory", "Generated barcodes: $barCodeList")
 
-                val inventoryData = DataClass.InventoryData(item, barCodeList)
+                val inventoryData = DataClass.InventoryData(item.brand,item.model,item.variant,item.condition,item.sellingPrice,item.purchasePrice,item.quantity,item.notes, barCodeList)
                 tempInventoryItem.add(inventoryData)
             }
             Log.d("Inventory", "Final items count: ${tempInventoryItem.size}") // Log final count
@@ -217,14 +219,14 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
 //    private val _postInventoryItem = MutableLiveData<String>()
 //    val postInventoryItem: LiveData<String> get() = _postInventoryItem
 
-     fun postInventory(item: DataClass.InventoryData): String{
-        lateinit var result: String
+     fun postInventory(item: DataClass.InventoryData): Boolean{
+         var result = false
          viewModelScope.launch {
                 result = try {
                     repository.saveInventory(item)
 
                 }catch (e : Exception){
-                    "Exception : ${e.message}"
+                    false
                 }
         }
         return result

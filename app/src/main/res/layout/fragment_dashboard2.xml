@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/red"
-    tools:context=".Fragments.DashboardFragment"
+    tools:context="dashboard.DashboardFragment"
 >
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,8 +13,6 @@
         android:orientation="vertical"
 
         >
-
-
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -53,6 +51,7 @@
 
 
                 <TextView
+                    android:id="@+id/totalSum"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Total Stock : 200"

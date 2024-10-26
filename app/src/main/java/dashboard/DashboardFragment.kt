@@ -1,5 +1,6 @@
-package com.isar.imagine.Fragments
+package dashboard
 
+import DashboardViewmodel
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -23,9 +24,15 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
 import com.isar.imagine.R
 import com.isar.imagine.databinding.FragmentDashboard2Binding
 import com.isar.imagine.responses.InventoryCountResponses
+import com.isar.imagine.utils.CommonMethods
+import com.isar.imagine.utils.CustomProgressBar
+import com.isar.imagine.utils.Results
+import dashboard.models.BarChartModel
+import dashboard.models.PieChartModel
 import java.util.ArrayList
 import java.util.Random
 
@@ -34,6 +41,7 @@ class DashboardFragment : Fragment() {
 
     private lateinit var myDB: DatabaseReference
     private lateinit var binding: FragmentDashboard2Binding
+    private lateinit var viewModel : DashboardViewmodel;
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,31 +56,62 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        viewModel = DashboardViewmodel()
 
 
         horizontalBarChartData()
-        pieChartData()
         lineCharData()
-        barChart()
+
+
+        onbserveData()
+    }
+
+    fun onbserveData(){
+        viewModel.brands.observe(viewLifecycleOwner){
+            when(it){
+                is Results.Loading ->{
+                  CustomProgressBar.show(requireContext(),"Loading Model ...")
+                }
+                is Results.Success ->{
+                    barChart(it.data!!)
+                    calculateTotalStock(it.data.quantity)
+                    CustomProgressBar.dismiss()
+                }
+                is Results.Error ->{}
+
+            }
+        }
+        viewModel.conditionWise.observe(viewLifecycleOwner){
+            when(it){
+                is Results.Loading ->{
+                    CustomProgressBar.show(requireContext(),"Loading Model ...")
+                }
+                is Results.Success ->{
+                    pieChartData(it.data!!)
+                    CustomProgressBar.dismiss()
+                }
+                is Results.Error ->{}
+
+            }
+        }
 
     }
 
+    private fun calculateTotalStock(quantity: List<Float>) {
+        val total =  quantity.sum()
+        binding.totalSum.text = "Total item : $total"
+    }
 
 
-
-
-    fun     barChart(){
+    fun  barChart(data : BarChartModel){
         // Assuming you're using MPAndroidChart
-        val barChart = binding.salesBarChart
-        val barChart1 = binding.modelWiseStockBarChart
+        val barChart1 = binding.salesBarChart
+        val barChart = binding.modelWiseStockBarChart
 
-        // Sample data for phone models and their stock
-        val modelNames = listOf("Model A", "Model B", "Model C", "Model D", "Model E", "Model F")
-        val stockValues = listOf(10f, 310f, 330f, 30f, 20f, 50f)
 
         val list = ArrayList<BarEntry>()
-        for (i in stockValues.indices) {
-            list.add(BarEntry(i.toFloat(), stockValues[i]))
+        for (i in data.quantity.indices) {
+            list.add(BarEntry(i.toFloat(), data.quantity[i],data.brandName[i]))
         }
 
         val set = BarDataSet(list, "Phone Models Stock").apply {
@@ -81,7 +120,6 @@ class DashboardFragment : Fragment() {
             valueTextSize = 16f // Size of value text on bars
         }
 
-        // Create a BarData object and customize its appearance
         val barData = BarData(set).apply {
             barWidth = 0.4f // Adjust bar width as needed
         }
@@ -91,31 +129,29 @@ class DashboardFragment : Fragment() {
         barChart1.data = barData
 
         // Customize the chart appearance
-        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(modelNames) // Set model names on X-axis
-        barChart.xAxis.granularity = 1f // Show one label per bar
-        barChart.axisRight.isEnabled = false // Disable right Y-axis
-        barChart.animateY(1000) // Add animation for bar chart
+        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(data.brandName) // Set model names on X-axis
+        barChart.xAxis.granularity = 1f
+        barChart.axisRight.isEnabled = false
+        barChart.animateY(1000)
 
         // Refresh the chart
-        barChart.invalidate() // Refresh the chart to reflect the changes
+        barChart.invalidate()
+        barChart1.invalidate()
 
 
     }
 
 
-    fun pieChartData(){
+    fun pieChartData(data : PieChartModel){
 
-        val pieChart = binding.conditionWiseSalesPieChart
-        val pieChart1 = binding.conditionWiseStockPieChart
+        val pieChart1 = binding.conditionWiseSalesPieChart
+        val pieChart = binding.conditionWiseStockPieChart
 
-        // Sample data for phone conditions
-        val conditionNames = listOf("Gold", "Silver", "Platinum")
-        val conditionValues = listOf(150f, 80f, 30f) // Replace with actual stock numbers
+
 
         // Create a list of PieEntry objects
-        val pieEntries = ArrayList<PieEntry>()
-        for (i in conditionValues.indices) {
-            pieEntries.add(PieEntry(conditionValues[i], conditionNames[i]))
+        val pieEntries =  data.condition.mapIndexed{ index, condition ->
+            PieEntry(data.quantity[index],condition)
         }
 
         // Create a PieDataSet
@@ -138,6 +174,7 @@ class DashboardFragment : Fragment() {
 
         // Refresh the chart
         pieChart.invalidate() // Refresh the chart to reflect the changes
+        pieChart1.invalidate()
 
     }
 

@@ -19,7 +19,14 @@ class DataClass{
     )
 
     data class InventoryData(
-        var inventoryData: InventoryItem,
+        val brand: String,
+        val model: String,
+        val variant: String,
+        val condition: String,
+        var purchasePrice: Double,
+        var sellingPrice: Double,
+        var quantity: Int,
+        var notes: String,
         var serialNumber: List<String>
     )
 

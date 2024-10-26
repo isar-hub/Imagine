@@ -3,9 +3,11 @@ package com.isar.imagine
 import WorkflowModel
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
+import android.content.Context
 import android.content.Intent
 import android.hardware.Camera
 import android.os.Bundle
+import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +31,7 @@ import java.io.IOException
 import java.util.ArrayList
 import android.view.View.OnClickListener
 import android.widget.Toast
+import com.google.mlkit.common.MlKit
 
 class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
 
@@ -44,6 +47,9 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        MlKit.initialize(this)
+
 
         setContentView(R.layout.activity_live_barcode)
         preview = findViewById(R.id.camera_preview)
@@ -66,12 +72,22 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
             setOnClickListener(this@BarCodeScanningActivity)
         }
 
+
         setUpWorkflowModel()
+        Log.e("tag","on create called")
     }
+
+    override fun onStart() {
+        super.onStart()
+        Log.e("Tag","on start called")
+        setUpWorkflowModel()
+
+    }
+
 
     override fun onResume() {
         super.onResume()
-
+        Log.e("tag","on resume called")
         workflowModel?.markCameraFrozen()
         settingsButton?.isEnabled = true
         currentWorkflowState = WorkflowModel.WorkflowState.NOT_STARTED
@@ -92,6 +108,7 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.e("tag","on destroy called")
         cameraSource?.release()
         cameraSource = null
     }

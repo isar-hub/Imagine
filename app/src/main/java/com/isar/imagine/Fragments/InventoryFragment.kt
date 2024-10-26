@@ -12,8 +12,12 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.isar.imagine.Adapters.InventoryExpandableListAdapter
+import com.isar.imagine.R
 import com.isar.imagine.data.model.InventoryItem
 import com.isar.imagine.databinding.FragmentInventory2Binding
 import com.isar.imagine.inventory.InventoryRepositoryImpl
@@ -101,6 +105,14 @@ class InventoryFragment : Fragment() {
     private fun saveData(){
         binding.submit.setOnClickListener{
             onSaveClick()
+        }
+        viewModel.responsePost.observe(viewLifecycleOwner){
+            if (it){
+                NavController(requireContext()).navigate(resId = R.id.dashboardFragment)
+            }
+            else{
+                Snackbar.make(requireContext(),requireView(),"Error in posting data Please Retry",Toast.LENGTH_LONG).show()
+            }
         }
     }
 

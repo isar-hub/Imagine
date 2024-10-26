@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.FirebaseApp
 import com.isar.imagine.LoginActivity
 import com.isar.imagine.R
 
@@ -23,7 +24,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_splash)
-
+        FirebaseApp.initializeApp(this)
 
 //        supportActionBar!!.hide()
         Handler().postDelayed({

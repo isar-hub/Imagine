@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.isar.imagine.Fragments.DashboardFragment"
+        android:name="dashboard.DashboardFragment"
         android:label="dashboard"
         tools:layout="@layout/fragment_dashboard"/>
 

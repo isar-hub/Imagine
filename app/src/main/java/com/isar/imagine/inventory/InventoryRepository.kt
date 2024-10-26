@@ -9,7 +9,7 @@ interface InventoryRepository {
     suspend fun getBrands(): List<DataClass.Brand>
     suspend fun getModels(brandId: String): List<DataClass.Model>
     suspend fun getVariants(brandId: String, modelId: String): List<DataClass.Variant>
-    suspend fun saveInventory(item: DataClass.InventoryData): String
+    suspend fun saveInventory(item: DataClass.InventoryData): Boolean
 }
 
 class InventoryRepositoryImpl(private val firestore: FirebaseFirestore) : InventoryRepository {
@@ -67,21 +67,22 @@ class InventoryRepositoryImpl(private val firestore: FirebaseFirestore) : Invent
         return variants
     }
 
-    override suspend fun saveInventory(item: DataClass.InventoryData): String {
-        var response = ""
+    override suspend fun saveInventory(item: DataClass.InventoryData): Boolean {
+
+        var response = false;
 
         try {
             // Generate a document reference for the new inventory item
             val inventoryRef = firestore.collection("inventory").document()
             inventoryRef.set(item).addOnSuccessListener {
                     // Handle success (e.g., show a toast)
-                response = "Item Added Successfully"
+                response = true
                 }.addOnFailureListener { e ->
                     // Handle failure (e.g., show an error message)
-                response = "Failure : ${e.message}"
+                response = false
                 }
         } catch (e: Exception) {
-            response = "Exception : ${e.message}"
+            response = false
         }
         return response
     }

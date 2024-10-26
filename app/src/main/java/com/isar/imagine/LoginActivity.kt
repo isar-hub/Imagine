@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
         intialization()
 
         val intent = Intent(this, MainActivity::class.java).apply {
-            putExtra("username", "1")
+            putExtra("username", "2")
         }
         startActivity(intent)
 
