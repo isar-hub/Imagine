@@ -1,8 +1,9 @@
 package com.isar.imagine.utils
 
+import android.app.AlertDialog
 import android.app.Dialog
-import android.app.ProgressDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -14,18 +15,17 @@ import android.hardware.Camera
 import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.TextView
+import androidx.annotation.StringRes
 import com.google.android.gms.common.images.Size
 import com.google.mlkit.vision.barcode.common.Barcode
-import androidx.annotation.StringRes
 import com.google.mlkit.vision.common.InputImage
 import com.isar.imagine.R
 import com.isar.imagine.barcode.CameraSizePair
 import com.isar.imagine.barcode.GraphicOverlay
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
-import kotlin.math.abs
-import java.util.ArrayList
 import kotlin.math.abs
 
 object Utils {
@@ -59,27 +59,28 @@ object Utils {
             val previewSizePrefKey = context.getString(R.string.pref_key_rear_camera_preview_size)
             val pictureSizePrefKey = context.getString(R.string.pref_key_rear_camera_picture_size)
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-            val previewSize = Size.parseSize(sharedPreferences.getString(previewSizePrefKey, null)!!)
-            val pictureSize = Size.parseSize(sharedPreferences.getString(pictureSizePrefKey, null)!!)
+            val previewSize =
+                Size.parseSize(sharedPreferences.getString(previewSizePrefKey, null)!!)
+            val pictureSize =
+                Size.parseSize(sharedPreferences.getString(pictureSizePrefKey, null)!!)
             CameraSizePair(previewSize, pictureSize)
 
         } catch (e: Exception) {
             null
         }
     }
+
     private fun getBooleanPref(
-        context: Context,
-        @StringRes prefKeyId: Int,
-        defaultValue: Boolean
-    ): Boolean =
-        PreferenceManager.getDefaultSharedPreferences(context)
-            .getBoolean(context.getString(prefKeyId), defaultValue)
+        context: Context, @StringRes prefKeyId: Int, defaultValue: Boolean
+    ): Boolean = PreferenceManager.getDefaultSharedPreferences(context)
+        .getBoolean(context.getString(prefKeyId), defaultValue)
 
     private fun getIntPref(context: Context, @StringRes prefKeyId: Int, defaultValue: Int): Int {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val prefKey = context.getString(prefKeyId)
         return sharedPreferences.getInt(prefKey, defaultValue)
     }
+
     fun getBarcodeReticleBox(overlay: GraphicOverlay): RectF {
         val context = overlay.context
         val overlayWidth = overlay.width.toFloat()
@@ -98,8 +99,9 @@ object Utils {
         return if (getBooleanPref(context, R.string.pref_key_enable_barcode_size_check, false)) {
             val reticleBoxWidth = getBarcodeReticleBox(overlay).width()
             val barcodeWidth = overlay.translateX(barcode.boundingBox?.width()?.toFloat() ?: 0f)
-            val requiredWidth =
-                reticleBoxWidth * getIntPref(context, R.string.pref_key_minimum_barcode_width, 50) / 100
+            val requiredWidth = reticleBoxWidth * getIntPref(
+                context, R.string.pref_key_minimum_barcode_width, 50
+            ) / 100
             (barcodeWidth / requiredWidth).coerceAtMost(1f)
         } else {
             1f
@@ -158,14 +160,13 @@ object Utils {
 
         return validPreviewSizes
     }
+
     fun saveStringPreference(context: Context, @StringRes prefKeyId: Int, value: String?) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-            .edit()
-            .putString(context.getString(prefKeyId), value)
-            .apply()
+        PreferenceManager.getDefaultSharedPreferences(context).edit()
+            .putString(context.getString(prefKeyId), value).apply()
     }
 
-    fun showProgressDialog(textmessage : String){
+    fun showProgressDialog(textmessage: String) {
 
     }
 
@@ -187,6 +188,42 @@ object CustomProgressBar {
         dialog?.findViewById<TextView>(R.id.progress_message)?.text = message
         dialog?.show()
     }
+
+    fun dismiss() {
+        dialog?.dismiss()
+        dialog = null
+    }
+}
+
+object CustomDialog {
+
+    private var dialog: AlertDialog? = null
+
+    fun showAlertDialog(
+        context: Context,
+        message: String,
+        onPositiveAction: (() -> Unit)? = null,
+        onNegativeAction: (() -> Unit)? = null
+    ) {
+        if (dialog == null) {
+            val dialogView = View.inflate(context, R.layout.custom_dialog_layout, null)
+
+            val messageTextView: TextView = dialogView.findViewById(R.id.body)
+            messageTextView.text = message
+
+            dialog = AlertDialog.Builder(context).setView(dialogView)
+                .setPositiveButton("Ok") { dialog1: DialogInterface, _: Int ->
+                    onPositiveAction?.invoke()
+                    dialog1.dismiss()
+                }.setNegativeButton("Cancel") { dialog1: DialogInterface, _: Int ->
+                    onNegativeAction?.invoke()  // Trigger the negative action callback
+                    dialog1.dismiss()
+
+                }.create()
+        }
+        dialog?.show()
+    }
+
 
     fun dismiss() {
         dialog?.dismiss()

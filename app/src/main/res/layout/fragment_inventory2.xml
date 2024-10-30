@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/red"
-    tools:context=".Fragments.InventoryFragment">
+    tools:context=".inventory.InventoryFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

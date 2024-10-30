@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/inventoryFragment"
-        android:name="com.isar.imagine.Fragments.InventoryFragment"
+        android:name="com.isar.imagine.inventory.InventoryFragment"
         android:label="inventory"
 
         tools:layout="@layout/fragment_inventory">

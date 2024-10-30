@@ -117,16 +117,15 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
     private val _inventoryListFinal = MutableLiveData<List<DataClass.InventoryData>>()
     val inventoryListFinal : LiveData<List<DataClass.InventoryData>> get() = _inventoryListFinal
 
-    private val _responsePost = MutableLiveData<Boolean>(false)
-    val responsePost : MutableLiveData<Boolean> get() = _responsePost
+
 
      suspend fun onSave() {
         Log.d("Inventory", "Starting to save inventory items")
 
+
          val items = getItems()
          for (item in items){
-            _responsePost.value = postInventory(item)
-
+            val respose = postInventory(item)
          }
 
     }
@@ -197,18 +196,16 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
         return withContext(Dispatchers.IO){
             val uniqueBarcodes = mutableListOf<String>()
             for (barcode in barcodes) {
-                val exists = firestore.collection("inventory")
-                    .whereEqualTo("serialNumber", barcode)
-                    .get()
-                    .await()
-                    .isEmpty // Check if the query returns no documents
+                val exists =
+                    firestore.collection("inventory").whereArrayContains("serialNumber", barcode).get()
+                        .await().documents.isEmpty()
 
-                if (!exists) {
+                if (exists) {
                     Log.d("Firebase", "Barcode exists, generating a new one for: $barcode")
-                    uniqueBarcodes.add(generateSerialNumber())
+                    uniqueBarcodes.add(barcode)
                 } else {
                     Log.d("Firebase", "Barcode is unique: $barcode")
-                    uniqueBarcodes.add(barcode)
+                    uniqueBarcodes.add(generateSerialNumber())
                 }
             }
             uniqueBarcodes
@@ -219,14 +216,14 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
 //    private val _postInventoryItem = MutableLiveData<String>()
 //    val postInventoryItem: LiveData<String> get() = _postInventoryItem
 
-     fun postInventory(item: DataClass.InventoryData): Boolean{
-         var result = false
+     fun postInventory(item: DataClass.InventoryData): String{
+         var result = ""
          viewModelScope.launch {
                 result = try {
                     repository.saveInventory(item)
 
                 }catch (e : Exception){
-                    false
+                 "${e.message}"
                 }
         }
         return result

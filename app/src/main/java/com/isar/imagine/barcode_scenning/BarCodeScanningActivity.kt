@@ -1,37 +1,39 @@
-package com.isar.imagine
+package com.isar.imagine.barcode_scenning
 
 import WorkflowModel
 import android.animation.AnimatorInflater
 import android.animation.AnimatorSet
-import android.content.Context
 import android.content.Intent
 import android.hardware.Camera
 import android.os.Bundle
-import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import android.view.View.OnClickListener
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.internal.Objects
 import com.google.android.material.chip.Chip
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.mlkit.common.MlKit
+import com.isar.imagine.R
 import com.isar.imagine.barcode.BarcodeProcessor
 import com.isar.imagine.barcode.BarcodeResultFragment
 import com.isar.imagine.barcode.CameraSource
 import com.isar.imagine.barcode.CameraSourcePreview
 import com.isar.imagine.barcode.GraphicOverlay
 import com.isar.imagine.barcode.SettingsActivity
+import com.isar.imagine.barcode_scenning.models.BillingDataModel
 import com.isar.imagine.data.model.BarcodeField
 import com.isar.imagine.data.model.ItemWithSerialResponse
-import com.isar.imagine.retrofit.RetrofitInstance
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.isar.imagine.utils.CustomDialog
+import com.isar.imagine.utils.CustomProgressBar
+import com.isar.imagine.utils.Results
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.IOException
-import java.util.ArrayList
-import android.view.View.OnClickListener
-import android.widget.Toast
-import com.google.mlkit.common.MlKit
 
 class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
 
@@ -45,13 +47,21 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
     private var workflowModel: WorkflowModel? = null
     private var currentWorkflowState: WorkflowModel.WorkflowState? = null
 
+    private val viewModel: BarCodeScanningViewmodel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        MlKit.initialize(this)
+//        MlKit.initialize(this)
 
 
-        setContentView(R.layout.activity_live_barcode)
+
+        obserVingViewmodel()
+        val firestore =
+//        val factory = BarCodeScanningViewModelProvider(firestore)
+//        viewModel = factory.create(BarCodeScanningViewmodel::class.java)
+//
+
+            setContentView(R.layout.activity_live_barcode)
         preview = findViewById(R.id.camera_preview)
         graphicOverlay = findViewById<GraphicOverlay>(R.id.camera_preview_graphic_overlay).apply {
             setOnClickListener(this@BarCodeScanningActivity)
@@ -59,10 +69,12 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
         }
 
         promptChip = findViewById(R.id.bottom_prompt_chip)
-        promptChipAnimator =
-            (AnimatorInflater.loadAnimator(this, R.animator.bottom_prompt_chip_enter) as AnimatorSet).apply {
-                setTarget(promptChip)
-            }
+        promptChipAnimator = (AnimatorInflater.loadAnimator(
+            this,
+            R.animator.bottom_prompt_chip_enter
+        ) as AnimatorSet).apply {
+            setTarget(promptChip)
+        }
 
         findViewById<View>(R.id.close_button).setOnClickListener(this)
         flashButton = findViewById<View>(R.id.flash_button).apply {
@@ -74,12 +86,12 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
 
 
         setUpWorkflowModel()
-        Log.e("tag","on create called")
+        Log.e("tag", "on create called")
     }
 
     override fun onStart() {
         super.onStart()
-        Log.e("Tag","on start called")
+        Log.e("Tag", "on start called")
         setUpWorkflowModel()
 
     }
@@ -87,7 +99,7 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        Log.e("tag","on resume called")
+        Log.e("tag", "on resume called")
         workflowModel?.markCameraFrozen()
         settingsButton?.isEnabled = true
         currentWorkflowState = WorkflowModel.WorkflowState.NOT_STARTED
@@ -108,7 +120,7 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.e("tag","on destroy called")
+        Log.e("tag", "on destroy called")
         cameraSource?.release()
         cameraSource = null
     }
@@ -127,6 +139,7 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
                     }
                 }
             }
+
             R.id.settings_button -> {
                 settingsButton?.isEnabled = false
                 startActivity(Intent(this, SettingsActivity::class.java))
@@ -180,24 +193,29 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
                     promptChip?.setText(R.string.prompt_point_at_a_barcode)
                     startCameraPreview()
                 }
+
                 WorkflowModel.WorkflowState.CONFIRMING -> {
                     promptChip?.visibility = View.VISIBLE
                     promptChip?.setText(R.string.prompt_move_camera_closer)
                     startCameraPreview()
                 }
+
                 WorkflowModel.WorkflowState.SEARCHING -> {
                     promptChip?.visibility = View.VISIBLE
                     promptChip?.setText(R.string.prompt_searching)
                     stopCameraPreview()
                 }
+
                 WorkflowModel.WorkflowState.DETECTED, WorkflowModel.WorkflowState.SEARCHED -> {
                     promptChip?.visibility = View.GONE
                     stopCameraPreview()
                 }
+
                 else -> promptChip?.visibility = View.GONE
             }
 
-            val shouldPlayPromptChipEnteringAnimation = wasPromptChipGone && promptChip?.visibility == View.VISIBLE
+            val shouldPlayPromptChipEnteringAnimation =
+                wasPromptChipGone && promptChip?.visibility == View.VISIBLE
             promptChipAnimator?.let {
                 if (shouldPlayPromptChipEnteringAnimation && !it.isRunning) it.start()
             }
@@ -206,51 +224,62 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
         workflowModel?.detectedBarcode?.observe(this, Observer { barcode ->
             if (barcode != null) {
 //                val barcodeFieldList = ArrayList<BarcodeField>()
-                startActivity(Intent(this@BarCodeScanningActivity,BillingPanelFragment::class.java))
+//                startActivity(Intent(this@BarCodeScanningActivity, BillingPanelFragment::class.java))
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    if (barcode.rawValue != null) {
+                        viewModel.isSerialNumber(barcode.rawValue!!,FirebaseFirestore.getInstance())
+
+                    } else {
+                        Log.e("BARCODE", "barcode is nul ${barcode.displayValue}")
+                    }
+                }
 
 //                barcodeFieldList.add(BarcodeField("Raw Value", barcode.rawValue?: ""))
 //                BarcodeResultFragment.show(supportFragmentManager, barcodeFieldList)
             }
         })
     }
-    private fun callApiForSearch(serialNum: String) {
-//        RetrofitInstance.getApiInterface().getItemWithId(serialNum)
-//            .enqueue(object : Callback<ItemWithSerialResponse> {
-//                override fun onResponse(
-//                    call: Call<ItemWithSerialResponse>, response: Response<ItemWithSerialResponse>
-//                ) {
-//                    if (response.isSuccessful) {
-//                        val item = response.body()
-//                        item?.let {
-//                            showSuccessItemDialog(it)
-//                        }
-//                    } else {
-//
-//
-//                        onResume()
-//                        Toast.makeText(applicationContext,"Doesn't Exist $serialNum",Toast.LENGTH_SHORT).show()
-//                        Log.e("API Error", "Response Code: ${response.code()} $serialNum")
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<ItemWithSerialResponse>, t: Throwable) {
-//                    Log.e("API Error", "Failed to fetch item", t)
-//                }
-//            })
+
+
+    private fun obserVingViewmodel() {
+        viewModel.serialNumberLiveData.observe(this) {
+            when (it) {
+
+                is Results.Error -> {
+                    CustomDialog.showAlertDialog(this@BarCodeScanningActivity,"Not available")
+                    Log.e("tag","not present...............")
+                    CustomProgressBar.dismiss()
+
+                }
+                is Results.Loading -> {
+                    CustomProgressBar.show(this@BarCodeScanningActivity,"Loading...")
+                    Log.e("tag","Loading...............")
+                }
+                is Results.Success -> {
+//                    CustomDialog.showAlertDialog(this@BarCodeScanningActivity,"Successfully fetched")
+                    showSuccessItemDialog(it.data!!)
+                    CustomProgressBar.dismiss()
+                    Log.e("tag","success...............")
+                }
+            }
+
+        }
     }
 
-    private fun showSuccessItemDialog(item: ItemWithSerialResponse) {
+    private fun showSuccessItemDialog(item: BillingDataModel) {
         val barcodeFieldList = arrayListOf(
+            BarcodeField("Serial Number ", item.serialNumber),
             BarcodeField("Brand", item.brand),
             BarcodeField("Model", item.model),
             BarcodeField("Variant", item.variant.toString()),
-            BarcodeField("Color", item.color),
             BarcodeField("Condition", item.condition),
-            BarcodeField("Price", item.sellingPrice.toString()),
-            BarcodeField("Description", item.description),
-            BarcodeField("Notes", item.notes)
-            // Add more fields as necessary
+            BarcodeField("Purchase Price", item.purchasePrice.toString()),
+            BarcodeField("Selling Price", item.sellingPrice.toString()),
+            BarcodeField("Quantity", item.quantity.toString()),
+            BarcodeField("Notes", item.notes),
         )
+        BarcodeResultFragment.setQuantity(item.quantity)
         BarcodeResultFragment.show(supportFragmentManager, barcodeFieldList)
     }
 

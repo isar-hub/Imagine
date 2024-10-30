@@ -69,7 +69,7 @@
             android:screenOrientation="fullSensor">
         </activity>
         <activity
-            android:name=".BarCodeScanningActivity"
+            android:name=".barcode_scenning.BarCodeScanningActivity"
             android:exported="false"
             android:screenOrientation="portrait">
         </activity>

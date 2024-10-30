@@ -5,15 +5,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import com.isar.imagine.R
 import com.isar.imagine.data.model.BarcodeField
 
 
 /** Presents a list of field info in the detected barcode.  */
-internal class BarcodeFieldAdapter(private val barcodeFieldList: List<BarcodeField>) :
-    RecyclerView.Adapter<BarcodeFieldAdapter.BarcodeFieldViewHolder>() {
+internal class BarcodeFieldAdapter(
+    private val barcodeFieldList: List<BarcodeField>,
+) : RecyclerView.Adapter<BarcodeFieldAdapter.BarcodeFieldViewHolder>() {
 
-    internal class BarcodeFieldViewHolder private constructor(view: View) : RecyclerView.ViewHolder(view) {
+    internal class BarcodeFieldViewHolder private constructor(view: View) :
+        RecyclerView.ViewHolder(view) {
 
         private val labelView: TextView = view.findViewById(R.id.barcode_field_label)
         private val valueView: TextView = view.findViewById(R.id.barcode_field_value)
@@ -23,21 +26,22 @@ internal class BarcodeFieldAdapter(private val barcodeFieldList: List<BarcodeFie
             valueView.text = barcodeField.value
         }
 
+
         companion object {
 
             fun create(parent: ViewGroup): BarcodeFieldViewHolder {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.barcode_field, parent, false)
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.barcode_field, parent, false)
                 return BarcodeFieldViewHolder(view)
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BarcodeFieldViewHolder =
-        BarcodeFieldViewHolder.create(parent)
+        BarcodeFieldViewHolder.create(parent,)
 
     override fun onBindViewHolder(holder: BarcodeFieldViewHolder, position: Int) =
         holder.bindBarcodeField(barcodeFieldList[position])
 
-    override fun getItemCount(): Int =
-        barcodeFieldList.size
+    override fun getItemCount(): Int = barcodeFieldList.size
 }

@@ -7,13 +7,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.button.MaterialButton
 import com.isar.imagine.R
 import com.isar.imagine.data.model.BarcodeField
+import com.isar.imagine.utils.CommonMethods
+import com.isar.imagine.utils.CustomDialog
 
 /** Displays the bottom sheet to present barcode fields contained in the detected barcode.  */
 class BarcodeResultFragment : BottomSheetDialogFragment() {
@@ -24,6 +28,14 @@ class BarcodeResultFragment : BottomSheetDialogFragment() {
         bundle: Bundle?
     ): View {
         val view = layoutInflater.inflate(R.layout.barcode_bottom_sheet, viewGroup)
+        val btn: MaterialButton = view.findViewById(R.id.btnConfirm)
+
+
+        btn.setOnClickListener{
+            if (getQuantity() > 0){
+                CustomDialog.showAlertDialog(requireContext(), getQuantity().toString())
+            }
+        }
 
         val arguments = arguments
         val barcodeFieldList: ArrayList<BarcodeField> =
@@ -56,16 +68,25 @@ class BarcodeResultFragment : BottomSheetDialogFragment() {
         super.onDismiss(dialogInterface)
     }
 
-    companion   object {
+    companion object {
 
         private const val TAG = "BarcodeResultFragment"
         private const val ARG_BARCODE_FIELD_LIST = "arg_barcode_field_list"
+        private var QUANTITY = 0L;
+
+        fun getQuantity() : Long{
+            return QUANTITY;
+        }
+        fun setQuantity(quantity : Long){
+            QUANTITY = quantity
+        }
 
         fun show(fragmentManager: FragmentManager, barcodeFieldArrayList: ArrayList<BarcodeField>) {
             val barcodeResultFragment = BarcodeResultFragment()
             barcodeResultFragment.arguments = Bundle().apply {
                 putParcelableArrayList(ARG_BARCODE_FIELD_LIST, barcodeFieldArrayList)
             }
+
             barcodeResultFragment.show(fragmentManager, TAG)
         }
 
