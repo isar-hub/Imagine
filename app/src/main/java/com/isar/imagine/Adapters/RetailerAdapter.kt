@@ -15,17 +15,17 @@ import com.isar.imagine.R
 //import com.isar.imagine.data.Retailer
 data class  Retailer(val name :String)
 class RetailerAdapter(
-    private var retailers: List<Retailer>,
-    private val listener: (Retailer) -> Unit
+    private var retailers: List<String>,
+    private val listener: (String) -> Unit
 ) : RecyclerView.Adapter<RetailerAdapter.ViewHolder>(), Filterable {
 
-     var retailersFullList: List<Retailer> = ArrayList(retailers)
+     var retailersFullList: List<String> = ArrayList(retailers)
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val retailerName: TextView = itemView.findViewById(R.id.tvRetailerName)
 
-        fun bind(retailer: Retailer) {
-            retailerName.text = retailer.name
+        fun bind(retailer: String) {
+            retailerName.text = retailer
             itemView.setOnClickListener { listener(retailer) }
         }
     }
@@ -38,7 +38,7 @@ class RetailerAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // Add logging to confirm the data in retailersFullList
-        Log.e("RetailerAdapter", "Full list data: ${retailersFullList.map { it.name }}")
+        Log.e("RetailerAdapter", "Full list data: ${retailersFullList.map { it }}")
 
         holder.bind(retailers[position])
     }
@@ -57,7 +57,7 @@ class RetailerAdapter(
                     retailersFullList
                 } else {
                     retailersFullList.filter {
-                        it.name.lowercase().contains(filterPattern)
+                        it.lowercase().contains(filterPattern)
                     }
                 }
 
@@ -68,7 +68,7 @@ class RetailerAdapter(
             @Suppress("UNCHECKED_CAST")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 Log.d("RetailerAdapter", "Publishing results with count: ${results?.values?.let { (it as List<*>).size }}")
-                retailers = results?.values as List<Retailer>
+                retailers = results?.values as List<String>
                 notifyDataSetChanged()
             }
         }

@@ -1,12 +1,9 @@
 package com.isar.imagine.viewmodels
 
-import android.app.ProgressDialog
-import android.provider.ContactsContract.Groups
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -14,23 +11,13 @@ import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
-import com.google.gson.Gson
 import com.isar.imagine.Adapters.Retailer
-import com.isar.imagine.data.Root
+import com.isar.imagine.data.Metadata
+import com.isar.imagine.data.ProviderDaum
 import com.isar.imagine.data.Root2
 import com.isar.imagine.utils.Results
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import com.google.gson.reflect.TypeToken
-
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
-import java.security.acl.Group
 
 
 class RetailerFragmentViewHolder(
@@ -41,39 +28,27 @@ class RetailerFragmentViewHolder(
 
     private val _inventoryList = MutableLiveData<Results<List<Retailer>>>()
     val inventoryList: LiveData<Results<List<Retailer>>> get() = _inventoryList
-    private val retailerList = mutableListOf<Retailer>()
+
+    private val _retailerList = MutableLiveData<Results<List<Root2>>>(Results.Loading())
+    val retailerList: LiveData<Results<List<Root2>>> get() = _retailerList
+
 
     init {
-        Log.e("funtions", "init callled")
         getRetailers()
-
     }
-    fun addRetailer(retailer: Retailer){
-        retailerList.add(retailer)
-        _inventoryList.postValue(Results.Success(retailerList))
-    }
-
-//    fun addLoadingRetailer(){
-//        _inventoryList.postValue(Results.Loading())
-//    }
-//    fun addError(message : String){
-//        _inventoryList.postValue(Results.Error(message))
-//    }
-
 
     private val _userCreated = MutableLiveData<Results<FirebaseUser?>>()
     val userCreated: LiveData<Results<FirebaseUser?>> get() = _userCreated
 
 
-
-     fun getRetailers()  {
-         viewModelScope.launch {
-             val result =repository.getRetailer(functions)
-
-             Log.e("main",result.toString())
-//             Log.e("main", result["data"].toString())
-         }
+    fun getRetailers() {
+        viewModelScope.launch {
+            val result = repository.getRetailer(functions)
+            _retailerList.postValue(result)
+        }
     }
+
+
     fun createUser(email: String, password: String, name: String) {
         _userCreated.postValue(Results.Loading())  // Set loading state
 
@@ -86,66 +61,59 @@ class RetailerFragmentViewHolder(
 }
 
 
-class RetailerRepository(private val firebaseAuth: FirebaseAuth)  {
-
-//    fun getRetailers() {
-//        val url = URL("https://api-jxtqakdgka-uc.a.run.app/main/allRetailers")
-//
-//        CoroutineScope(Dispatchers.IO).launch {
-//            try {
-//                val connection = url.openConnection() as HttpURLConnection
-//                connection.requestMethod = "GET"
-//
-//                val responseCode = connection.responseCode
-//                if (responseCode == HttpURLConnection.HTTP_OK) {
-//                    val inputStream = BufferedReader(InputStreamReader(connection.inputStream))
-//                    val response = StringBuilder()
-//                    inputStream.forEachLine { line ->
-//                        response.append(line)
-//                    }
-//                    inputStream.close()
-//
-//                    withContext(Dispatchers.Main) {
-//                        Log.e("API Response", "user : $response")
-//                    }
-//                } else {
-//                    Log.e("API Response", "Failed: HTTP error code $responseCode")
-//                }
-//                connection.disconnect()
-//            } catch (e: Exception) {
-//                Log.e("API Response", "error: ${e.message}")
-//            }
-//        }
-//    }
-    suspend fun getRetailer(functions: FirebaseFunctions) : List<HashMap<String,String>>? {
-
-
+class RetailerRepository(private val firebaseAuth: FirebaseAuth) {
+    suspend fun getRetailer(functions: FirebaseFunctions): Results<List<Root2>> {
         Log.e("functions", "Calling the 'addMessage' function...")
-        return  try {
-            val result =functions.getHttpsCallable("addmessage").call().await()
-           if (result.data != null){
-               val data = result.data as List<HashMap<String,String>>
-               data;
-           }
-            else{
-                return  null;
-           }
+        return try {
+            val result = functions.getHttpsCallable("addmessage").call().await()
+            if (result.data != null) {
+                val data = result.data as List<HashMap<String, String>>
+                Results.Success(data.map { mapToRoot2(it) })
+            } else {
+                Results.Error("Error in Fetching")
+            }
         } catch (e: Exception) {
-            return  null;
+            return Results.Error("Error ${e.message}")
         }
     }
 
+    fun mapToRoot2(map: Map<String, Any>): Root2 {
+        val metadataMap = map["metadata"] as? Map<String, String>
+        val providerDataList = map["providerData"] as? List<Map<String, String>>
 
+        return Root2(uid = map["uid"] as String,
+            email = map["email"] as String,
+            emailVerified = map["emailVerified"] as Boolean,
+            displayName = map["displayName"] as String,
+            disabled = map["disabled"] as Boolean,
+
+            metadata = Metadata(
+                lastSignInTime = metadataMap?.get("lastSignInTime") ?: "",
+                creationTime = metadataMap?.get("creationTime") ?: "",
+                lastRefreshTime = metadataMap?.get("lastRefreshTime") ?: ""
+            ),
+
+            passwordHash = map["passwordHash"] as String,
+            passwordSalt = map["passwordSalt"] as String,
+            tokensValidAfterTime = map["tokensValidAfterTime"] as String,
+
+            providerData = providerDataList?.map { providerMap ->
+                ProviderDaum(
+                    uid = providerMap["uid"] ?: "",
+                    displayName = providerMap["displayName"] ?: "",
+                    email = providerMap["email"] ?: "",
+                    providerId = providerMap["providerId"] ?: ""
+                )
+            } ?: emptyList())
+    }
 
     suspend fun createUser(email: String, password: String, name: String): Results<FirebaseUser?> {
         return try {
-            val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).  await()
+            val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             val user = authResult.user
 
             if (user != null) {
-                val profileUpdates = UserProfileChangeRequest.Builder()
-                    .setDisplayName(name)
-                    .build()
+                val profileUpdates = UserProfileChangeRequest.Builder().setDisplayName(name).build()
 
                 user.updateProfile(profileUpdates).await()
 

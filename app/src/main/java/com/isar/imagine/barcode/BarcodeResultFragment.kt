@@ -2,38 +2,59 @@ package com.isar.imagine.barcode
 
 import WorkflowModel
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.EditText
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
+import com.isar.imagine.BillingPanelFragment
 import com.isar.imagine.R
+import com.isar.imagine.barcode_scenning.models.BillingDataModel
 import com.isar.imagine.data.model.BarcodeField
-import com.isar.imagine.utils.CommonMethods
 import com.isar.imagine.utils.CustomDialog
 
 /** Displays the bottom sheet to present barcode fields contained in the detected barcode.  */
 class BarcodeResultFragment : BottomSheetDialogFragment() {
 
     override fun onCreateView(
-        layoutInflater: LayoutInflater,
-        viewGroup: ViewGroup?,
-        bundle: Bundle?
+        layoutInflater: LayoutInflater, viewGroup: ViewGroup?, bundle: Bundle?
     ): View {
         val view = layoutInflater.inflate(R.layout.barcode_bottom_sheet, viewGroup)
         val btn: MaterialButton = view.findViewById(R.id.btnConfirm)
 
 
-        btn.setOnClickListener{
-            if (getQuantity() > 0){
-                CustomDialog.showAlertDialog(requireContext(), getQuantity().toString())
+        btn.setOnClickListener {
+            val textView = EditText(requireContext()).apply {
+                hint = getQuantity().toString()
+                width = MATCH_PARENT
+                inputType = InputType.TYPE_CLASS_NUMBER
+
+            }
+            if (getQuantity() > 0) {
+                CustomDialog.showAlertDialog(requireContext(),
+                    textView,
+                    "Please Enter Quantity max is : ${getQuantity()}",
+                    {
+                        if (Integer.parseInt(textView.text.toString()) <= getQuantity()) {
+//                            Log.e("Data","in data ${getItem()}")
+                            startActivity(Intent(
+                                requireContext(), BillingPanelFragment::class.java
+                            ).apply {
+                                putExtra("data", getItem())
+                            })
+                            activity?.finish()
+                        }
+                    })
             }
         }
 
@@ -72,13 +93,23 @@ class BarcodeResultFragment : BottomSheetDialogFragment() {
 
         private const val TAG = "BarcodeResultFragment"
         private const val ARG_BARCODE_FIELD_LIST = "arg_barcode_field_list"
-        private var QUANTITY = 0L;
+        private var QUANTITY = 0L
+        private var item: MutableList<BillingDataModel> = mutableListOf()
 
-        fun getQuantity() : Long{
-            return QUANTITY;
+        fun getQuantity(): Long {
+            return QUANTITY
         }
-        fun setQuantity(quantity : Long){
+
+        fun setQuantity(quantity: Long) {
             QUANTITY = quantity
+        }
+
+        fun getItem(): ArrayList<BillingDataModel>{
+            return this.item as ArrayList
+        }
+
+        fun setItem(item: List<BillingDataModel>) {
+            this.item.addAll(item)
         }
 
         fun show(fragmentManager: FragmentManager, barcodeFieldArrayList: ArrayList<BarcodeField>) {

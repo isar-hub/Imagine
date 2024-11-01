@@ -3,7 +3,6 @@ package com.isar.imagine.utils
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -16,9 +15,11 @@ import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.StringRes
 import com.google.android.gms.common.images.Size
+import com.google.android.material.button.MaterialButton
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 import com.isar.imagine.R
@@ -201,25 +202,28 @@ object CustomDialog {
 
     fun showAlertDialog(
         context: Context,
-        message: String,
+        message: View,
+        header: String,
         onPositiveAction: (() -> Unit)? = null,
         onNegativeAction: (() -> Unit)? = null
     ) {
         if (dialog == null) {
             val dialogView = View.inflate(context, R.layout.custom_dialog_layout, null)
 
-            val messageTextView: TextView = dialogView.findViewById(R.id.body)
-            messageTextView.text = message
+            val container: ViewGroup = dialogView.findViewById(R.id.body)
+            dialogView.findViewById<MaterialButton>(R.id.cancel).setOnClickListener {
+                onNegativeAction?.invoke()
+                dismiss()
+            }
+            dialogView.findViewById<MaterialButton>(R.id.ok).setOnClickListener {
+                onPositiveAction?.invoke()
+                dismiss()
+            }
+            dialogView.findViewById<TextView>(R.id.header).text = header
+            container.removeAllViews()
+            container.addView(message)
 
-            dialog = AlertDialog.Builder(context).setView(dialogView)
-                .setPositiveButton("Ok") { dialog1: DialogInterface, _: Int ->
-                    onPositiveAction?.invoke()
-                    dialog1.dismiss()
-                }.setNegativeButton("Cancel") { dialog1: DialogInterface, _: Int ->
-                    onNegativeAction?.invoke()  // Trigger the negative action callback
-                    dialog1.dismiss()
-
-                }.create()
+            dialog = AlertDialog.Builder(context).setView(dialogView).create()
         }
         dialog?.show()
     }
@@ -230,3 +234,4 @@ object CustomDialog {
         dialog = null
     }
 }
+

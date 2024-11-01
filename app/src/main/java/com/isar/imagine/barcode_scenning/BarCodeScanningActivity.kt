@@ -6,20 +6,28 @@ import android.animation.AnimatorSet
 import android.content.Intent
 import android.hardware.Camera
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.EditText
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.setPadding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.common.internal.Objects
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.mlkit.common.MlKit
 import com.isar.imagine.R
 import com.isar.imagine.barcode.BarcodeProcessor
 import com.isar.imagine.barcode.BarcodeResultFragment
+import com.isar.imagine.barcode.BarcodeResultFragment.Companion.getQuantity
 import com.isar.imagine.barcode.CameraSource
 import com.isar.imagine.barcode.CameraSourcePreview
 import com.isar.imagine.barcode.GraphicOverlay
@@ -46,22 +54,23 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
     private var promptChipAnimator: AnimatorSet? = null
     private var workflowModel: WorkflowModel? = null
     private var currentWorkflowState: WorkflowModel.WorkflowState? = null
+    private  var listData: MutableList<BillingDataModel> = mutableListOf()
+
 
     private val viewModel: BarCodeScanningViewmodel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_live_barcode)
 
-//        MlKit.initialize(this)
-
+        val dataList = intent.getSerializableExtra("dataList") as? ArrayList<BillingDataModel>
+        val isBilling = intent.getBooleanExtra("isBilling", false)
+        if (dataList != null && isBilling){
+            listData.addAll(dataList)
+        }
 
 
         obserVingViewmodel()
-        val firestore =
-//        val factory = BarCodeScanningViewModelProvider(firestore)
-//        viewModel = factory.create(BarCodeScanningViewmodel::class.java)
-//
 
-            setContentView(R.layout.activity_live_barcode)
         preview = findViewById(R.id.camera_preview)
         graphicOverlay = findViewById<GraphicOverlay>(R.id.camera_preview_graphic_overlay).apply {
             setOnClickListener(this@BarCodeScanningActivity)
@@ -74,6 +83,25 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
             R.animator.bottom_prompt_chip_enter
         ) as AnimatorSet).apply {
             setTarget(promptChip)
+        }
+        val textView = EditText(this).apply {
+            hint = getQuantity().toString()
+            width = MATCH_PARENT
+            inputType = InputType.TYPE_CLASS_TEXT
+            maxLines = 1
+
+        }
+
+
+        findViewById<MaterialButton>(R.id.loginButton).setOnClickListener{
+            CustomDialog.showAlertDialog(this@BarCodeScanningActivity,textView,"Enter Serial Number",{
+                CoroutineScope(Dispatchers.IO).launch {
+                    if (!textView.text.isNullOrEmpty() ) {
+                        viewModel.isSerialNumber(textView.text.toString(),FirebaseFirestore.getInstance())
+
+                    }
+                }
+            })
         }
 
         findViewById<View>(R.id.close_button).setOnClickListener(this)
@@ -243,11 +271,14 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
 
 
     private fun obserVingViewmodel() {
+        val textView = TextView(this@BarCodeScanningActivity).apply {
+            text = "Not Available"
+        }
         viewModel.serialNumberLiveData.observe(this) {
             when (it) {
 
                 is Results.Error -> {
-                    CustomDialog.showAlertDialog(this@BarCodeScanningActivity,"Not available")
+                    CustomDialog.showAlertDialog(this@BarCodeScanningActivity,textView,"Error in Scanning")
                     Log.e("tag","not present...............")
                     CustomProgressBar.dismiss()
 
@@ -279,6 +310,8 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
             BarcodeField("Quantity", item.quantity.toString()),
             BarcodeField("Notes", item.notes),
         )
+        listData.add(item)
+        BarcodeResultFragment.setItem(listData)
         BarcodeResultFragment.setQuantity(item.quantity)
         BarcodeResultFragment.show(supportFragmentManager, barcodeFieldList)
     }
