@@ -1,7 +1,9 @@
 package com.isar.imagine
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -12,6 +14,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import com.isar.imagine.barcode_scenning.BarCodeScanningActivity
 import com.isar.imagine.databinding.FragmentFirstBinding
 
 
@@ -36,6 +39,7 @@ class MainPanelFragment : AppCompatActivity() {
 
         Log.e("MainPanelFragment", "onViewCreated called")
 
+
         bindToolbar()
         setUpToolbar()
         navigation()
@@ -46,9 +50,11 @@ class MainPanelFragment : AppCompatActivity() {
                 R.id.dashboard -> {
                     navController.navigate(R.id.dashboardFragment)
                 }
+
                 R.id.inventory -> {
                     navController.navigate(R.id.inventoryFragment)
                 }
+
                 R.id.transactions -> {
                     navController.navigate(R.id.transactionsFragment)
                 }
@@ -64,6 +70,20 @@ class MainPanelFragment : AppCompatActivity() {
                 R.id.customer -> {
                     navController.navigate(R.id.customerFragment)
                 }
+
+                R.id.billingPanel -> {
+                    startActivity(Intent(this@MainPanelFragment, BarCodeScanningActivity::class.java))
+                }
+
+                R.id.signout -> {
+                    startActivity(Intent(
+                        this@MainPanelFragment, LoginActivity::class.java
+                    ).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        finish()
+                    })
+                }
+
                 else -> {
                     Log.e("Test", "Clicked on else")
                 }
@@ -81,7 +101,10 @@ class MainPanelFragment : AppCompatActivity() {
         toolbar = findViewById(R.id.toolbar)
         drawerLayout = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.drawer_nav_view)
-
+        val desiredWidth = (resources.displayMetrics.widthPixels * 0.5).toInt()
+        val layoutParams = navigationView.layoutParams
+        layoutParams.width = desiredWidth
+        navigationView.layoutParams = layoutParams
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -114,4 +137,6 @@ class MainPanelFragment : AppCompatActivity() {
 
 
     }
+
+
 }

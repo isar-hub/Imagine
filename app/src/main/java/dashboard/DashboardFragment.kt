@@ -58,9 +58,9 @@ class DashboardFragment : Fragment() {
 
         viewModel = DashboardViewmodel()
 
-
         horizontalBarChartData()
         lineCharData()
+
 
 
         onbserveData()

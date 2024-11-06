@@ -8,8 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import com.isar.imagine.utils.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -37,8 +36,6 @@ class RetailerFragment() : Fragment() {
     private lateinit var firebaseAuth: FirebaseAuth
     val repository = RetailerRepository(FirebaseAuth.getInstance())
 
-
-
     private val viewModel: RetailerFragmentViewHolder by viewModels() {
         RetailerViewModelFactory(repository)
     }
@@ -60,23 +57,11 @@ class RetailerFragment() : Fragment() {
     }
 
 
-    private fun getTextView(message: String): TextView{
-        return TextView(requireContext()).apply {
-            text = message
-        }
-    }
-    private fun observers() {
-//        viewModel.inventoryList.observe(viewLifecycleOwner) {
-//            when (it) {
-//                is Results.Loading -> CustomProgressBar.show(requireContext(), "Loading Retailer...")
-//                is Results.Error -> Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
-//                is Results.Success -> it.data?.let { retailers -> setupRecyclerView(retailers) }
-//            }
-//        }
 
+    private fun observers() {
         viewModel.retailerList.observe(viewLifecycleOwner){ retailer ->
             when(retailer){
-                is Results.Error -> CustomDialog.showAlertDialog(requireContext(),getTextView(retailer.message!!),"Error")
+                is Results.Error -> CustomDialog.showAlertDialog(requireContext(),requireContext().getTextView(retailer.message!!),"Error")
                 is Results.Loading -> CustomProgressBar.show(requireContext(),"Loading Retailers")
                 is Results.Success -> {
                     CustomProgressBar.dismiss()
@@ -86,18 +71,6 @@ class RetailerFragment() : Fragment() {
             }
         }
 
-//        viewModel.userCreated.observe(viewLifecycleOwner) { result ->
-//            when (result) {
-//                is Results.Loading -> CustomProgressBar.show(requireContext(), "Creating User...")
-//                is Results.Success -> {
-//                    val retailer = result.data?.displayName?.let { Retailer(it) }
-//                    retailer?.let { viewModel.addRetailer(it) }
-//                    Toast.makeText(requireContext(), "User created: ${result.data?.email}", Toast.LENGTH_SHORT).show()
-//                }
-//                is Results.Error -> Toast.makeText(requireContext(), "Error: ${result.message}", Toast.LENGTH_SHORT).show()
-//            }
-//            CustomProgressBar.dismiss()
-//        }
     }
 
     private fun setupRecyclerView(retailers: List<String>) {
@@ -108,17 +81,15 @@ class RetailerFragment() : Fragment() {
         binding.rvRetailers.adapter = adapter
     }
     private fun showCreateUserDialog() {
-        // Initialize FirebaseAuth
         firebaseAuth = FirebaseAuth.getInstance()
 
-        // Inflate the custom layout
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_create_user, null)
 
         // Create the AlertDialog
         val dialog = context?.let {
             AlertDialog.Builder(it)
                 .setView(dialogView)
-                .setCancelable(true) // Allow dismissing by tapping outside
+                .setCancelable(true)
                 .create()
         }
 

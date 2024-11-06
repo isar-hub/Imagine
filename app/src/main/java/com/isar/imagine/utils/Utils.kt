@@ -28,6 +28,11 @@ import com.isar.imagine.barcode.GraphicOverlay
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
 import kotlin.math.abs
+ fun Context.getTextView(message: String): TextView{
+    return TextView(this).apply {
+        text = message
+    }
+}
 
 object Utils {
     const val ASPECT_RATIO_TOLERANCE = 0.01f
@@ -195,6 +200,7 @@ object CustomProgressBar {
         dialog = null
     }
 }
+
 
 object CustomDialog {
 

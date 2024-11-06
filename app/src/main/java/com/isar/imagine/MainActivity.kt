@@ -29,11 +29,15 @@ class MainActivity : AppCompatActivity() {
         when (userName) {
             "1" -> {
                 Log.e("Test", "Navigating to mainPanelFragment")
-                startActivity(Intent(this@MainActivity,MainPanelFragment::class.java))
+                startActivity(Intent(this@MainActivity,MainPanelFragment::class.java)).apply {
+                    finish()
+                }
             }
             "2" -> {
                 Log.e("Test", "Navigating to billingPanelFragment")
-                startActivity(Intent(this@MainActivity, BarCodeScanningActivity::class.java))
+                startActivity(Intent(this@MainActivity, BarCodeScanningActivity::class.java)).apply {
+                    finish()
+                }
             }
             else -> println("Other number")
         }

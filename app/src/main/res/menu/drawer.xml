@@ -2,30 +2,32 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group
         android:id="@+id/drawer_menu_top"
-        android:checkableBehavior="single"
-        >
+        android:checkableBehavior="single">
         <item
             android:id="@+id/dashboard"
-            android:title="Dashboard"
             android:checked="true"
-            android:icon="@drawable/imagine_logo"
-            />
+            android:icon="@drawable/main"
+            android:iconTint="@color/white"
+            android:title="Dashboard" />
         <item
             android:id="@+id/inventory"
-            android:title="Inventory"
-            android:icon="@drawable/imagine_logo"
-           />
+            android:icon="@drawable/baseline_storage_24"
+            android:iconTint="@color/white"
+
+            android:title="Inventory" />
         <item
             android:id="@+id/transactions"
-            android:title="Transactions"
-            android:icon="@drawable/imagine_logo"
-            />
+            android:icon="@drawable/baseline_history_24"
+            android:iconTint="@color/white"
+
+            android:title="Transactions" />
         <item
 
             android:id="@+id/warranty"
-            android:title="Warranty"
-            android:icon="@drawable/imagine_logo"
-         />
+            android:icon="@drawable/baseline_mobile_friendly_24"
+            android:iconTint="@color/white"
+
+            android:title="Warranty" />
     </group>
 
     <group
@@ -33,13 +35,32 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/retailer"
-            android:title="Retailers"
-            android:icon="@drawable/imagine_logo"
-            />
-        <item  android:id="@+id/customer"
-            android:title="Customers"
-            android:icon="@drawable/imagine_logo"
-            />
+            android:icon="@drawable/add_retailer_icon"
+            android:iconTint="@color/white"
+
+            android:title="Retailers" />
+        <item
+            android:id="@+id/customer"
+            android:icon="@drawable/baseline_people_alt_24"
+            android:iconTint="@color/white"
+
+            android:title="Customers" />
     </group>
-    <group></group>
+    <group>
+
+        <item
+            android:id="@+id/billingPanel"
+            android:icon="@drawable/baseline_qr_code_scanner_24"
+            android:iconTint="@color/white"
+
+            android:title="Billing Panel" />
+        <item
+            android:id="@+id/signout"
+            android:icon="@drawable/baseline_logout_24"
+            android:iconTint="@color/white"
+
+            android:title="Signout" />
+
+
+    </group>
 </menu>

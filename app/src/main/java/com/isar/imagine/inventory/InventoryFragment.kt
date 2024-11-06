@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.isar.imagine.Adapters.InventoryExpandableListAdapter
@@ -20,7 +21,11 @@ import com.isar.imagine.R
 import com.isar.imagine.data.model.InventoryItem
 import com.isar.imagine.databinding.FragmentInventory2Binding
 import com.isar.imagine.inventory.models.DataClass
+import com.isar.imagine.utils.CommonMethods
+import com.isar.imagine.utils.CustomDialog
+import com.isar.imagine.utils.CustomProgressBar
 import com.isar.imagine.utils.Results
+import com.isar.imagine.utils.getTextView
 import kotlinx.coroutines.launch
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellStyle
@@ -49,8 +54,8 @@ class InventoryFragment : Fragment() {
     private lateinit var viewModel: InventoryViewModel
     private lateinit var binding: FragmentInventory2Binding
 
-    private var selectedBrand: DataClass.Brand? = null
-    private var selectedModel: DataClass.Model? = null
+    private var selectedBrand: String? = null
+    private var selectedModel: String? = null
     private lateinit var progressDialog: ProgressDialog
 
     var items: MutableList<DataClass.InventoryData> = mutableListOf()
@@ -100,23 +105,35 @@ class InventoryFragment : Fragment() {
 
     private fun saveData(){
         binding.submit.setOnClickListener{
+
             onSaveClick()
         }
-//        viewModel.responsePost.observe(viewLifecycleOwner){
-//            if (it){
-//                NavController(requireContext()).navigate(resId = R.id.dashboardFragment)
-//            }
-//            else{
-//                Snackbar.make(requireContext(),requireView(),"Error in posting data Please Retry",Toast.LENGTH_LONG).show()
-//            }
-//        }
+
     }
 
 
     private  fun onSaveClick() {
 
         viewModel.viewModelScope.launch {
-            viewModel.onSave()
+            viewModel.onSave {
+                if (it) {
+                    CustomDialog.showAlertDialog(
+                        requireContext(),
+                        requireContext().getTextView("Successfull Done"),
+                        "Sucess",{
+                            NavHostFragment.findNavController(requireParentFragment()).navigateUp()
+                        },{
+                            NavHostFragment.findNavController(requireParentFragment()).navigateUp()
+                        }
+                    )
+                } else {
+                    CustomDialog.showAlertDialog(
+                        requireContext(),
+                        requireContext().getTextView("Error"),
+                        "Error"
+                    )
+                }
+            }
 
         }
         viewModel.inventoryListFinal.observe(viewLifecycleOwner){ items->
@@ -171,16 +188,19 @@ class InventoryFragment : Fragment() {
         viewModel.brands.observe(viewLifecycleOwner) { brands ->
             when(brands){
                 is Results.Loading ->{
-                    showDialog("Loading brand")
+                    CustomProgressBar.show(requireContext(),"Loadin Branda")
+                    CommonMethods.showLogs("Success","Brand loading")
                 }
                 is Results.Success-> {
-                    progressDialog.hide()
-                    if (brands.data != null && brands.data.isNotEmpty()){
+                    CustomProgressBar.dismiss()
+                    CommonMethods.showLogs("Success","Brand successfull")
+                    if (!brands.data.isNullOrEmpty()){
                         populateBrandSpinner(brands.data)
                     }
                 }
                 is Results.Error ->{
-                    progressDialog.hide()
+                    CustomProgressBar.dismiss()
+                    CommonMethods.showLogs("Success","Brand error")
                     Toast.makeText(context, "Error in fetching brands ${brands.data}",Toast.LENGTH_LONG).show()
                 }
             }
@@ -192,16 +212,16 @@ class InventoryFragment : Fragment() {
         viewModel.models.observe(viewLifecycleOwner) { models ->
             when(models){
                 is Results.Loading ->{
-                    showDialog("Loading Models")
+                    CustomProgressBar.show(requireContext(),"Loading Variants")
                 }
                 is Results.Success-> {
-                    progressDialog.hide()
+                    CustomProgressBar.dismiss()
                     if (!models.data.isNullOrEmpty()){
                         populateModelSpinner(models.data)
                     }
                 }
                 is Results.Error ->{
-                    progressDialog.hide()
+                    CustomProgressBar.dismiss()
                     Toast.makeText(context, "Error in fetching brands ${models.data}",Toast.LENGTH_LONG).show()
                 }
             }
@@ -237,55 +257,39 @@ class InventoryFragment : Fragment() {
         progressDialog.show()
     }
 
-    private fun populateBrandSpinner(brands: List<DataClass.Brand>) {
-        val brandNames = brands.map { it.name }
+    private fun populateBrandSpinner(brands: List<String>) {
+
         val adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, brandNames)
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, brands)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinnerBrandName.adapter = adapter
+        binding.spinnerBrandName.setAdapter(adapter)
 
-
-        binding.spinnerBrandName.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    // Do nothing
-                }
-
-                override fun onItemSelected(
-                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
-                ) {
-                    selectedBrand = brands[position]
-                    // Fetch models for selected brand
-                    viewModel.fetchModels(selectedBrand!!.id)
-                    // Reset downstream selections
-                    binding.spinnerModel.adapter = null
-                    binding.spinnerVariant.adapter = null
-                }
-            }
+        binding.spinnerBrandName.setOnFocusChangeListener { _, _ ->
+            binding.spinnerBrandName.showDropDown()
+        }
+        binding.spinnerBrandName.setOnItemClickListener { _, _, position, _ ->
+            selectedBrand = brands[position]
+            // Fetch models for selected brand
+            viewModel.fetchModels(selectedBrand!!)
+            binding.spinnerModel.setAdapter(null)
+            binding.spinnerVariant.setAdapter(null)
+        }
     }
 
-    private fun populateModelSpinner(models: List<DataClass.Model>?) {
-        val modelNames = models?.map { it.name }
+    private fun populateModelSpinner(models: List<String>) {
+
         val adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, modelNames!!)
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, models)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinnerModel.adapter = adapter
-
-        binding.spinnerModel.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Do nothing
-            }
-
-            override fun onItemSelected(
-                parent: AdapterView<*>?, view: View?, position: Int, id: Long
-            ) {
-                selectedModel = models[position]
-                // Fetch variants for selected model
-                viewModel.fetchVariants(selectedBrand!!.id, selectedModel!!.id)
-                // Reset downstream selections
-                binding.spinnerVariant.adapter = null
-
-            }
+        binding.spinnerModel.setAdapter(adapter)
+        binding.spinnerModel.setOnFocusChangeListener { _, _ ->
+            binding.spinnerModel.showDropDown()
+        }
+        binding.spinnerModel.setOnItemClickListener { _, _, position, _ ->
+            selectedModel = models[position]
+            // Fetch variants for selected model
+            viewModel.fetchVariants(selectedBrand!!,selectedModel!!)
+            binding.spinnerVariant.setAdapter(null)
         }
     }
     private fun populateConditionSpinner() {
@@ -298,26 +302,16 @@ class InventoryFragment : Fragment() {
     }
 
 
-    private fun populateVariantSpinner(variants: List<DataClass.Variant>?) {
-        val variantNames = variants?.map { "${it.ram} - ${it.rom} - ${it.color}" }
+    private fun populateVariantSpinner(variants: List<String>) {
+
         val adapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, variantNames!!)
+            ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, variants)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinnerVariant.adapter = adapter
+        binding.spinnerVariant.setAdapter(adapter)
+        binding.spinnerVariant.setOnClickListener { _, ->
+            binding.spinnerVariant.showDropDown()
+        }
 
-        binding.spinnerVariant.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                }
-
-                override fun onItemSelected(
-                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
-                ) {
-//                selectedVariant = variants[position]
-//                displayVariantDetails(selectedVariant!!)
-                }
-            }
     }
 
 
@@ -339,15 +333,10 @@ class InventoryFragment : Fragment() {
 
     private fun addItemToList() {
 
-//        // observing inventory list to set in expandable list
-//        viewModel.inventoryList.observe(viewLifecycleOwner) { inventoryList ->
-//            updateExpandableListAdapter(inventoryList)
-//        }
-
         //getting item from input fields
-        val name = binding.spinnerBrandName.selectedItem.toString()
-        val model = binding.spinnerModel.selectedItem.toString()
-        val variant = binding.spinnerVariant.selectedItemPosition.toString()
+        val name = binding.spinnerBrandName.text.toString()
+        val model = binding.spinnerModel.text.toString()
+        val variant = binding.spinnerVariant.text.toString()
         val condition = binding.spinnerCondition.selectedItem.toString()
         val purchasePrice = binding.edittextPurchasePrice.text.toString().toDoubleOrNull() ?: 0.0
         val sellingPrice = binding.edittextPrice.text.toString().toDoubleOrNull() ?: 0.0

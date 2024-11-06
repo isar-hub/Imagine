@@ -26,14 +26,14 @@
                 android:text="Brand Name" />
 
             <!-- Model Spinner -->
-            <Spinner
+            <AutoCompleteTextView
                 android:id="@+id/spinner_brand_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/dropdown_bg"
                 android:layout_marginBottom="8dp"
                 android:padding="5dp"
-                android:prompt="@string/brand" />
+                android:hint="@string/brand" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -42,11 +42,11 @@
                 android:textStyle="bold"
                 android:text="Model" />
 
-            <Spinner
+            <AutoCompleteTextView
                 android:id="@+id/spinner_model"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:prompt="@string/model"
+                android:hint="@string/model"
                 android:padding="5dp"
                 android:background="@drawable/dropdown_bg"
                 android:layout_marginBottom="8dp" />
@@ -59,12 +59,13 @@
                 android:textStyle="bold"
                 android:text="Variant" />
 
-            <Spinner
+            <AutoCompleteTextView
                 android:id="@+id/spinner_variant"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:prompt="@string/variant"
+                android:hint="@string/variant"
                 android:padding="5dp"
+                android:completionThreshold="1"
                 android:background="@drawable/dropdown_bg"
                 android:dropDownSelector="@color/white"
                 android:layout_marginBottom="8dp" />

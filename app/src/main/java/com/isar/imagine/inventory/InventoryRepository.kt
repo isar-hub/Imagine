@@ -2,90 +2,125 @@ package com.isar.imagine.inventory
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.isar.imagine.inventory.models.DataClass
+import com.isar.imagine.utils.Brand
+import com.isar.imagine.utils.CommonMethods
+import com.isar.imagine.utils.Data
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.tasks.await
 
 interface InventoryRepository {
-    suspend fun getBrands(): List<DataClass.Brand>
-    suspend fun getModels(brandId: String): List<DataClass.Model>
-    suspend fun getVariants(brandId: String, modelId: String): List<DataClass.Variant>
-    suspend fun saveInventory(item: DataClass.InventoryData): String
+    suspend fun getBrands(): List<String>
+    suspend fun getModels(
+        brandId: String,
+        onSuccess: (List<String>) -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
+    suspend fun getVariants(
+        brandId: String,
+        modelName: String,
+        onSuccess: (List<String>) -> Unit,
+        onFailure: (Exception) -> Unit
+    )
+
+    suspend fun saveInventory(item:List<DataClass. InventoryData>, result: (Boolean) -> Unit,)
 }
 
 class InventoryRepositoryImpl(private val firestore: FirebaseFirestore) : InventoryRepository {
-    override suspend fun getBrands(): List<DataClass.Brand> {
-        val brands = mutableListOf<DataClass.Brand>()
+
+    suspend fun getSingleBrand(brandName: String): Brand {
+        val snapshot = Data().brands
+        return snapshot.find {
+            it.name == brandName
+        } ?: Brand()
+    }
+
+    override suspend fun getBrands(): List<String> {
+        val snapshot = Data().brands
+        return snapshot.map { it.name }
+    }
+
+    override suspend fun getModels(
+        brandId: String,
+        onSuccess: (List<String>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         try {
-            val snapshot = firestore.collection("brands").get().await()
-            for (doc in snapshot.documents) {
-                val brandName = doc.getString("name") ?: ""
-                brands.add(DataClass.Brand(id = doc.id, name = brandName))
+            val snapshot = getSingleBrand(brandId).models
+            if (snapshot.isNotEmpty()){
+                onSuccess(snapshot.map { it.name })
+            }
+            else{
+                onFailure(Exception("No Model Present"))
             }
         } catch (e: Exception) {
-            // Handle exception (log or rethrow)
-            throw e
+            CommonMethods.showLogs("Firestore", "Models are ${e.message}")
+            onFailure(e)
         }
-        return brands
+
     }
 
-    override suspend fun getModels(brandId: String): List<DataClass.Model> {
-        val models = mutableListOf<DataClass.Model>()
+    override suspend fun getVariants(
+        brandId: String,
+        modelName: String,
+        onSuccess: (List<String>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        CommonMethods.showLogs("Firebase","Brand name $brandId mode $modelName")
         try {
-            val snapshot =
-                firestore.collection("brands").document(brandId).collection("models").get().await()
-            for (doc in snapshot.documents) {
-                val modelName = doc.getString("name") ?: ""
-                models.add(DataClass.Model(id = doc.id, name = modelName))
+
+            val snapshot = getSingleBrand(brandId).models.find { it.name == modelName }!!.variants
+            CommonMethods.showLogs("Firebase","Brand name $snapshot")
+            if (snapshot.isNotEmpty()){
+                onSuccess(snapshot.map { it.variant })
+
+            }
+            else{
+                onFailure(Exception("No Model Present"))
             }
         } catch (e: Exception) {
-            throw e
+            onFailure(e)
         }
-        return models
     }
 
-    override suspend fun getVariants(brandId: String, modelId: String): List<DataClass.Variant> {
-        val variants = mutableListOf<DataClass.Variant>()
+    override suspend fun saveInventory(item: List<DataClass. InventoryData>,result: (Boolean) -> Unit) = coroutineScope {
+
         try {
-            val snapshot = firestore.collection("brands").document(brandId).collection("models")
-                .document(modelId).collection("variants").get().await()
-            for (doc in snapshot.documents) {
-                val ram = doc.getLong("ram") ?: 0
-                val rom = doc.getLong("rom") ?: 0
-                val color = doc.getString("color") ?: ""
-                variants.add(
-                    DataClass.Variant(
-                        id = doc.id,
-                        ram = ram,
-                        rom = rom,
-                        color = color,
-                    )
-                )
+            val batch = firestore.batch()
+
+
+            item.forEach { item ->
+                val inventoryRef = firestore.collection("inventory").document()
+                batch.set(inventoryRef, item)
             }
+
+            batch.commit().await() // Commits the batch, all-or-nothing
+            result(true)
         } catch (e: Exception) {
-            throw e
+            Log.e("Inventory", "Batch save failed: ${e.message}")
+            result(false)
         }
-        return variants
     }
 
-    override suspend fun saveInventory(item: DataClass.InventoryData): String {
-
-        var response = "";
-
-        try {
-            // Generate a document reference for the new inventory item
-            val inventoryRef = firestore.collection("inventory").document()
-            inventoryRef.set(item).addOnSuccessListener {
-                    // Handle success (e.g., show a toast)
-                response = "Posted"
-                }.addOnFailureListener { e ->
-                    // Handle failure (e.g., show an error message)
-                response = "${e.message}"
-                }
-        } catch (e: Exception) {
-            response = "${e.message}"
-        }
-        return response
-    }
+//        var response = ""
+//
+//        try {
+//            // Generate a document reference for the new inventory item
+//            val inventoryRef = firestore.collection("inventory").document()
+//            inventoryRef.set(item).addOnSuccessListener {
+//                // Handle success (e.g., show a toast)
+//                response = "Posted"
+//            }.addOnFailureListener { e ->
+//                // Handle failure (e.g., show an error message)
+//                response = "${e.message}"
+//            }
+//        } catch (e: Exception) {
+//            response = "${e.message}"
+//        }
+//        return response
+//    }
 
 
 }

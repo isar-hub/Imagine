@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.isar.imagine.data.model.InventoryItem
 import com.isar.imagine.inventory.models.DataClass
+import com.isar.imagine.utils.CommonMethods
 import com.isar.imagine.utils.Results
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -20,27 +21,30 @@ import kotlin.random.Random
 
 class InventoryViewModel(private val repository: InventoryRepository) : ViewModel() {
 
-    private val _brands = MutableLiveData<Results<List<DataClass.Brand>>>()
-    val brands: LiveData<Results<List<DataClass.Brand>>> = _brands
+    private val _brands = MutableLiveData<Results<List<String>>>()
+    val brands: LiveData<Results<List<String>>> = _brands
 
-    private val _models = MutableLiveData<Results<List<DataClass.Model>>>()
-    val models: LiveData<Results<List<DataClass.Model>>> = _models
+    private val _models = MutableLiveData<Results<List<String>>>()
+    val models: LiveData<Results<List<String>>> = _models
 
-    private val _variants = MutableLiveData<Results<List<DataClass.Variant>>>()
-    val variants: LiveData<Results<List<DataClass.Variant>>> = _variants
+    private val _variants = MutableLiveData<Results<List<String>>>()
+    val variants: LiveData<Results<List<String>>> = _variants
 
     init {
         fetchBrands()
-        _brands.postValue(Results.Loading())
+
     }
 
     private fun fetchBrands() {
+        _brands.postValue(Results.Loading())
         viewModelScope.launch {
             try {
                 val brandsList = repository.getBrands()
+                CommonMethods.showLogs("Firebase","Brand $brandsList")
                 _brands.postValue(Results.Success(brandsList))
             } catch (e: Exception) {
                 _brands.postValue(Results.Error("Failed to load brands: ${e.message}"))
+                CommonMethods.showLogs("Firebase","Error ${e.message}")
 
             }
         }
@@ -50,9 +54,21 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
         _models.postValue(Results.Loading())
         viewModelScope.launch {
             try {
-                val modelsList = repository.getModels(brandId)
-                _models.postValue(Results.Success(modelsList))
+                repository.getModels(brandId, { models ->
+
+
+                    CommonMethods.showLogs("Inventory", "Models $models")
+                    _models.postValue(Results.Success(models))
+                }, { error ->
+                    _models.postValue(Results.Error("Failed to load brands: ${error.message}"))
+                    CommonMethods.showLogs("Inventory", "Failed to load brands: ${error.message}")
+                }
+
+
+                )
+
             } catch (e: Exception) {
+                CommonMethods.showLogs("Inventory", "Failed to load brands: ${e.message}")
                 _models.postValue(Results.Error("Failed to load brands: ${e.message}"))
             }
         }
@@ -60,16 +76,29 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
 
     fun fetchVariants(brandId: String, modelId: String) {
         _variants.postValue(Results.Loading())
+        CommonMethods.showLogs("Inventory", "Variants $variants")
         viewModelScope.launch {
             try {
-                val variantsList = repository.getVariants(brandId, modelId)
-                _variants.postValue(Results.Success(variantsList))
+                repository.getVariants(brandId, modelId, { variants ->
+                    _variants.postValue(Results.Success(variants))
+                    CommonMethods.showLogs("Inventory", "Variants $variants")
+
+                }, { error ->
+                    _variants.postValue(
+                        Results.Error(
+                            "Failed to load brands: ${
+                                error.message
+                            }"
+                        )
+                    )
+                    CommonMethods.showLogs("Inventory", "Failed to load brands: ${error.message}")
+                })
             } catch (e: Exception) {
-                _models.postValue(Results.Error("Failed to load brands: ${e.message}"))
+                _variants.postValue(Results.Error("Failed to load brands: ${e.message}"))
+                CommonMethods.showLogs("Inventory", "Failed to load brands: ${e.message}")
             }
         }
     }
-
 
 
     private val _inventoryList = MutableLiveData<List<InventoryItem>>(emptyList())
@@ -90,7 +119,7 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
 
         //new item of inventory item with method parameters
         val newItem = InventoryItem(
-            name, model,  variant, condition, purchasePrice, sellingPrice, quantity, notes
+            name, model, variant, condition, purchasePrice, sellingPrice, quantity, notes
         )
 
         //temp list of inventory item
@@ -115,18 +144,13 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
 
 
     private val _inventoryListFinal = MutableLiveData<List<DataClass.InventoryData>>()
-    val inventoryListFinal : LiveData<List<DataClass.InventoryData>> get() = _inventoryListFinal
+    val inventoryListFinal: LiveData<List<DataClass.InventoryData>> get() = _inventoryListFinal
 
 
-
-     suspend fun onSave() {
+    suspend fun onSave(result : (Boolean) -> Unit) {
         Log.d("Inventory", "Starting to save inventory items")
+        postInventory(getItems()) { result(it) }
 
-
-         val items = getItems()
-         for (item in items){
-            val respose = postInventory(item)
-         }
 
     }
 
@@ -143,7 +167,17 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
 
                 Log.d("Inventory", "Generated barcodes: $barCodeList")
 
-                val inventoryData = DataClass.InventoryData(item.brand,item.model,item.variant,item.condition,item.sellingPrice,item.purchasePrice,item.quantity,item.notes, barCodeList)
+                val inventoryData = DataClass.InventoryData(
+                    item.brand,
+                    item.model,
+                    item.variant,
+                    item.condition,
+                    item.sellingPrice,
+                    item.purchasePrice,
+                    item.quantity,
+                    item.notes,
+                    barCodeList
+                )
                 tempInventoryItem.add(inventoryData)
             }
             Log.d("Inventory", "Final items count: ${tempInventoryItem.size}") // Log final count
@@ -153,11 +187,12 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
         }
 
     }
+
     private val firestore = FirebaseFirestore.getInstance()
 
     private suspend fun generateUniqueBarcodes(quantity: Int): List<String> {
 
-        return withContext(Dispatchers.IO){
+        return withContext(Dispatchers.IO) {
             val barCodeSet = mutableSetOf<String>()
 
             Log.d("Barcode", "Generating unique barcodes for quantity: $quantity")
@@ -169,7 +204,7 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
             }
             Log.d("Barcode", "Checked barcodes in Firebase: $barCodeSet")
             val barCodeListDeferred = async { checkBarcodesInFirebase(barCodeSet.toList()) }
-           barCodeListDeferred.await()
+            barCodeListDeferred.await()
         }
 
     }
@@ -193,12 +228,12 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
         Log.d("Firebase", "Checking barcodes in Firebase: $barcodes")
 
 
-        return withContext(Dispatchers.IO){
+        return withContext(Dispatchers.IO) {
             val uniqueBarcodes = mutableListOf<String>()
             for (barcode in barcodes) {
                 val exists =
-                    firestore.collection("inventory").whereArrayContains("serialNumber", barcode).get()
-                        .await().documents.isEmpty()
+                    firestore.collection("inventory").whereArrayContains("serialNumber", barcode)
+                        .get().await().documents.isEmpty()
 
                 if (exists) {
                     Log.d("Firebase", "Barcode exists, generating a new one for: $barcode")
@@ -216,26 +251,18 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
 //    private val _postInventoryItem = MutableLiveData<String>()
 //    val postInventoryItem: LiveData<String> get() = _postInventoryItem
 
-     fun postInventory(item: DataClass.InventoryData): String{
-         var result = ""
-         viewModelScope.launch {
-                result = try {
-                    repository.saveInventory(item)
-
-                }catch (e : Exception){
-                 "${e.message}"
-                }
-        }
-        return result
+    private suspend fun postInventory(item: List<DataClass. InventoryData>, result: (Boolean) -> Unit){
+        repository.saveInventory(item,{result(it)})
     }
 
 
 }
-class MobileViewModelFactory(private val repository: InventoryRepository) : ViewModelProvider.Factory {
+
+class MobileViewModelFactory(private val repository: InventoryRepository) :
+    ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(InventoryViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return InventoryViewModel(repository) as T
+            @Suppress("UNCHECKED_CAST") return InventoryViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

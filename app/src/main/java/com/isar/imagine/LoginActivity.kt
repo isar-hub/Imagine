@@ -3,20 +3,21 @@ package com.isar.imagine
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.snackbar.Snackbar
+import com.isar.imagine.barcode_scenning.BarCodeScanningActivity
+import com.isar.imagine.utils.CustomDialog
+import com.isar.imagine.utils.getTextView
 
 class LoginActivity : AppCompatActivity() {
 
-    lateinit var userName : EditText
-    lateinit var password : EditText
-    lateinit var loginButton : Button
+    lateinit var userName: EditText
+    lateinit var password: EditText
+    lateinit var loginButton: Button
 
-    val user1 = "main1"
-    val user2 = "billing2"
+    val user1 = "main"
+    val user2 = "billing"
     val pass = "1234"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,55 +25,50 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login2)
 
         intialization()
-
-        val intent = Intent(this, MainActivity::class.java).apply {
-            putExtra("username", "1")
+        startActivity(Intent(this@LoginActivity, MainPanelFragment::class.java)).apply {
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            finish()
         }
-        startActivity(intent)
 
-        loginButton.setOnClickListener{
+        loginButton.setOnClickListener {
             if (userName.text.isNotEmpty() && password.text.isNotEmpty()) {
                 destination()
-            }
-            else{
-                val view = findViewById<View>(android.R.id.content)
-                Snackbar.make(view, "Please write username and password ", Snackbar.LENGTH_LONG)
-                    .setAction("OK") {
-                        // Handle the action here
-                        // e.g., retrying an operation
-                    }
-                    .show()
+            } else {
+                CustomDialog.showAlertDialog(
+                    this@LoginActivity,
+                    this@LoginActivity.getTextView("Username and Password cannot be empty"),
+                    "Error"
+                )
+
             }
         }
     }
-    fun destination()
-    {
-        Log.e("Test","destination ${userName.text}")
-        if(userName.text.toString() == user1){
-            val intent = Intent(this, MainActivity::class.java).apply {
-                putExtra("username", "1")
+
+    fun destination() {
+        Log.e("Test", "destination ${userName.text}")
+        if (userName.text.toString() == user1) {
+            startActivity(Intent(this@LoginActivity, MainPanelFragment::class.java)).apply {
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                finish()
             }
-            startActivity(intent)
-        }
-        else if(userName.text.toString() == user2){
-            val intent = Intent(this, MainActivity::class.java).apply {
-                putExtra("username", "2")
+        } else if (userName.text.toString() == user2) {
+            startActivity(Intent(this@LoginActivity, BarCodeScanningActivity::class.java)).apply {
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                finish()
             }
-            startActivity(intent)
-        }
-        else{
-            val view = findViewById<View>(android.R.id.content)
-            Snackbar.make(view, "Wrong credentials ", Snackbar.LENGTH_LONG)
-                .setAction("OK") {
-                    // Handle the action here
-                    // e.g., retrying an operation
-                }
-                .show()
+        } else {
+            CustomDialog.showAlertDialog(
+                this@LoginActivity,
+                this@LoginActivity.getTextView("Wrong Username and Password"),
+                "Error"
+            )
+
         }
     }
+
     private fun intialization() {
-      userName = findViewById(R.id.userName)
-      password = findViewById(R.id.password)
-      loginButton = findViewById(R.id.loginButton)
+        userName = findViewById(R.id.userName)
+        password = findViewById(R.id.password)
+        loginButton = findViewById(R.id.loginButton)
     }
 }

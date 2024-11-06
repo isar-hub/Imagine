@@ -53,11 +53,13 @@
         android:layout_gravity="start"
         android:background="@color/red"
         app:itemTextColor="@color/white"
+        app:itemShapeInsetEnd="10dp"
         app:itemTextAppearanceActiveBoldEnabled="true"
         android:fitsSystemWindows="true"
         app:dividerInsetStart="10dp"
         app:headerLayout="@layout/nav_header"
         app:dividerInsetEnd="10dp"
+
         app:menu="@menu/drawer" />
 
 
