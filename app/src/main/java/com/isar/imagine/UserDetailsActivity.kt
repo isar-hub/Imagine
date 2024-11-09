@@ -15,7 +15,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -50,14 +49,10 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
@@ -84,8 +79,8 @@ class UserDetailsActivity : AppCompatActivity() {
     private lateinit var signatureDestination: File
     var view: View? = null
 
-    private  var userImageString : Uri? = null
-    private  var userSignatureString : Uri? = null
+    private var userImageString: Uri? = null
+    private var userSignatureString: Uri? = null
 
     private var mContent: LinearLayout? = null
     private lateinit var mGetSign: Button
@@ -95,7 +90,6 @@ class UserDetailsActivity : AppCompatActivity() {
     private var bitmap: Bitmap? = null
 
     private lateinit var cameraLauncher: ActivityResultLauncher<Intent>
-
 
 
     private lateinit var signatureView: SignatureView
@@ -111,18 +105,18 @@ class UserDetailsActivity : AppCompatActivity() {
 
 
     // result after choosing image in gallery
-    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) {
-            Log.e("PhotoPicker", "Selected URI: $uri")
-            photoImageView.setImageURI(uri)
-            userImageString = uri
+    private val pickMedia =
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                Log.e("PhotoPicker", "Selected URI: $uri")
+                photoImageView.setImageURI(uri)
+                userImageString = uri
 
 
-        } else {
-            Log.e("PhotoPicker", "No media selected")
+            } else {
+                Log.e("PhotoPicker", "No media selected")
+            }
         }
-    }
-
 
 
     //ui initializatio
@@ -135,9 +129,9 @@ class UserDetailsActivity : AppCompatActivity() {
     private lateinit var userZipCode: EditText
     private lateinit var userState: AutoCompleteTextView
     private lateinit var userSignature: ImageView
-    private lateinit var submitButton : Button
+    private lateinit var submitButton: Button
 
-    private lateinit var progressBar : CircularProgressIndicator
+    private lateinit var progressBar: CircularProgressIndicator
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -152,7 +146,7 @@ class UserDetailsActivity : AppCompatActivity() {
 
 
 
-        submitButton.setOnClickListener{
+        submitButton.setOnClickListener {
             submitButton.isEnabled = false
             progressBar.visibility = View.VISIBLE
             progressBar.show()
@@ -167,17 +161,17 @@ class UserDetailsActivity : AppCompatActivity() {
             uploadPhotoButton.isEnabled = false
             uploadSignatureButton.isEnabled = false
 
-            if (isFormValid()){
+            if (isFormValid()) {
 
                 var image: String = ""
-                var sinature : String = ""
+                var sinature: String = ""
                 userImageString?.let { it1 ->
-                    uploadImage(it1) { imageUrl,success ->
-                        if(success){
+                    uploadImage(it1) { imageUrl, success ->
+                        if (success) {
                             image = imageUrl
                             userSignatureString?.let { it1 ->
-                                uploadImage(it1) { imageUrl ,success->
-                                    if (success){
+                                uploadImage(it1) { imageUrl, success ->
+                                    if (success) {
                                         sinature = imageUrl
 
 
@@ -195,28 +189,30 @@ class UserDetailsActivity : AppCompatActivity() {
 
                                         postUserDetails(newCustomer)
                                     }
-                                    
+
                                 }
                             }
                         }
-                     
+
                     }
                 }
-          
 
-            }
-            else{
-                view?.let { it1 -> Snackbar.make(it1,"Please Fill ALl Details",Snackbar.LENGTH_LONG).setAction("Ok"){}.show() }
+
+            } else {
+                view?.let { it1 ->
+                    Snackbar.make(
+                        it1,
+                        "Please Fill ALl Details",
+                        Snackbar.LENGTH_LONG
+                    ).setAction("Ok") {}.show()
+                }
             }
         }
 
 
-
-
-
-
     }
-    private fun uploadImage(imageUri: Uri, onComplete: (String,Boolean) -> Unit) {
+
+    private fun uploadImage(imageUri: Uri, onComplete: (String, Boolean) -> Unit) {
         val storage = FirebaseStorage.getInstance()
         val storageRef = storage.reference
 
@@ -229,8 +225,8 @@ class UserDetailsActivity : AppCompatActivity() {
         uploadTask.addOnSuccessListener {
             // Get the download URL
             imageRef.downloadUrl.addOnSuccessListener { uri ->
-                onComplete(uri.toString(),true)
-                Log.e("test","url $uri")
+                onComplete(uri.toString(), true)
+                Log.e("test", "url $uri")
             }.addOnFailureListener {
 
             }
@@ -240,16 +236,19 @@ class UserDetailsActivity : AppCompatActivity() {
     }
 
 
-
     private fun postUserDetails(creaeteUser: creaeteUser) {
-        Log.e("test","create ${creaeteUser.image}")
+        Log.e("test", "create ${creaeteUser.image}")
         val call = RetrofitInstance.getApiInterface().createCustomer(creaeteUser)
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
 
                 Log.e("Test", "Response code: ${response.code()} Message: ${response.message()}")
                 if (response.isSuccessful) {
-                    Toast.makeText(this@UserDetailsActivity, "User details uploaded successfully", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@UserDetailsActivity,
+                        "User details uploaded successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     Log.e("test", "Response success: ${response.code()} ${response.message()}")
                     val intent = Intent(this@UserDetailsActivity, MainActivity::class.java).apply {
                         putExtra("username", "1")
@@ -257,13 +256,18 @@ class UserDetailsActivity : AppCompatActivity() {
                     startActivity(intent)
 
 
-
-
                 } else {
-                    Toast.makeText(this@UserDetailsActivity, "Failed to upload user details", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@UserDetailsActivity,
+                        "Failed to upload user details",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     // Log response body for debugging
                     val errorBody = response.errorBody()?.string()
-                    Log.e("test", "Response not success: ${response.code()} ${response.message()} Error Body: $errorBody")
+                    Log.e(
+                        "test",
+                        "Response not success: ${response.code()} ${response.message()} Error Body: $errorBody"
+                    )
                     submitButton.isEnabled = true
                     progressBar.hide()
 
@@ -283,7 +287,8 @@ class UserDetailsActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(this@UserDetailsActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@UserDetailsActivity, "Error: ${t.message}", Toast.LENGTH_SHORT)
+                    .show()
                 Log.e("test", "Response fail: ${t.message}")
                 submitButton.isEnabled = true
                 progressBar.hide()
@@ -468,7 +473,7 @@ class UserDetailsActivity : AppCompatActivity() {
             if (file.exists()) {
                 val bitmap = BitmapFactory.decodeStream(FileInputStream(file))
                 signatureImageView.visibility = View.VISIBLE
-                userSignatureString = saveBitmapToFile(applicationContext,bitmap)
+                userSignatureString = saveBitmapToFile(applicationContext, bitmap)
                 signatureImageView.setImageBitmap(bitmap)
             } else {
                 Log.e("Test", "File does not exist: ${signatureDestination.path}")
@@ -496,7 +501,7 @@ class UserDetailsActivity : AppCompatActivity() {
             }
         }
         builder.show()
-    }   
+    }
 
     private fun openGallery() {
         try {
@@ -527,6 +532,7 @@ class UserDetailsActivity : AppCompatActivity() {
     }
 
     //on activity result for camera image
+    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
@@ -534,7 +540,7 @@ class UserDetailsActivity : AppCompatActivity() {
 
             val imageBitmap = data?.extras?.get("data") as Bitmap
             Log.e("test", data.extras!!.get("data").toString())
-            userImageString = saveBitmapToFile(applicationContext,imageBitmap)
+            userImageString = saveBitmapToFile(applicationContext, imageBitmap)
             photoImageView.setImageBitmap(imageBitmap)
 
         }
@@ -548,7 +554,7 @@ class UserDetailsActivity : AppCompatActivity() {
 
 
 
-         try {
+        try {
             // Write the bitmap to the file
             FileOutputStream(file).use { out ->
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
@@ -593,47 +599,46 @@ class UserDetailsActivity : AppCompatActivity() {
     //permissions
     private fun getPermission(permissions: MutableList<String>) {
         dexter = Dexter.withContext(this).withPermissions(
-                permissions
-            ).withListener(object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(report: MultiplePermissionsReport) {
-                    report.let {
+            permissions
+        ).withListener(object : MultiplePermissionsListener {
+            override fun onPermissionsChecked(report: MultiplePermissionsReport) {
+                report.let {
 
-                        if (report.areAllPermissionsGranted()) {
-                            showImagePickerOptions()
-                            Toast.makeText(
-                                this@UserDetailsActivity, "Permissions Granted", Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            AlertDialog.Builder(this@UserDetailsActivity, R.style.Theme_Dialog)
-                                .apply {
-                                    setMessage("please allow the required permissions").setCancelable(
-                                            false
-                                        ).setPositiveButton("Settings") { _, _ ->
-                                            val reqIntent =
-                                                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                                                        val uri = Uri.fromParts(
-                                                            "package", packageName, null
-                                                        )
-                                                        data = uri
-                                                    }
-                                            resultLauncher.launch(reqIntent)
+                    if (report.areAllPermissionsGranted()) {
+                        showImagePickerOptions()
+                        Toast.makeText(
+                            this@UserDetailsActivity, "Permissions Granted", Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        AlertDialog.Builder(this@UserDetailsActivity, R.style.Theme_Dialog).apply {
+                                setMessage("please allow the required permissions").setCancelable(
+                                    false
+                                ).setPositiveButton("Settings") { _, _ ->
+                                    val reqIntent =
+                                        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                                            val uri = Uri.fromParts(
+                                                "package", packageName, null
+                                            )
+                                            data = uri
                                         }
-                                    // setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
-                                    val alert = this.create()
-                                    alert.show()
+                                    resultLauncher.launch(reqIntent)
                                 }
-                        }
+                                // setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
+                                val alert = this.create()
+                                alert.show()
+                            }
                     }
                 }
+            }
 
-                override fun onPermissionRationaleShouldBeShown(
-                    permissions: List<PermissionRequest?>?, token: PermissionToken?
-                ) {
-                    token?.continuePermissionRequest()
-                }
-            }).withErrorListener {
-                Toast.makeText(this, it.name, Toast.LENGTH_SHORT).show()
-            } as Dexter
+            override fun onPermissionRationaleShouldBeShown(
+                permissions: List<PermissionRequest?>?, token: PermissionToken?
+            ) {
+                token?.continuePermissionRequest()
+            }
+        }).withErrorListener {
+            Toast.makeText(this, it.name, Toast.LENGTH_SHORT).show()
+        } as Dexter
         dexter.check()
     }
 

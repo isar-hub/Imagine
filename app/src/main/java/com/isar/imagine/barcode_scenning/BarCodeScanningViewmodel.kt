@@ -22,7 +22,7 @@ class BarCodeScanningViewmodel : ViewModel() {
 
 
 
-    suspend fun isSerialNumber(barCode: String, firestore :FirebaseFirestore) {
+    suspend fun isSerialNumber(barCode: String, firestore :FirebaseFirestore)  {
         withContext(Dispatchers.Main){
             _serialNumberLiveData.value = Results.Loading()
 

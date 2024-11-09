@@ -15,6 +15,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
 import androidx.lifecycle.Observer
@@ -56,6 +57,7 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
     private var currentWorkflowState: WorkflowModel.WorkflowState? = null
     private  var listData: MutableList<BillingDataModel> = mutableListOf()
 
+    private lateinit var textView : EditText
 
     private val viewModel: BarCodeScanningViewmodel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +70,13 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
             listData.addAll(dataList)
         }
 
+        textView = EditText(this).apply {
+            hint = getQuantity().toString()
+            width = MATCH_PARENT
+            inputType = InputType.TYPE_CLASS_TEXT
+            maxLines = 1
+
+        }
 
         obserVingViewmodel()
 
@@ -83,13 +92,6 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
             R.animator.bottom_prompt_chip_enter
         ) as AnimatorSet).apply {
             setTarget(promptChip)
-        }
-        val textView = EditText(this).apply {
-            hint = getQuantity().toString()
-            width = MATCH_PARENT
-            inputType = InputType.TYPE_CLASS_TEXT
-            maxLines = 1
-
         }
 
 
@@ -251,9 +253,6 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
 
         workflowModel?.detectedBarcode?.observe(this, Observer { barcode ->
             if (barcode != null) {
-//                val barcodeFieldList = ArrayList<BarcodeField>()
-//                startActivity(Intent(this@BarCodeScanningActivity, BillingPanelFragment::class.java))
-
                 CoroutineScope(Dispatchers.IO).launch {
                     if (barcode.rawValue != null) {
                         viewModel.isSerialNumber(barcode.rawValue!!,FirebaseFirestore.getInstance())
@@ -263,8 +262,6 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
                     }
                 }
 
-//                barcodeFieldList.add(BarcodeField("Raw Value", barcode.rawValue?: ""))
-//                BarcodeResultFragment.show(supportFragmentManager, barcodeFieldList)
             }
         })
     }

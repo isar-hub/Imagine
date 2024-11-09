@@ -1,9 +1,11 @@
 package com.isar.imagine
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -13,7 +15,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.transition.Explode
 import com.google.android.material.navigation.NavigationView
+import com.google.android.play.integrity.internal.c
 import com.isar.imagine.barcode_scenning.BarCodeScanningActivity
 import com.isar.imagine.databinding.FragmentFirstBinding
 

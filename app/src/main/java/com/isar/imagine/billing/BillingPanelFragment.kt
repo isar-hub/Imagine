@@ -1,4 +1,4 @@
-package com.isar.imagine
+package com.isar.imagine.billing
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
 import com.isar.imagine.Adapters.InventoryExpandableListAdapter
+import com.isar.imagine.R
 import com.isar.imagine.barcode_scenning.BarCodeScanningActivity
 import com.isar.imagine.barcode_scenning.models.BillingDataModel
 import com.isar.imagine.data.model.InventoryItem
@@ -15,6 +16,7 @@ class BillingPanelFragment : AppCompatActivity() {
 
     private lateinit var expandableListView: ExpandableListView
     private lateinit var binding: FragmentSecondBinding
+
 
     private  var listData: MutableList<BillingDataModel> = mutableListOf()
 
@@ -31,7 +33,15 @@ class BillingPanelFragment : AppCompatActivity() {
 
         addMoreData()
 
+        saveData()
 
+
+    }
+
+    private fun saveData() {
+        binding.loginButton.setOnClickListener {
+
+        }
     }
 
     private fun addMoreData(){

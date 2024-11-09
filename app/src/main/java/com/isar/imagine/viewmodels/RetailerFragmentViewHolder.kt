@@ -12,9 +12,8 @@ import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
 import com.isar.imagine.Adapters.Retailer
-import com.isar.imagine.data.Metadata
-import com.isar.imagine.data.ProviderDaum
 import com.isar.imagine.data.Root2
+import com.isar.imagine.utils.CommonMethods
 import com.isar.imagine.utils.Results
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -29,8 +28,8 @@ class RetailerFragmentViewHolder(
     private val _inventoryList = MutableLiveData<Results<List<Retailer>>>()
     val inventoryList: LiveData<Results<List<Retailer>>> get() = _inventoryList
 
-    private val _retailerList = MutableLiveData<Results<List<Root2>>>(Results.Loading())
-    val retailerList: LiveData<Results<List<Root2>>> get() = _retailerList
+    private val _retailerList = MutableLiveData<Results<List<RetailerEntity>>>(Results.Loading())
+    val retailerList: LiveData<Results<List<RetailerEntity>>> get() = _retailerList
 
 
     init {
@@ -61,50 +60,44 @@ class RetailerFragmentViewHolder(
 }
 
 
-class RetailerRepository(private val firebaseAuth: FirebaseAuth) {
-    suspend fun getRetailer(functions: FirebaseFunctions): Results<List<Root2>> {
+class RetailerRepository(
+    private val firebaseAuth: FirebaseAuth,
+    private val retailerDao: RetailerDao
+) {
+    suspend fun getRetailer(functions: FirebaseFunctions): Results<List<RetailerEntity>> {
         Log.e("functions", "Calling the 'addMessage' function...")
-        return try {
-            val result = functions.getHttpsCallable("addmessage").call().await()
-            if (result.data != null) {
-                val data = result.data as List<HashMap<String, String>>
-                Results.Success(data.map { mapToRoot2(it) })
-            } else {
-                Results.Error("Error in Fetching")
+
+        val localData = retailerDao.getAllRetailers()
+        if (localData.isNotEmpty()) {
+            CommonMethods.showLogs("TAG","Coming from local $localData")
+            return Results.Success(localData)
+
+        } else {
+            return try {
+                val result = functions.getHttpsCallable("addmessage").call().await()
+                if (result.data != null) {
+                    val data = result.data as List<HashMap<String, String>>
+                    val retailerEntities = data.map { mapToRoot2(it) }
+                    retailerDao.insertRetailers(retailerEntities)
+                    Results.Success(retailerEntities)
+                } else {
+                    Results.Error("Error in Fetching")
+                }
+            } catch (e: Exception) {
+                return Results.Error("Error ${e.message}")
             }
-        } catch (e: Exception) {
-            return Results.Error("Error ${e.message}")
         }
+
     }
 
-    fun mapToRoot2(map: Map<String, Any>): Root2 {
-        val metadataMap = map["metadata"] as? Map<String, String>
-        val providerDataList = map["providerData"] as? List<Map<String, String>>
+    fun mapToRoot2(map: Map<String, Any>): RetailerEntity {
 
-        return Root2(uid = map["uid"] as String,
+        return RetailerEntity(
+            uid = map["uid"] as String,
             email = map["email"] as String,
-            emailVerified = map["emailVerified"] as Boolean,
             displayName = map["displayName"] as String,
             disabled = map["disabled"] as Boolean,
-
-            metadata = Metadata(
-                lastSignInTime = metadataMap?.get("lastSignInTime") ?: "",
-                creationTime = metadataMap?.get("creationTime") ?: "",
-                lastRefreshTime = metadataMap?.get("lastRefreshTime") ?: ""
-            ),
-
-            passwordHash = map["passwordHash"] as String,
-            passwordSalt = map["passwordSalt"] as String,
-            tokensValidAfterTime = map["tokensValidAfterTime"] as String,
-
-            providerData = providerDataList?.map { providerMap ->
-                ProviderDaum(
-                    uid = providerMap["uid"] ?: "",
-                    displayName = providerMap["displayName"] ?: "",
-                    email = providerMap["email"] ?: "",
-                    providerId = providerMap["providerId"] ?: ""
-                )
-            } ?: emptyList())
+        )
     }
 
     suspend fun createUser(email: String, password: String, name: String): Results<FirebaseUser?> {

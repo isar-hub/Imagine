@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
-import com.isar.imagine.BillingPanelFragment
+import com.isar.imagine.billing.BillingPanelFragment
 import com.isar.imagine.R
 import com.isar.imagine.barcode_scenning.models.BillingDataModel
 import com.isar.imagine.data.model.BarcodeField

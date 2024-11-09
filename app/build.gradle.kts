@@ -3,18 +3,19 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
     id("kotlin-parcelize")
+    id("kotlin-kapt")
 }
 
 android {
     namespace = "com.isar.imagine"
-    compileSdk = 34
+    compileSdk = 35
     packagingOptions {
-        exclude ("META-INF/*")
+        exclude("META-INF/*")
     }
     defaultConfig {
         applicationId = "com.isar.imagine"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -25,8 +26,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -40,6 +40,9 @@ android {
     buildFeatures {
         viewBinding = true
     }
+}
+kapt {
+    correctErrorTypes = true
 }
 
 dependencies {
@@ -64,7 +67,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx.v252)
     //dexter
     implementation(libs.dexter)
     implementation(libs.retrofit)
@@ -92,7 +96,7 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle.v101)
     implementation(libs.androidx.camera.view.v100alpha28)
 
-    implementation (libs.mpandroidchart)
+    implementation(libs.mpandroidchart)
 
     implementation(libs.guava) // Use the latest version available
 
