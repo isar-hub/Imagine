@@ -64,10 +64,12 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.functions)
     implementation(libs.firebase.auth.ktx)
+    implementation(libs.androidx.core.i18n)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     kapt(libs.androidx.room.compiler)
+    implementation (libs.pdf.invoice.generator)
     implementation(libs.androidx.room.ktx.v252)
     //dexter
     implementation(libs.dexter)
@@ -86,8 +88,9 @@ dependencies {
     implementation(libs.poi.ooxml)
     //pdf generator library
     implementation(libs.pdf.invoice.generator)
-
-
+    implementation (libs.kernel.android)
+    implementation (libs.layout.android)
+    implementation(libs.pdf.viewer)
 // Barcode scanning API
     implementation(libs.barcode.scanning.v1703)
 // CameraX library

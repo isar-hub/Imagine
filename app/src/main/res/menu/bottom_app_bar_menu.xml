@@ -1,0 +1,21 @@
+<!-- res/menu/bottom_app_bar_menu.xml -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/baseline_share_24"
+        android:title="Share"
+ />
+
+    <item
+        android:id="@+id/print"
+        android:icon="@drawable/baseline_print_24"
+        android:title="Print"
+/>
+
+    <item
+        android:id="@+id/download"
+        android:icon="@drawable/baseline_download_24"
+        android:title="Download"
+ />
+</menu>

@@ -1,6 +1,9 @@
 package com.isar.imagine
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.animation.DecelerateInterpolator
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -20,6 +24,8 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.play.integrity.internal.c
 import com.isar.imagine.barcode_scenning.BarCodeScanningActivity
 import com.isar.imagine.databinding.FragmentFirstBinding
+import com.isar.imagine.utils.Invoice
+import com.isar.imagine.utils.Invoice.createPdf
 
 
 class MainPanelFragment : AppCompatActivity() {
@@ -47,6 +53,8 @@ class MainPanelFragment : AppCompatActivity() {
         bindToolbar()
         setUpToolbar()
         navigation()
+
+        ActivityCompat.requestPermissions(this, arrayOf(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE), PackageManager.PERMISSION_GRANTED)
         navigationView.setNavigationItemSelectedListener { menuItem ->
 
             Log.e("Test", "Clicked on ${menuItem.itemId}")

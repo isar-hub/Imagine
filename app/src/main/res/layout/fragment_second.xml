@@ -6,12 +6,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/red"
+    android:id="@+id/billingMain"
     tools:context=".billing.BillingPanelFragment">
 
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/scrollable"
         >
 
@@ -20,7 +21,6 @@
             android:id="@+id/linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:orientation="vertical"
             android:padding="16dp">
 
@@ -29,7 +29,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_marginTop="16dp"
-                android:nestedScrollingEnabled="true"
                 android:layout_below="@+id/scrollable"
                 tools:listheader="@layout/expandable_list_header"
                 />

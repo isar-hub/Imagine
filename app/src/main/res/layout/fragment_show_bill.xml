@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".billing.ShowBillFragment">
+
+    <com.rajat.pdfviewer.PdfRendererView
+        android:id="@+id/pdfView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        app:pdfView_divider="@drawable/pdf_viewer_divider"
+        app:pdfView_showDivider="true" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/done"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="Done"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/white"
+        android:layout_gravity="end"
+        android:textStyle="bold"
+        app:backgroundTint="@color/black"
+        app:cornerRadius="5dp"
+        />
+
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottom_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:layout_gravity="bottom"
+        >
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:menu="@menu/bottom_app_bar_menu" />
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

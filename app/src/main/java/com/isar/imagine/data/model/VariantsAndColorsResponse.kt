@@ -42,5 +42,4 @@ data class Variant(
     val ram: Int,
     val rom: Int,
     val _id : String
-
 )

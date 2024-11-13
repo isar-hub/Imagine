@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.isar.imagine.barcode_scenning.models.BillingDataModel
 import com.isar.imagine.barcode_scenning.models.mapToBillingDataModel
-import com.isar.imagine.inventory.models.DataClass
 import com.isar.imagine.utils.Results
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -18,35 +17,34 @@ class BarCodeScanningViewmodel : ViewModel() {
 
 
     private val _serialNumberLiveData = MutableLiveData<Results<BillingDataModel>>()
-    val serialNumberLiveData : LiveData<Results<BillingDataModel>> get() = _serialNumberLiveData
+    val serialNumberLiveData: LiveData<Results<BillingDataModel>> get() = _serialNumberLiveData
 
 
-
-    suspend fun isSerialNumber(barCode: String, firestore :FirebaseFirestore)  {
-        withContext(Dispatchers.Main){
+    suspend fun isSerialNumber(barCode: String, firestore: FirebaseFirestore) {
+        withContext(Dispatchers.Main) {
             _serialNumberLiveData.value = Results.Loading()
 
         }
         withContext(Dispatchers.IO) {
-
             val exists =
                 firestore.collection("inventory").whereArrayContains("serialNumber", barCode).get()
                     .await()
 
             if (exists.documents.isEmpty()) {
-                withContext(Dispatchers.Main){
+                withContext(Dispatchers.Main) {
                     _serialNumberLiveData.value = Results.Error("Not Found")
 
                 }
             } else {
 
                 val barCode1 = exists.documents[0].data?.toMutableMap()
+                val itemId = exists.documents[0].id
                 barCode1?.let {
                     it["serialNumber"] = barCode
                 }
-                Log.e("TAG","barcode data $barCode1")
-                val billingData = mapToBillingDataModel(barCode1!!)
-                withContext(Dispatchers.Main){
+                Log.e("TAG", "barcode data $barCode1")
+                val billingData = mapToBillingDataModel(barCode1!!,itemId)
+                withContext(Dispatchers.Main) {
                     _serialNumberLiveData.value = Results.Success(billingData)
 
                 }

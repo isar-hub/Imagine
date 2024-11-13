@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class BillingDataModel(
+    val inventoryId : String,
     val brand: String,
     val model: String,
     val variant: String,
@@ -19,6 +20,7 @@ data class BillingDataModel(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
+        parcel.readString()!!,
         parcel.readDouble(),
         parcel.readDouble(),
         parcel.readLong(),
@@ -27,6 +29,7 @@ data class BillingDataModel(
     )
 
     override fun writeToParcel(parcel: Parcel, flag: Int) {
+        parcel.writeString(inventoryId)
         parcel.writeString(brand)
         parcel.writeString(model)
         parcel.writeString(variant)
@@ -53,8 +56,9 @@ data class BillingDataModel(
     }
 }
 
-fun mapToBillingDataModel(data: Map<String, Any?>): BillingDataModel {
+fun mapToBillingDataModel(data: Map<String, Any?>,id : String): BillingDataModel {
     return BillingDataModel(
+        inventoryId = id,
         brand = data["brand"] as? String ?: "",
         model = data["model"] as? String ?: "",
         variant = data["variant"] as? String ?: "",

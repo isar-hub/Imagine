@@ -21,6 +21,7 @@ import com.isar.imagine.billing.BillingPanelFragment
 import com.isar.imagine.R
 import com.isar.imagine.barcode_scenning.models.BillingDataModel
 import com.isar.imagine.data.model.BarcodeField
+import com.isar.imagine.utils.CommonMethods
 import com.isar.imagine.utils.CustomDialog
 
 /** Displays the bottom sheet to present barcode fields contained in the detected barcode.  */
@@ -46,10 +47,12 @@ class BarcodeResultFragment : BottomSheetDialogFragment() {
                     "Please Enter Quantity max is : ${getQuantity()}",
                     {
                         if (Integer.parseInt(textView.text.toString()) <= getQuantity()) {
-//                            Log.e("Data","in data ${getItem()}")
+
                             startActivity(Intent(
                                 requireContext(), BillingPanelFragment::class.java
                             ).apply {
+                                val item = getItem()
+                                CommonMethods.showLogs("BILLING","get item size ${item.size}")
                                 putExtra("data", getItem())
                             })
                             activity?.finish()
@@ -109,6 +112,8 @@ class BarcodeResultFragment : BottomSheetDialogFragment() {
         }
 
         fun setItem(item: List<BillingDataModel>) {
+            CommonMethods.showLogs("BILLING","Size of list data in set ${item.size}")
+            this.item.clear()
             this.item.addAll(item)
         }
 

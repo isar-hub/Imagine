@@ -36,6 +36,7 @@ import com.isar.imagine.barcode.SettingsActivity
 import com.isar.imagine.barcode_scenning.models.BillingDataModel
 import com.isar.imagine.data.model.BarcodeField
 import com.isar.imagine.data.model.ItemWithSerialResponse
+import com.isar.imagine.utils.CommonMethods
 import com.isar.imagine.utils.CustomDialog
 import com.isar.imagine.utils.CustomProgressBar
 import com.isar.imagine.utils.Results
@@ -278,17 +279,16 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
                     CustomDialog.showAlertDialog(this@BarCodeScanningActivity,textView,"Error in Scanning")
                     Log.e("tag","not present...............")
                     CustomProgressBar.dismiss()
-
                 }
                 is Results.Loading -> {
                     CustomProgressBar.show(this@BarCodeScanningActivity,"Loading...")
                     Log.e("tag","Loading...............")
                 }
                 is Results.Success -> {
-//                    CustomDialog.showAlertDialog(this@BarCodeScanningActivity,"Successfully fetched")
+
                     showSuccessItemDialog(it.data!!)
                     CustomProgressBar.dismiss()
-                    Log.e("tag","success...............")
+                    Log.e("BILLING"," data size is ${it.data}")
                 }
             }
 
@@ -296,18 +296,24 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
     }
 
     private fun showSuccessItemDialog(item: BillingDataModel) {
+
+        if (listData.any { it.serialNumber == item.serialNumber }) {
+            Log.e(TAG, "Item with serial number ${item.serialNumber} already exists in listData.")
+        } else {
+            listData.add(item)
+        }
         val barcodeFieldList = arrayListOf(
             BarcodeField("Serial Number ", item.serialNumber),
             BarcodeField("Brand", item.brand),
             BarcodeField("Model", item.model),
-            BarcodeField("Variant", item.variant.toString()),
+            BarcodeField("Variant", item.variant),
             BarcodeField("Condition", item.condition),
             BarcodeField("Purchase Price", item.purchasePrice.toString()),
             BarcodeField("Selling Price", item.sellingPrice.toString()),
-            BarcodeField("Quantity", item.quantity.toString()),
+            BarcodeField("Quantity", item.quantity.toString(),true),
             BarcodeField("Notes", item.notes),
         )
-        listData.add(item)
+        CommonMethods.showLogs("BILLING","Size of list data is ${listData.size}")
         BarcodeResultFragment.setItem(listData)
         BarcodeResultFragment.setQuantity(item.quantity)
         BarcodeResultFragment.show(supportFragmentManager, barcodeFieldList)

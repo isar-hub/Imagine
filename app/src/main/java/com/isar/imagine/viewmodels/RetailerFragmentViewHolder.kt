@@ -107,10 +107,8 @@ class RetailerRepository(
 
             if (user != null) {
                 val profileUpdates = UserProfileChangeRequest.Builder().setDisplayName(name).build()
-
                 user.updateProfile(profileUpdates).await()
-
-                Results.Success(user)  // Successfully created and updated profile
+                Results.Success(user)
             } else {
                 Results.Error("User creation failed")
             }

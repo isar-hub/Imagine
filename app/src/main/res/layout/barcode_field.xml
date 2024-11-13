@@ -8,7 +8,7 @@
     android:paddingEnd="@dimen/barcode_field_padding_horizontal"
     android:background="@color/white">
 
-    <TextView
+    <EditText
         android:id="@+id/barcode_field_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

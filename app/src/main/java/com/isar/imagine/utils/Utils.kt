@@ -27,6 +27,9 @@ import com.isar.imagine.barcode.CameraSizePair
 import com.isar.imagine.barcode.GraphicOverlay
 import java.io.ByteArrayOutputStream
 import java.nio.ByteBuffer
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.math.abs
  fun Context.getTextView(message: String): TextView{
     return TextView(this).apply {
@@ -36,6 +39,10 @@ import kotlin.math.abs
 
 object Utils {
     const val ASPECT_RATIO_TOLERANCE = 0.01f
+
+    fun now(): String {
+        return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+    }
 
     fun convertToBitmap(data: ByteBuffer, width: Int, height: Int, rotationDegrees: Int): Bitmap? {
         data.rewind()

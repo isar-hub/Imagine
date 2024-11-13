@@ -11,8 +11,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -24,6 +23,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/imagine_logo"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/imagine_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Imagine"
@@ -31,7 +31,7 @@
         <activity android:name=".LoginActivity"/>
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
+            android:authorities="com.isar.imagine.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

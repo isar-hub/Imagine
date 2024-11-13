@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.isar.imagine.barcode_scenning.BarCodeScanningActivity
+import com.isar.imagine.billing.BillingPanelFragment
 import com.isar.imagine.utils.CustomDialog
 import com.isar.imagine.utils.getTextView
 
