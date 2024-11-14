@@ -119,7 +119,7 @@ class InventoryViewModel(private val repository: InventoryRepository) : ViewMode
 
         //new item of inventory item with method parameters
         val newItem = InventoryItem(
-            name, model, variant, condition, purchasePrice, sellingPrice, quantity, notes
+            quantity, name, model, variant, condition, purchasePrice, sellingPrice, notes
         )
 
         //temp list of inventory item

@@ -7,6 +7,7 @@
     import android.view.ViewGroup
     import android.widget.BaseExpandableListAdapter
     import android.widget.TextView
+    import androidx.cardview.widget.CardView
     import com.isar.imagine.R
     import com.isar.imagine.data.model.InventoryItem
 
@@ -31,11 +32,9 @@
         }
 
         override fun getChildrenCount(listPosition: Int): Int {
-            val count = expandableListDetail[expandableListTitle[listPosition]]?.size ?: 0
+            val key = expandableListTitle[listPosition]
 
-            Log.e(TAG, "getChildrenCount: Number of children for group $listPosition is $count")
-
-            return count
+            return expandableListDetail[key]?.size ?:0
         }
 
         override fun getGroup(listPosition: Int): Any {
@@ -66,31 +65,20 @@
         ): View {
             Log.e(TAG, "getChildView: Creating view for child at position $expandedListPosition in group $listPosition")
 
-            var view = convertView
-            if (view == null) {
-                Log.e(TAG, "view is null")
-                val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                view = layoutInflater.inflate(R.layout.expandable_list_item, null)
-            }
+            val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.expandable_list_item, parent, false)
             val item = getChild(listPosition, expandedListPosition) as InventoryItem
             Log.e(TAG, "item of expanded $item")
 
 
-            val modelTextView = view!!.findViewById<TextView>(R.id.model)
-            val variantTextView = view.findViewById<TextView>(R.id.variant)
-            val conditionTextView = view.findViewById<TextView>(R.id.condition)
-            val purchasePriceTextView = view.findViewById<TextView>(R.id.purchasePrice)
-            val sellingPriceTextView = view.findViewById<TextView>(R.id.sellingPrice)
-            val quantityTextView = view.findViewById<TextView>(R.id.quantity)
-            val notesTextView = view.findViewById<TextView>(R.id.notes)
-
-            "Model: ${item.model}".also { modelTextView.text = it }
-            "Variant: ${item.variant}".also { variantTextView.text = it }
-            "Condition: ${item.condition}".also { conditionTextView.text = it }
-            "Purchase Price: ${item.purchasePrice}".also { purchasePriceTextView.text = it }
-            "Selling Price: ${item.sellingPrice}".also { sellingPriceTextView.text = it }
-            "Quantity: ${item.quantity}".also { quantityTextView.text = it }
-            "Notes: ${item.notes}".also { notesTextView.text =it }
+            with(view) {
+                findViewById<TextView>(R.id.model).text = "Model: ${item.model}"
+                findViewById<TextView>(R.id.variant).text = "Variant: ${item.variant}"
+                findViewById<TextView>(R.id.condition).text = "Condition: ${item.condition}"
+                findViewById<TextView>(R.id.purchasePrice).text = "Purchase Price: ${item.purchasePrice}"
+                findViewById<TextView>(R.id.sellingPrice).text = "Selling Price: ${item.sellingPrice}"
+                findViewById<TextView>(R.id.quantity).text = "Quantity: ${item.quantity}"
+                findViewById<TextView>(R.id.notes).text = "Notes: ${item.notes}"
+            }
 
             return view
         }
@@ -98,25 +86,23 @@
         override fun getGroupView(
             listPosition: Int, isExpanded: Boolean,
             convertView: View?, parent: ViewGroup?
-        ): View? {
+        ): View {
             Log.e(TAG, "getGroupView: Creating view for group at position $listPosition, isExpanded: $isExpanded")
 
-            var view = convertView
-            if (view == null) {
-                val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                view = layoutInflater.inflate(R.layout.expandable_list_header, null)
-            }
+            // Use the provided Android layout for a simple expandable list item
+            val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.expandable_list_header, parent, false)
+
+            val listTitleTextView = view.findViewById<TextView>(R.id.text1)
             val listTitle = getGroup(listPosition) as String
-            val listTitleTextView = view?.findViewById<TextView>(R.id.header)
-            if (listTitleTextView != null) {
-                listTitleTextView.text = listTitle
-            }
+            listTitleTextView.text = listTitle
+
             return view
         }
 
         override fun isChildSelectable(listPosition: Int, expandedListPosition: Int): Boolean {
-            Log.e(TAG, "isChildSelectable: Checking if child at position $expandedListPosition in group $listPosition is selectable")
 
+            Log.e(TAG, "isChildSelectable: Checking if child at position $expandedListPosition in group $listPosition is selectable")
             return true
+
         }
     }

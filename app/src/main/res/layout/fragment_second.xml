@@ -2,19 +2,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/billingMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/red"
-    android:id="@+id/billingMain"
+    android:orientation="vertical"
     tools:context=".billing.BillingPanelFragment">
 
-
-    <ScrollView
+    <ExpandableListView
+        android:id="@+id/listViewBilling"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="400dp"
+        android:padding="10dp"
+        android:clickable="true"
+        android:layout_marginTop="16dp"
+        tools:listheader="@android:layout/simple_expandable_list_item_1"
+         />
+    <ScrollView
         android:id="@+id/scrollable"
-        >
+        android:layout_width="match_parent"
+        android:layout_below="@+id/listViewBilling"
+        android:layout_height="match_parent">
 
         <LinearLayout
 
@@ -24,25 +32,17 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <ExpandableListView
-                android:id="@+id/listViewBilling"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginTop="16dp"
-                android:layout_below="@+id/scrollable"
-                tools:listheader="@layout/expandable_list_header"
-                />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="Add More"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 app:backgroundTint="@color/white"
                 app:cornerRadius="5dp"
-                android:layout_gravity="center"
 
                 />
 
@@ -51,69 +51,61 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Add Retailer"
                 android:textColor="@color/black"
-                android:textStyle="bold"
-                android:text="Add Retailer" />
+                android:textStyle="bold" />
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:prompt="@string/variant"
-                android:padding="5dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/dropdown_bg"
                 android:dropDownSelector="@color/white"
-                android:layout_marginBottom="8dp" />
+                android:padding="5dp"
+                android:prompt="@string/variant" />
+            <TextView
+                android:id="@+id/notes_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
 
-            <!-- Send Bill -->
-
-<!--            <EditText-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:hint="Add Quantity"-->
-<!--                android:inputType="number"-->
-<!--                android:layout_marginTop="16dp"/>-->
-
-<!--            <Button-->
-<!--                android:id="@+id/btnSendBill"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="32dp"-->
-<!--                android:text="Save" />-->
-
-
-<!--            <Button-->
-<!--                android:id="@+id/Save"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="32dp"-->
-<!--                android:text="Send Bill" />-->
+                android:text="Add Notes"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+            <EditText
+                android:id="@+id/notes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Notes"
+                android:labelFor="@+id/notes_text"
+                android:padding="6dp"
+                android:background="@drawable/barcode_field_box"
+                android:inputType="number" />
 
 
         </LinearLayout>
 
 
-
-
     </ScrollView>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/black"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
-        >
+        android:background="@color/black">
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/loginButton"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
+            android:layout_centerInParent="true"
             android:text="Generate Invoice"
             android:textColor="@color/black"
             android:textStyle="bold"
             app:backgroundTint="@color/white"
-            app:cornerRadius="5dp"
-            android:layout_centerInParent="true"
-            />
+            app:cornerRadius="5dp" />
 
 
     </RelativeLayout>

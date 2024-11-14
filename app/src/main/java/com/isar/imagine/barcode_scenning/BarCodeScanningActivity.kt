@@ -285,7 +285,6 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
                     Log.e("tag","Loading...............")
                 }
                 is Results.Success -> {
-
                     showSuccessItemDialog(it.data!!)
                     CustomProgressBar.dismiss()
                     Log.e("BILLING"," data size is ${it.data}")
@@ -297,12 +296,13 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
 
     private fun showSuccessItemDialog(item: BillingDataModel) {
 
-        if (listData.any { it.serialNumber == item.serialNumber }) {
+        if (listData.any { it.quantity == item.quantity }) {
             Log.e(TAG, "Item with serial number ${item.serialNumber} already exists in listData.")
         } else {
             listData.add(item)
         }
         val barcodeFieldList = arrayListOf(
+            BarcodeField("Quantity", item.quantity.toString(),true),
             BarcodeField("Serial Number ", item.serialNumber),
             BarcodeField("Brand", item.brand),
             BarcodeField("Model", item.model),
@@ -310,7 +310,6 @@ class BarCodeScanningActivity : AppCompatActivity(), OnClickListener {
             BarcodeField("Condition", item.condition),
             BarcodeField("Purchase Price", item.purchasePrice.toString()),
             BarcodeField("Selling Price", item.sellingPrice.toString()),
-            BarcodeField("Quantity", item.quantity.toString(),true),
             BarcodeField("Notes", item.notes),
         )
         CommonMethods.showLogs("BILLING","Size of list data is ${listData.size}")

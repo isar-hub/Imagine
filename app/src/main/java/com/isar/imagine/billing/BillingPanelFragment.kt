@@ -24,17 +24,13 @@ import com.isar.imagine.databinding.FragmentSecondBinding
 import com.isar.imagine.utils.CommonMethods
 import com.isar.imagine.utils.CustomDialog
 import com.isar.imagine.utils.CustomProgressBar
-import com.isar.imagine.utils.Invoice
 import com.isar.imagine.utils.Invoice.createPdf
 import com.isar.imagine.utils.Results
-import com.isar.imagine.utils.Utils
 import com.isar.imagine.utils.getTextView
 import com.isar.imagine.viewmodels.AppDatabase
 import com.isar.imagine.viewmodels.RetailerEntity
 import com.isar.imagine.viewmodels.RetailerRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class BillingPanelFragment : AppCompatActivity() {
 
@@ -68,7 +64,7 @@ class BillingPanelFragment : AppCompatActivity() {
 
 
         val dataList = intent.getSerializableExtra("data") as List<BillingDataModel>
-        CommonMethods.showLogs("BILLING", "get size is ${dataList.size}")
+        CommonMethods.showLogs("BILLING", "get size is ${dataList[0].quantity}")
         listData.addAll(dataList)
 
         listViewInitialize(view = binding.root)
@@ -122,7 +118,7 @@ class BillingPanelFragment : AppCompatActivity() {
             CustomProgressBar.show(this, "Loading...")
 
             lifecycleScope.launch {
-                viewModel.addTransaction(listData,retailerEntity.uid) {
+                viewModel.addTransaction(listData, retailerEntity.uid) {
                     if (it) {
                         generateInvoice()
                     } else {
@@ -167,22 +163,34 @@ class BillingPanelFragment : AppCompatActivity() {
 
         val headerMap = listData.map { it.brand }.distinct()
         val itemMap = listData.map { it.toInventory() }.distinct().groupBy { it.brand }
-        val expandableListAdapter =
-            InventoryExpandableListAdapter(applicationContext, headerMap, itemMap)
+        CommonMethods.showLogs("TAG", "ITEM MAP IS $itemMap")
+
+
+        val expandableListAdapter = InventoryExpandableListAdapter(this, headerMap, itemMap)
         expandableListView.setAdapter(expandableListAdapter)
+        expandableListView.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
+            CommonMethods.showLogs("TAG","CLICKED $groupPosition  $childPosition $id")
+
+            expandableListView.expandGroup(groupPosition)
+
+
+        }
+        expandableListView.setOnGroupExpandListener { groupPosition ->
+            CommonMethods.showLogs("TAG", "Group expanded at position: $groupPosition")
+        }
 
 
     }
 
     fun BillingDataModel.toInventory(): InventoryItem {
         return InventoryItem(
+            quantity = this.quantity.toInt(),
             brand = this.brand,
             model = this.model,
             variant = this.variant,
             condition = this.condition,
             purchasePrice = this.purchasePrice,
             sellingPrice = this.sellingPrice,
-            quantity = this.quantity.toInt(),
             notes = this.notes
         )
     }

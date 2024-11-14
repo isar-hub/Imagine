@@ -1,13 +1,13 @@
 package com.isar.imagine.data.model
 
 data class InventoryItem(
+    var quantity: Int,
     val brand: String,
     val model: String,
     val variant: String,
     val condition: String,
     var purchasePrice: Double,
     var sellingPrice: Double,
-    var quantity: Int,
     var notes: String
 )
 

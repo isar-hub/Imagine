@@ -26,6 +26,7 @@ import com.isar.imagine.utils.CustomDialog
 
 /** Displays the bottom sheet to present barcode fields contained in the detected barcode.  */
 class BarcodeResultFragment : BottomSheetDialogFragment() {
+    private lateinit var item:  ArrayList<BillingDataModel>
 
     override fun onCreateView(
         layoutInflater: LayoutInflater, viewGroup: ViewGroup?, bundle: Bundle?
@@ -33,32 +34,15 @@ class BarcodeResultFragment : BottomSheetDialogFragment() {
         val view = layoutInflater.inflate(R.layout.barcode_bottom_sheet, viewGroup)
         val btn: MaterialButton = view.findViewById(R.id.btnConfirm)
 
+        item = getItem()
 
         btn.setOnClickListener {
-            val textView = EditText(requireContext()).apply {
-                hint = getQuantity().toString()
-                width = MATCH_PARENT
-                inputType = InputType.TYPE_CLASS_NUMBER
-
-            }
-            if (getQuantity() > 0) {
-                CustomDialog.showAlertDialog(requireContext(),
-                    textView,
-                    "Please Enter Quantity max is : ${getQuantity()}",
-                    {
-                        if (Integer.parseInt(textView.text.toString()) <= getQuantity()) {
-
-                            startActivity(Intent(
-                                requireContext(), BillingPanelFragment::class.java
-                            ).apply {
-                                val item = getItem()
-                                CommonMethods.showLogs("BILLING","get item size ${item.size}")
-                                putExtra("data", getItem())
-                            })
-                            activity?.finish()
-                        }
-                    })
-            }
+            startActivity(Intent(
+                requireContext(), BillingPanelFragment::class.java
+            ).apply {
+                CommonMethods.showLogs("BILLING","get item size ${item.size}")
+                putExtra("data", item)
+            })
         }
 
         val arguments = arguments
@@ -75,11 +59,25 @@ class BarcodeResultFragment : BottomSheetDialogFragment() {
         view.findViewById<RecyclerView>(R.id.barcode_field_recycler_view).apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(activity)
-            adapter = BarcodeFieldAdapter(barcodeFieldList)
+            adapter = BarcodeFieldAdapter(barcodeFieldList){isOk,pos,quantity->
+                CommonMethods.showLogs("BILLING","IN RESULT FRAGMENT $quantity")
+                if (isOk){
+                    btn.isEnabled = true
+                    item[pos].quantity = quantity.toLong()
+                    btn.setBackgroundColor(getResources().getColor(R.color.white))
+
+                }
+                else{
+                    btn.isEnabled = false
+                    btn.setBackgroundColor(getResources().getColor(R.color.barcode_field_box_stroke))
+                }
+            }
         }
 
         return view
     }
+
+
 
     override fun onDismiss(dialogInterface: DialogInterface) {
 
