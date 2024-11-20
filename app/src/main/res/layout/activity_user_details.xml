@@ -5,206 +5,384 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/red"
     tools:context=".UserDetailsActivity">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp"
-        >
+        android:layout_height="match_parent">
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:orientation="vertical">
 
-            <!-- Phone Details Section -->
-            <TextView
-                android:id="@+id/tvPhoneDetails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Phone Details"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:paddingBottom="8dp" />
-
-            <TextView
-                android:id="@+id/tvPhoneName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Phone: Samsung Galaxy S21"
-                android:paddingBottom="4dp" />
-
-            <TextView
-                android:id="@+id/tvPhoneCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Quantity: 1"
-                android:paddingBottom="16dp" />
-
-            <!-- Customer Details Section -->
-            <TextView
-                android:id="@+id/tvCustomerDetails"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Customer Details"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:paddingBottom="8dp" />
-
-            <EditText
-                android:id="@+id/etCustomerName"
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Name"
-                android:inputType="textPersonName"
-                android:paddingBottom="8dp" />
-            <EditText
-                android:id="@+id/etCustomerEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Email"
-                android:inputType="textPersonName"
-                android:paddingBottom="8dp" />
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="10dp"
 
-            <EditText
-                android:id="@+id/etMobileNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Mobile Number"
-                android:inputType="phone"
-                android:paddingBottom="8dp" />
-
-            <EditText
-                android:id="@+id/etAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Address"
-                android:inputType="textPostalAddress"
-                android:paddingBottom="16dp" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="2"
                 >
 
-                <EditText
-                    android:id="@+id/city"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:hint="City"
-                    android:inputType="textPostalAddress"
-                    android:layout_marginEnd="5dp"
-                    android:paddingBottom="16dp" />
-                <EditText
-                    android:id="@+id/pincode"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:hint="PinCode"
-                    android:layout_marginStart="5dp"
-                    android:inputType="phone"
-                    android:paddingBottom="16dp" />
-            </LinearLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/device_model_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-          >
-                <AutoCompleteTextView
-                    android:id="@+id/state"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:inputType="textAutoComplete"
-                    android:text="State"
-                    />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:background="@color/black"
+                    android:orientation="vertical"
+                    >
 
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="Personal Details"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/tvCustomerPhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Customer Photo"
-                android:layout_marginTop="10dp"
-                android:paddingBottom="8dp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:orientation="vertical"
 
-            <ImageView
-                android:id="@+id/ivCustomerPhoto"
+                        >
+
+                        <EditText
+                            android:id="@+id/fullName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:autofillHints="name"
+                            android:background="@drawable/barcode_field_box"
+                            android:drawableStart="@drawable/baseline_person_24"
+                            android:hint="Full Name"
+                            android:inputType="textPersonName"
+
+                            android:padding="10dp" />
+
+                        <EditText
+                            android:id="@+id/email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:autofillHints="emailAddress"
+                            android:background="@drawable/barcode_field_box"
+                            android:drawableStart="@drawable/outline_email_24"
+                            android:hint="Email"
+                            android:inputType="textEmailAddress"
+                            android:padding="10dp" />
+
+
+                        <EditText
+                            android:id="@+id/mobile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:autofillHints="phone"
+                            android:background="@drawable/barcode_field_box"
+                            android:drawableStart="@drawable/baseline_call_24"
+                            android:hint="Mobile"
+                            android:inputType="phone"
+                            android:padding="10dp" />
+                        <Spinner
+                            android:id="@+id/role"
+                            android:layout_width="match_parent"
+                            android:layout_margin="10dp"
+                            android:padding="10dp"
+                            android:background="@drawable/barcode_field_box"
+                            android:layout_height="wrap_content" />
+
+                        <EditText
+                            android:id="@+id/companyName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/barcode_field_box"
+                            android:drawableStart="@drawable/outline_home_work_24"
+                            android:hint="Company Name"
+                            android:inputType="text"
+
+                            android:padding="10dp" />
+
+                        <EditText
+                            android:id="@+id/gstNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/barcode_field_box"
+                            android:drawableStart="@drawable/outline_text_snippet_24"
+                            android:hint="GST Number"
+                            android:inputType="textCapWords"
+                            android:padding="10dp" />
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="centerCrop"
-                android:background="@android:color/darker_gray"
-                android:contentDescription="Customer Photo"
-                android:paddingBottom="8dp" />
-
-            <Button
-                android:id="@+id/btnUploadPhoto"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Upload Photo"
-                android:paddingBottom="16dp" />
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="10dp"
 
-            <TextView
-                android:id="@+id/tvCustomerSignature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Customer Signature"
-                android:paddingBottom="8dp" />
+                >
 
-            <ImageView
-                android:id="@+id/ivCustomerSignature"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="centerCrop"
-                android:visibility="gone"
-                android:background="@android:color/darker_gray"
-                android:contentDescription="Customer Signature"
-                android:paddingBottom="8dp" />
-
-            <Button
-                android:id="@+id/btnUploadSignature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.9"
-                android:background="@color/ColorPrimary"
-                android:text="Click here to Upload Signature" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-               >
-            <Button
-                android:id="@+id/btnSubmit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Submit"
-                android:textStyle="bold"
-                android:textColor="@android:color/white" />
-
-                <com.google.android.material.progressindicator.CircularProgressIndicator
-                    android:id="@+id/progress_circular"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:indicatorColor="@color/black"
-                    android:layout_centerInParent="true"
-                    android:visibility="gone"
+                    android:layout_height="wrap_content"
+                    android:background="@color/black"
+                    android:orientation="vertical"
 
-                    />
-            </RelativeLayout>
+                    >
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="Login Details"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+
+                        >
+
+                        <EditText
+                            android:id="@+id/username"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:autofillHints="username"
+                            android:background="@drawable/barcode_field_box"
+                            android:drawableStart="@drawable/baseline_person_24"
+                            android:hint="Username"
+                            android:inputType="text"
+                            android:padding="10dp" />
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:hint="Password"
+                            app:endIconMode="password_toggle"
+                            >
+
+                            <EditText
+                                android:id="@+id/password"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:autofillHints="password"
+                                android:background="@drawable/barcode_field_box"
+                                android:drawableStart="@drawable/outline_lock_clock_24"
+                                android:padding="10dp"
+
+                                android:inputType="textPassword"
+                                 />
+
+
+                        </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:hint="Confirm Password"
+                            app:endIconMode="password_toggle"
+                            >
+
+                            <EditText
+                                android:id="@+id/confirmPassword"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:autofillHints="password"
+                                android:background="@drawable/barcode_field_box"
+                                android:drawableStart="@drawable/outline_lock_clock_24"
+                                android:inputType="textPassword"
+                                android:singleLine="true"
+                                android:padding="10dp" />
+
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="10dp"
+
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/black"
+                    android:orientation="vertical"
+
+                    >
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="Personal Details"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+
+                        >
+
+                        <EditText
+                            android:id="@+id/address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:autofillHints="postalAddress"
+                            android:background="@drawable/barcode_field_box"
+                            android:drawableStart="@drawable/outline_notes_24"
+                            android:hint="Address"
+                            android:inputType="textMultiLine"
+                            android:padding="10dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:orientation="horizontal">
+
+                            <EditText
+                                android:id="@+id/city"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="10dp"
+                                android:layout_weight="1"
+                                android:autofillHints="postalAddress"
+                                android:background="@drawable/barcode_field_box"
+
+                                android:drawableStart="@drawable/outline_text_snippet_24"
+                                android:hint="City"
+
+                                android:inputType="textShortMessage"
+                                android:padding="10dp" />
+
+                            <EditText
+                                android:id="@+id/pincode"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="10dp"
+                                android:layout_marginStart="5dp"
+                                android:layout_weight="1"
+                                android:autofillHints="postalCode"
+                                android:background="@drawable/barcode_field_box"
+
+
+                                android:drawableStart="@drawable/outline_pin_drop_24"
+                                android:hint="PinCode"
+
+                                android:inputType="textPostalAddress"
+                                android:padding="10dp" />
+                        </LinearLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/device_model_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+
+                            >
+
+                            <AutoCompleteTextView
+                                android:id="@+id/state"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:inputType="textAutoComplete"
+                                android:padding="10dp"
+                                android:text="State"
+                                android:textColor="@color/black" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
 
         </LinearLayout>
 
-
     </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/saveDetails"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:text="Save"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:backgroundTint="@color/white"
+            app:cornerRadius="5dp" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/loader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            app:trackColor="@color/white"
+
+            />
+
+    </RelativeLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

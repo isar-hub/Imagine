@@ -8,13 +8,13 @@
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="dashboard.DashboardFragment"
-        android:label="dashboard"
+        android:label="Dashboard"
         tools:layout="@layout/fragment_dashboard"/>
 
     <fragment
         android:id="@+id/inventoryFragment"
         android:name="com.isar.imagine.inventory.InventoryFragment"
-        android:label="inventory"
+        android:label="Inventory"
 
         tools:layout="@layout/fragment_inventory">
 
@@ -30,17 +30,26 @@
     <fragment
         android:id="@+id/warrantyFragment"
         android:name="com.isar.imagine.warranty.WarrantyFragment"
-        android:label="warranty"
+        android:label="Warranty"
         tools:layout="@layout/fragment_warranty"/>
     <fragment
         android:id="@+id/retailerFragment"
         android:name="com.isar.imagine.Fragments.RetailerFragment"
-        android:label="retailers"
-        tools:layout="@layout/fragment_retailer"/>
+        android:label="Retailers"
+        tools:layout="@layout/fragment_retailer">
+        <action
+            android:id="@+id/action_retailerFragment_to_userDetailsActivity"
+            app:destination="@id/userDetailsActivity" />
+    </fragment>
     <fragment
         android:id="@+id/customerFragment"
         android:name="com.isar.imagine.Fragments.CustomerFragment"
-        android:label="customers"
+        android:label="Customers"
         tools:layout="@layout/fragment_customer"/>
+    <fragment
+        android:id="@+id/userDetailsActivity"
+        android:name="com.isar.imagine.UserDetailsActivity"
+        android:label="Create Retailers"
+        tools:layout="@layout/activity_user_details" />
 
 </navigation>

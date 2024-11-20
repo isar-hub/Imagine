@@ -21,6 +21,7 @@ import com.isar.imagine.barcode_scenning.BarCodeScanningActivity
 import com.isar.imagine.barcode_scenning.models.BillingDataModel
 import com.isar.imagine.data.model.InventoryItem
 import com.isar.imagine.databinding.FragmentSecondBinding
+import com.isar.imagine.responses.UserDetails
 import com.isar.imagine.utils.CommonMethods
 import com.isar.imagine.utils.CustomDialog
 import com.isar.imagine.utils.CustomProgressBar
@@ -30,6 +31,7 @@ import com.isar.imagine.utils.getTextView
 import com.isar.imagine.viewmodels.AppDatabase
 import com.isar.imagine.viewmodels.RetailerEntity
 import com.isar.imagine.viewmodels.RetailerRepository
+import com.isar.imagine.viewmodels.UserDatabase
 import kotlinx.coroutines.launch
 
 class BillingPanelFragment : AppCompatActivity() {
@@ -40,7 +42,7 @@ class BillingPanelFragment : AppCompatActivity() {
 
     private val repository: RetailerRepository by lazy {
         RetailerRepository(
-            FirebaseAuth.getInstance(), AppDatabase.getDatabase(this).retailerDao()
+            FirebaseAuth.getInstance(), UserDatabase.getDatabase(this).userDao()
         )
     }
     private val billingRepository: BillingRepository by lazy {
@@ -94,9 +96,9 @@ class BillingPanelFragment : AppCompatActivity() {
 
     }
 
-    private fun populateBrandSpinner(brands: List<RetailerEntity>) {
+    private fun populateBrandSpinner(brands: List<UserDetails>) {
 
-        val list = brands.map { it.displayName }
+        val list = brands.map { it.name }
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, list)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.autoCompleteTextView.setAdapter(adapter)
@@ -110,12 +112,13 @@ class BillingPanelFragment : AppCompatActivity() {
 
     }
 
-    lateinit var retailerEntity: RetailerEntity
+    lateinit var retailerEntity: UserDetails
 
     private fun saveData() {
         binding.loginButton.setOnClickListener {
             binding.loginButton.isEnabled = false
             CustomProgressBar.show(this, "Loading...")
+
 
             lifecycleScope.launch {
                 viewModel.addTransaction(listData, retailerEntity.uid) {

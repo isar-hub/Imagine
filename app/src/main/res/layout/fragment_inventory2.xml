@@ -199,7 +199,6 @@
                 android:layout_height="400dp"
                 android:layout_marginTop="16dp"
                 android:dividerHeight="1dp"
-
                 android:nestedScrollingEnabled="true"
                 tools:listheader="@layout/expandable_list_header" />
 

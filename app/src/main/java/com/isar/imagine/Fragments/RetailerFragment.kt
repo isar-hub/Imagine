@@ -11,18 +11,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.auth.FirebaseAuth
 import com.isar.imagine.Adapters.RetailerAdapter
 import com.isar.imagine.R
 import com.isar.imagine.databinding.FragmentRetailerBinding
+import com.isar.imagine.responses.UserDetails
 import com.isar.imagine.utils.CustomDialog
 import com.isar.imagine.utils.CustomProgressBar
 import com.isar.imagine.utils.Results
 import com.isar.imagine.utils.getTextView
-import com.isar.imagine.viewmodels.AppDatabase
 import com.isar.imagine.viewmodels.RetailerFragmentViewHolder
 import com.isar.imagine.viewmodels.RetailerRepository
+import com.isar.imagine.viewmodels.UserDatabase
 
 
 class RetailerFragment : Fragment() {
@@ -31,7 +34,7 @@ class RetailerFragment : Fragment() {
     private lateinit var binding: FragmentRetailerBinding
     private val repository: RetailerRepository by lazy {
         RetailerRepository(
-            FirebaseAuth.getInstance(), AppDatabase.getDatabase(requireContext()).retailerDao()
+            FirebaseAuth.getInstance(), UserDatabase.getDatabase(requireContext()).userDao()
         )
     }
 
@@ -49,34 +52,69 @@ class RetailerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnAddRetailer.setOnClickListener { showCreateUserDialog() }
+        binding.btnAddRetailer.setOnClickListener {
+            Navigation.findNavController(view)
+                .navigate(R.id.action_retailerFragment_to_userDetailsActivity)
+        }
+
+
+        binding.sendNotification.setOnClickListener {
+            showCreateUserDialog()
+        }
+        parentFragmentManager.setFragmentResultListener(
+            "refreshKey",
+            viewLifecycleOwner
+        ) { key, bundle ->
+            val isRefresh = bundle.getBoolean("refresh")
+            if (isRefresh) {
+                viewModel.getRetailers()
+            }
+        }
+        searchView()
         observers()
+    }
+
+    private fun searchView() {
+        binding.svRetailerSearch.setOnClickListener { binding.svRetailerSearch.onActionViewExpanded() }
+
+        binding.svRetailerSearch.setOnQueryTextListener(object :
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                adapter.filter.filter(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.filter.filter(newText);
+                return true
+            }
+
+        })
     }
 
 
     private fun observers() {
         viewModel.retailerList.observe(viewLifecycleOwner) { retailer ->
             when (retailer) {
+                is Results.Error -> {
+                    CustomDialog.showAlertDialog(
+                        requireContext(), requireContext().getTextView(retailer.message!!), "Error"
+                    )
+                    CustomProgressBar.dismiss()
 
-                is Results.Error -> CustomDialog.showAlertDialog(
-                    requireContext(),
-                    requireContext().getTextView(retailer.message!!),
-                    "Error"
-                )
+
+                }
 
                 is Results.Loading -> CustomProgressBar.show(requireContext(), "Loading Retailers")
                 is Results.Success -> {
                     CustomProgressBar.dismiss()
-                    val retailer = retailer.data?.map { it.displayName }
 
-                    setupRecyclerView(retailer!!)
+                    setupRecyclerView(retailer.data!!)
                 }
 
                 else -> {
                     CustomDialog.showAlertDialog(
-                        requireContext(),
-                        requireContext().getTextView(retailer.message!!),
-                        "Error"
+                        requireContext(), requireContext().getTextView(retailer.message!!), "Error"
                     )
                 }
             }
@@ -84,8 +122,13 @@ class RetailerFragment : Fragment() {
 
     }
 
-    private fun setupRecyclerView(retailers: List<String>) {
-        adapter = RetailerAdapter(retailers) {}
+    private fun setupRecyclerView(retailers: List<UserDetails>) {
+        adapter = RetailerAdapter(retailers) { userDetails ->
+            val bundle = Bundle()
+            bundle.putSerializable("userDetails", userDetails)
+            Navigation.findNavController(binding.root)
+                .navigate(R.id.action_retailerFragment_to_userDetailsActivity, args = bundle)
+        }
         binding.rvRetailers.layoutManager = LinearLayoutManager(context)
         binding.rvRetailers.adapter = adapter
     }
@@ -100,32 +143,55 @@ class RetailerFragment : Fragment() {
         }
 
         // Get references to the views in the dialog layout
-        val emailEditText = dialogView.findViewById<EditText>(R.id.edit_email)
-        val passwordEditText = dialogView.findViewById<EditText>(R.id.edit_password)
-        val nameEditText = dialogView.findViewById<EditText>(R.id.edit_name)
-        val createButton = dialogView.findViewById<Button>(R.id.submit)
+        val title = dialogView.findViewById<EditText>(R.id.title)
+        val message = dialogView.findViewById<EditText>(R.id.message)
+        val createButton = dialogView.findViewById<Button>(R.id.send)
+        val loader = dialogView.findViewById<CircularProgressIndicator>(R.id.loaderDialog)
 
         // Handle Create User button click
         createButton.setOnClickListener {
-            val email = emailEditText.text.toString().trim() + "@imagine.com"
-            val password = passwordEditText.text.toString().trim()
-            val name = nameEditText.text.toString().trim()
+            val titleText = title.text.toString().trim()
+            val messageText = message.text.toString().trim()
 
-            if (email.isEmpty()) {
-                emailEditText.error = "user id  cannot be empty"
-            } else if (password.isEmpty() && password.length < 6) {
-                passwordEditText.error = "password cannot be empty"
-            } else if (name.isEmpty()) {
-                nameEditText.error = "name cannot be empty"
+            if (titleText.isEmpty()) {
+                title.error = "Title cannot be empty"
+            } else if (messageText.isEmpty()) {
+                message.error = "Message cannot be empty"
             } else {
                 if (dialog != null) {
-                    dialog.hide()
-                    viewModel.createUser(email, password, name)
+                    viewModel.sendNotification(titleText, messageText) {
+                        when (it) {
+                            is Results.Success -> {
+                                dialog.hide()
+                                CustomDialog.showAlertDialog(
+                                    requireContext(),
+                                    requireContext().getTextView(it.data!!),
+                                    "Success"
+                                )
+
+                            }
+
+                            is Results.Error -> {
+                                dialog.hide()
+                                CustomDialog.showAlertDialog(
+                                    requireContext(),
+                                    requireContext().getTextView(it.message!!),
+                                    "Error"
+                                )
+
+                            }
+
+                            is Results.Loading -> {
+                                loader.visibility = View.VISIBLE
+                                createButton.visibility = View.GONE
+                            }
+
+                        }
+                    }
                 }
             }
         }
 
-        // Show the dialog
         dialog?.show()
     }
 }

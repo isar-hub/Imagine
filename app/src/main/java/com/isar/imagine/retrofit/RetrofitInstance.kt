@@ -24,8 +24,8 @@ object RetrofitInstance{
 
 
 
-
-     fun getApiInterface(): ApiInterface {
-       return getInstance().create(ApiInterface::class.java)
-    }
+//
+//     fun getApiInterface(): ApiInterface {
+//       return getInstance().create(ApiInterface::class.java)
+//    }
 }

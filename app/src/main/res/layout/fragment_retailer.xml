@@ -20,9 +20,12 @@
             android:id="@+id/svRetailerSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/card_background"
+            android:background="@drawable/barcode_field_box"
+            android:focusable="true"
+            android:iconifiedByDefault="true"
             android:queryHint="Search Retailer"
-            app:searchIcon="@drawable/search_icon" />
+            app:searchIcon="@drawable/search_icon"
+            />
 
         <!-- Add New Retailer Section -->
         <LinearLayout
@@ -42,7 +45,6 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.button.MaterialButton
-                android:tooltipText="Create retailer"
                 android:id="@+id/btnAddRetailer"
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
@@ -51,15 +53,16 @@
                 android:insetTop="0dp"
                 android:insetRight="0dp"
                 android:insetBottom="0dp"
+                android:tooltipText="Create retailer"
                 app:cornerRadius="50dp"
                 app:icon="@drawable/add_retailer_icon"
                 app:iconGravity="textStart"
                 app:iconPadding="0dp"
                 app:iconSize="20dp" />
 
-            <com.google.android.material.button.MaterialButton
-                android:tooltipText="Update user"
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/sendNotification"
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="5dp"
@@ -68,23 +71,7 @@
                 android:insetTop="0dp"
                 android:insetRight="0dp"
                 android:insetBottom="0dp"
-                app:cornerRadius="50dp"
-                app:icon="@drawable/generate_id_icon"
-                app:iconGravity="textStart"
-                app:iconPadding="0dp"
-                app:iconSize="20dp" />
-
-            <com.google.android.material.button.MaterialButton
                 android:tooltipText="send notification"
-
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:backgroundTint="@color/black"
-                android:insetLeft="0dp"
-                android:insetTop="0dp"
-                android:insetRight="0dp"
-                android:insetBottom="0dp"
                 app:cornerRadius="50dp"
                 app:icon="@drawable/send_notification_icon"
                 app:iconGravity="textStart"
@@ -92,24 +79,12 @@
                 app:iconSize="20dp" />
         </LinearLayout>
 
-        <androidx.cardview.widget.CardView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRetailers"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:foreground="@drawable/card_background"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="4dp"
-
-            >
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvRetailers"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="10dp"
-                tools:listitem="@layout/item_retailer" />
-
-
-        </androidx.cardview.widget.CardView>
+            android:padding="10dp"
+            tools:listitem="@layout/item_retailer" />
 
         <!-- RecyclerView to List Retailers -->
 
@@ -117,12 +92,12 @@
 
 
     </LinearLayout>
+
     <ProgressBar
         android:id="@+id/loader"
         android:layout_width="wrap_content"
-        android:visibility="gone"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        />
+        android:visibility="gone" />
 
 </FrameLayout>

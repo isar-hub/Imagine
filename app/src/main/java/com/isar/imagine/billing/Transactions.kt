@@ -7,8 +7,9 @@ data class Transactions(
     val createdAt : String,
     val billValue : Double,
     val totalQuantity : Long,
-    val retailer : RetailerEntity,
     val description : String,
+    val retailerId : String,
+    val retailer : String,
     val items : List<InventoryItem>
 )
 

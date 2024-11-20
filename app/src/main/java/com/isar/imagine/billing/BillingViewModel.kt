@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.functions.FirebaseFunctions
 import com.isar.imagine.barcode_scenning.models.BillingDataModel
 import com.isar.imagine.inventory.models.DataClass
+import com.isar.imagine.responses.UserDetails
 import com.isar.imagine.utils.CommonMethods
 import com.isar.imagine.utils.Invoice
 import com.isar.imagine.utils.Invoice.createPdf
@@ -29,8 +30,8 @@ class BillingViewModel(
 ) : ViewModel() {
     private val firestore = FirebaseFirestore.getInstance()
 
-    private val _retailers = MutableLiveData<Results<List<RetailerEntity>>>()
-    val retailers: LiveData<Results<List<RetailerEntity>>> get() = _retailers
+    private val _retailers = MutableLiveData<Results<List<UserDetails>>>()
+    val retailers: LiveData<Results<List<UserDetails>>> get() = _retailers
 
     init {
         viewModelScope.launch {
@@ -38,8 +39,18 @@ class BillingViewModel(
         }
 
     }
-    fun addTransaction(data: List<BillingDataModel>,uid: String, onResult: (Boolean) -> Unit) {
 
+//    fun postSingleTransaction(data: List<Transactions>){
+//        val transactionList = data.map {
+//            Transactions(
+//                inventoryId = it.inventoryId,
+//                quantity = it.quantity,
+//                userId = uid
+//            )
+//        }
+//        repository.postSingleTransaction(transactionList)
+//    }
+    fun addTransaction(data: List<BillingDataModel>,uid: String, onResult: (Boolean) -> Unit) {
         val pairItem = data.map { Pair(it.inventoryId,it.quantity) }
         viewModelScope.launch {
             val allItem = async { billAllItems(pairItem,uid) }
@@ -94,11 +105,11 @@ class BillingViewModel(
 
 
     fun generateInvoiceData(
-        retailerEntity: RetailerEntity, // Replace with the actual type
+        retailerEntity: UserDetails, // Replace with the actual type
         listData: List<BillingDataModel>
     ): Pair<Invoice.UserInformation, List<Invoice.ProductInformation>> {
         val user = Invoice.UserInformation(
-            name = retailerEntity.displayName,
+            name = retailerEntity.name,
             address = retailerEntity.email,
             transactionNumber = retailerEntity.uid,
             stateName = "Bihar",
@@ -135,10 +146,10 @@ class BillingViewModel(
 class BillingRepository(
     private val retailerRepository: RetailerRepository, private val functions: FirebaseFunctions,private val firestore: FirebaseFirestore
 ) {
-    suspend fun getRetailer(): Results<List<RetailerEntity>> {
+    suspend fun getRetailer(): Results<List<UserDetails>> {
         return try {
             CommonMethods.showLogs("BillingRepository", "Calling retailerRepository.getRetailer()...")
-            val retailers = retailerRepository.getRetailer(functions)
+            val retailers = retailerRepository.getRetailer(firestore)
             CommonMethods.showLogs("Retailers","Result is $retailers")
             retailers
         } catch (e: Exception) {
@@ -149,6 +160,7 @@ class BillingRepository(
     }
     suspend fun addTransaction(item : List<SingleItem>  ,result: (Boolean) -> Unit) =  coroutineScope{
         try {
+
             val batch = firestore.batch()
             item.forEach {
                 val billingItem = firestore.collection("transactions").document()

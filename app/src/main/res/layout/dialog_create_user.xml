@@ -8,11 +8,13 @@
     app:cardCornerRadius="14dp"
 
     >
+
     <LinearLayout
         android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/black"
+
         android:orientation="vertical"
 
         >
@@ -21,7 +23,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create Retailer"
+            android:text="Send Notifications"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -36,40 +38,55 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/edit_email"
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter username"
-                android:inputType="textEmailAddress" />
+                android:layout_margin="10dp"
+                android:autofillHints="name"
+                android:background="@drawable/barcode_field_box"
+                android:hint="Title"
+                android:inputType="textShortMessage"
+                android:padding="10dp" />
 
             <EditText
-                android:id="@+id/edit_password"
+                android:id="@+id/message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter Password"
-                android:inputType="textPassword"
-                android:layout_marginTop="10dp" />
-            <EditText
-                android:id="@+id/edit_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Retailer name"
-                android:inputType="textPassword"
-                android:layout_marginTop="10dp" />
+                android:layout_margin="10dp"
+                android:autofillHints="name"
+                android:background="@drawable/barcode_field_box"
+                android:hint="Message"
+                android:lines="5"
+                android:gravity="top|start"
+                android:scrollbars="vertical"
+                android:inputType="textMultiLine"
+                android:imeOptions="actionDone"
+                android:overScrollMode="always"
+                android:padding="10dp" />
+
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/submit"
+                android:id="@+id/send"
                 android:layout_width="140dp"
                 android:layout_height="40dp"
-                android:layout_marginTop="10dp"
-                android:text="Save"
+                android:layout_marginTop="8dp"
+                android:text="Send"
                 android:textColor="@color/white"
                 android:textStyle="bold"
+                android:visibility="visible"
                 android:layout_gravity="center"
                 app:backgroundTint="@color/black"
                 app:cornerRadius="5dp"
                 />
 
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/loaderDialog"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:trackColor="@color/black"
+                android:visibility="gone"
+                android:layout_gravity="center_horizontal"
+                />
 
         </LinearLayout>
     </LinearLayout>

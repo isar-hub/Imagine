@@ -2,7 +2,6 @@ package com.isar.imagine.billing
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
@@ -15,11 +14,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
-import com.google.android.datatransport.runtime.BuildConfig
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
@@ -52,7 +48,10 @@ class ShowBillFragment : Fragment() {
 
             if (file.exists()) {
                 try {
-                    Log.d("ShowBillFragment", "Initializing PDF view with file: ${file.absolutePath}")
+                    Log.d(
+                        "ShowBillFragment",
+                        "Initializing PDF view with file: ${file.absolutePath}"
+                    )
                     pdfView.initWithFile(file)
 
                 } catch (e: Exception) {
@@ -66,17 +65,13 @@ class ShowBillFragment : Fragment() {
             } else {
                 Log.e("ShowBillFragment", "File not found at: $path")
                 CustomDialog.showAlertDialog(
-                    requireContext(),
-                    requireContext().getTextView("PDF file not found"),
-                    "ERROR"
+                    requireContext(), requireContext().getTextView("PDF file not found"), "ERROR"
                 )
             }
         } else {
             Log.e("ShowBillFragment", "PDF path is null")
             CustomDialog.showAlertDialog(
-                requireContext(),
-                requireContext().getTextView("PDF path is null"),
-                "ERROR"
+                requireContext(), requireContext().getTextView("PDF path is null"), "ERROR"
             )
         }
 
@@ -94,11 +89,13 @@ class ShowBillFragment : Fragment() {
                     sharePDF(file)
                     true
                 }
+
                 R.id.print -> {
                     Log.d("ShowBillFragment", "Print option clicked")
                     printPDF(file)
                     true
                 }
+
                 R.id.download -> {
                     Log.d("ShowBillFragment", "Download option clicked")
                     CustomDialog.showAlertDialog(
@@ -108,6 +105,7 @@ class ShowBillFragment : Fragment() {
                     )
                     true
                 }
+
                 else -> false
             }
         }
@@ -121,11 +119,13 @@ class ShowBillFragment : Fragment() {
                     sharePDF(file)
                     true
                 }
+
                 R.id.print -> {
                     Log.d("ShowBillFragment", "Print option clicked")
                     printPDF(file)
                     true
                 }
+
                 R.id.download -> {
                     Log.d("ShowBillFragment", "Download option clicked")
                     CustomDialog.showAlertDialog(
@@ -135,6 +135,7 @@ class ShowBillFragment : Fragment() {
                     )
                     true
                 }
+
                 else -> false
             }
         }
@@ -162,8 +163,7 @@ class ShowBillFragment : Fragment() {
                     callback?.onLayoutFinished(
                         PrintDocumentInfo.Builder(file.name)
                             .setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
-                            .setPageCount(PrintDocumentInfo.PAGE_COUNT_UNKNOWN)
-                            .build(),
+                            .setPageCount(PrintDocumentInfo.PAGE_COUNT_UNKNOWN).build(),
                         oldAttributes == newAttributes
                     )
                 }
@@ -199,9 +199,7 @@ class ShowBillFragment : Fragment() {
 
 
         val uri = FileProvider.getUriForFile(
-            requireContext(),
-            "com.isar.imagine.provider",
-            file
+            requireContext(), "com.isar.imagine.provider", file
         )
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "application/pdf"
@@ -221,10 +219,9 @@ class ShowBillFragment : Fragment() {
         pdfView = v.findViewById(R.id.pdfView)
 
         val done = v.findViewById<MaterialButton>(R.id.done)
-        done.setOnClickListener{
-            Intent(requireContext(),BarCodeScanningActivity::class.java)
+        done.setOnClickListener {
+            startActivity(Intent(requireContext(), BarCodeScanningActivity::class.java))
         }
-
         return v
     }
 }
