@@ -79,9 +79,9 @@ class BillingPanelFragment : AppCompatActivity() {
         viewModel.retailers.observe(this) {
             when (it) {
                 is Results.Error -> CustomDialog.showAlertDialog(
+
                     this, getTextView(it.message!!), "Error"
                 )
-
                 is Results.Loading -> CustomProgressBar.show(this, "Loading Retailers")
                 is Results.Success -> {
                     if (!it.data.isNullOrEmpty()) {
@@ -120,8 +120,9 @@ class BillingPanelFragment : AppCompatActivity() {
             CustomProgressBar.show(this, "Loading...")
 
 
+
             lifecycleScope.launch {
-                viewModel.addTransaction(listData, retailerEntity.uid) {
+                viewModel.addTransaction(listData, retailerEntity.uid,) {
                     if (it) {
                         generateInvoice()
                     } else {
@@ -172,7 +173,7 @@ class BillingPanelFragment : AppCompatActivity() {
         val expandableListAdapter = InventoryExpandableListAdapter(this, headerMap, itemMap)
         expandableListView.setAdapter(expandableListAdapter)
         expandableListView.setOnChildClickListener { parent, v, groupPosition, childPosition, id ->
-            CommonMethods.showLogs("TAG","CLICKED $groupPosition  $childPosition $id")
+            CommonMethods.showLogs("TAG", "CLICKED $groupPosition  $childPosition $id")
 
             expandableListView.expandGroup(groupPosition)
 

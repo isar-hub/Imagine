@@ -50,6 +50,9 @@ class RetailerAdapter(
 
         holder.bind(retailers[position])
     }
+    fun isEmpty() : Boolean{
+        return retailers.isEmpty()
+    }
 
     override fun getItemCount(): Int = retailers.size
     override fun getFilter(): Filter {

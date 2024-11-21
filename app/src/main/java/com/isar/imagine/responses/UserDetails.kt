@@ -10,7 +10,7 @@ import java.io.Serializable
 
 @Entity(tableName = "Retailers")
 data class UserDetails(
-    @PrimaryKey val uid: String,
+    @PrimaryKey var uid: String,
     val name: String,
     val email: String,
     val mobile: String,

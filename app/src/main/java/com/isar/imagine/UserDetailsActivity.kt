@@ -71,7 +71,6 @@ class UserDetailsActivity : Fragment() {
         binding.state.setText(user.state)
         binding.pincode.setText(user.pinCode.toString())
         binding.role.setSelection(user.role.ordinal)
-
     }
 
 
@@ -82,16 +81,10 @@ class UserDetailsActivity : Fragment() {
 
         state()
         binding.fullName.requestFocus()
-
-
-
         binding.saveDetails.setOnClickListener {
             binding.saveDetails.isEnabled = false
-
-
-            val userDetails = FirebaseAuth.getInstance().currentUser?.uid?.let { it1 ->
-                UserDetails(
-                    uid = it1,
+            val userDetails = UserDetails(
+                    uid = "",
                     name = binding.fullName.text.toString(),
                     email = binding.email.text.toString(),
                     mobile = binding.mobile.text.toString(),
@@ -105,18 +98,14 @@ class UserDetailsActivity : Fragment() {
                     pinCode = binding.pincode.text.toString().toIntOrNull() ?: 0,
                     role = UserRole.entries[binding.role.selectedItemPosition],
                     image = ""
-
-
                     )
-            }
+
             if (validation()) {
-                if (userDetails != null) {
-                    viewModel.createUser(
-                        binding.username.text.toString(),
-                        binding.confirmPassword.text.toString(),
-                        userDetails
-                    )
-                }
+                viewModel.createUser(
+                    binding.username.text.toString(),
+                    binding.confirmPassword.text.toString(),
+                    userDetails
+                )
             }
         }
 

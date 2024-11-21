@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
@@ -101,14 +102,11 @@ class RetailerFragment : Fragment() {
                         requireContext(), requireContext().getTextView(retailer.message!!), "Error"
                     )
                     CustomProgressBar.dismiss()
-
-
                 }
 
                 is Results.Loading -> CustomProgressBar.show(requireContext(), "Loading Retailers")
                 is Results.Success -> {
                     CustomProgressBar.dismiss()
-
                     setupRecyclerView(retailer.data!!)
                 }
 
@@ -131,6 +129,13 @@ class RetailerFragment : Fragment() {
         }
         binding.rvRetailers.layoutManager = LinearLayoutManager(context)
         binding.rvRetailers.adapter = adapter
+        if (adapter.isEmpty()) {
+            binding.emptyView.visibility = View.VISIBLE
+            binding.rvRetailers.visibility = View.GONE
+        } else {
+            binding.emptyView.visibility = View.GONE
+            binding.rvRetailers.visibility = View.VISIBLE
+        }
     }
 
     private fun showCreateUserDialog() {

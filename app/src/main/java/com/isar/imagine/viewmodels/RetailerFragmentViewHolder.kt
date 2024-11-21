@@ -52,22 +52,25 @@ class RetailerFragmentViewHolder(
     }
 
     fun sendNotification(
-        title: String,message : String, callback: (Results< String>) -> Unit
+        title: String, message: String, callback: (Results<String>) -> Unit
     ) {
         viewModelScope.launch {
-            val notifications = Notifications(title,message)
+            val notifications = Notifications(title, message)
             val result = repository.sendNotification(firestore, notifications)
             callback(result)
         }
     }
 
-    fun createUser(email: String, password: String, userDetails: UserDetails) {
+    fun createUser(
+        email: String, password: String, userDetails: UserDetails
+    ) {
         _userCreated.postValue(Results.Loading())  // Set loading state
 
         viewModelScope.launch {
             val result = repository.createUser(email, password)
 
             if (result is Results.Success) {
+                userDetails.uid = result.data?.uid.toString()
                 val posted = repository.saveUserDetails(userDetails, firestore)
                 if (posted.data?.first == true) {
                     _userCreated.postValue(result)  // Post success result
@@ -91,7 +94,7 @@ class RetailerRepository(
 
     suspend fun sendNotification(
         firestore: FirebaseFirestore, notifications: Notifications
-    ): Results< String> {
+    ): Results<String> {
         return try {
             // Add the notification to the "notification" collection
             firestore.collection("notification").document().set(notifications).await()
