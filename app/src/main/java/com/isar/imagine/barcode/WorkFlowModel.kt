@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData
 
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.objects.DetectedObject
-import com.isar.imagine.barcode.InputInfo
+import com.isar.imagine.barcode.utils.InputInfo
 import com.isar.imagine.utils.Utils
 import java.io.ByteArrayOutputStream
 import java.io.IOException

@@ -4,13 +4,10 @@ import WorkflowModel
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.widget.EditText
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,10 +16,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.isar.imagine.billing.BillingPanelFragment
 import com.isar.imagine.R
+import com.isar.imagine.barcode.adapters.BarcodeFieldAdapter
 import com.isar.imagine.barcode_scenning.models.BillingDataModel
-import com.isar.imagine.data.model.BarcodeField
+import com.isar.imagine.barcode.data.BarcodeField
 import com.isar.imagine.utils.CommonMethods
-import com.isar.imagine.utils.CustomDialog
 
 /** Displays the bottom sheet to present barcode fields contained in the detected barcode.  */
 class BarcodeResultFragment : BottomSheetDialogFragment() {

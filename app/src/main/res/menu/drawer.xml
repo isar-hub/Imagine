@@ -31,6 +31,18 @@
     </group>
 
     <group
+        android:id="@+id/drawer_product"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/allProducts"
+            android:icon="@drawable/baseline_mobile_friendly_24"
+            android:iconTint="@color/white"
+            android:title="All Products"
+            />
+
+    </group>
+
+    <group
         android:id="@+id/drawer_menu_bottom"
         android:checkableBehavior="single">
         <item

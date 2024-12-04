@@ -11,6 +11,8 @@ import android.view.SurfaceHolder
 import android.view.WindowManager
 import com.google.android.gms.common.images.Size
 import com.isar.imagine.R
+import com.isar.imagine.barcode.utils.FrameMetadata
+import com.isar.imagine.barcode.utils.FrameProcessor
 import com.isar.imagine.utils.Utils
 
 import java.io.IOException

@@ -59,11 +59,45 @@ class Data{
 
     val brands = listOf(
         Brand(
+            name = "Samsung",
+            models = listOf(
+                Model(
+                    name = "Galaxy S10",
+                    imageUrl = "https://www.canva.com/design/DAGYOpTrocU/V_Msx1pEHiKLNm5M0_6NkA/view",
+                    variants = listOf(
+                        Variant(variant = "3GB-64GB-Black"),
+                        Variant(variant = "3GB-128GB-Black"),
+                        Variant(variant = "3GB-256GB-Black"),
+                    )
+                ),
+                Model(
+                    name = "Galaxy S10+",
+                    imageUrl = "https://www.canva.com/design/DAGYOpwclCY/3723R2q2fEXOdgM3K7F2Tw/view",
+                    variants = listOf(
+                        Variant(variant = "3GB-64GB-Black"),
+                        Variant(variant = "3GB-128GB-Black"),
+                        Variant(variant = "3GB-256GB-Black"),
+                    )
+                ),
+                Model(
+                    name = "Galaxy S21",
+                    imageUrl = "https://www.canva.com/design/DAGYOrGs1yo/KjUBnx7LzN2Amt_H-nTZ_Q/view",
+                    variants = listOf(
+                        Variant(variant = "3GB-64GB-Black"),
+                        Variant(variant = "3GB-128GB-Black"),
+                        Variant(variant = "3GB-256GB-Black"),
+                    )
+                )
+
+            )
+        ),
+        Brand(
+
             name = "Apple",
             models = listOf(
                 Model(
                     name = "iPhone 6",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-qp4ba4sq-aeny.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYOoO2ac0/_oL6wk4a5rxF0uwnz48a0g/view",
                     variants = listOf(
                         Variant(variant = "1GB-16GB-Space Grey"),
                         Variant(variant = "1GB-32GB-Space Grey"),
@@ -83,7 +117,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 6 Plus",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-yicxxl1r-d1ta.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYOj6DeKw/E_4D2TQZVKU57iDI8EFcug/view",
                     variants = listOf(
                         Variant(variant = "1GB-16GB-Space Grey"),
                         Variant(variant = "1GB-64GB-Space Grey"),
@@ -100,7 +134,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 6S",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-oh9xlwt8-yunr.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYOvviT6k/SDazI81w2jee8WijTSIxSA/view",
                     variants = listOf(
                         Variant(variant = "2GB-16GB-Space Grey"),
                         Variant(variant = "2GB-32GB-Space Grey"),
@@ -125,7 +159,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 6S Plus",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-73kjnouo-hzvn.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYOqktm84/74hHOAd3v2WKCnXG8guiYQ/view",
                     variants = listOf(
                         Variant(variant = "2GB-16GB-Space Grey"),
                         Variant(variant = "2GB-32GB-Space Grey"),
@@ -150,7 +184,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone SE 1st Generation",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-b3sceh1m-qzme.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYOs3MuJs/rX0cLV0nN1XEC9YGFw87xg/view",
                     variants = listOf(
                         Variant(variant = "2GB-16GB-Space Grey"),
                         Variant(variant = "2GB-32GB-Space Grey"),
@@ -175,7 +209,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 7",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-jwihkccb-gqpj.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYOrsU6w4/qakZeLhvZEiKJvEM2on1ow/view",
                     variants = listOf(
                         Variant(variant = "2GB-32GB-Jet Black"),
                         Variant(variant = "2GB-128GB-Jet Black"),
@@ -204,7 +238,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 7 Plus",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-ujdaoxqa-5pv1.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYOpI2F2U/aC7kIB6s3G0xqbFgGPRUMA/view",
                     variants = listOf(
                         Variant(variant = "3GB-32GB-Jet Black"),
                         Variant(variant = "3GB-128GB-Jet Black"),
@@ -233,7 +267,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 8",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-wwiz6qsn-dquh.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYO6jjH7w/Sk-u68sKZUppj-1TKz38mg/view",
                     variants = listOf(
                         Variant(variant = "2GB-64GB-Silver"),
                         Variant(variant = "2GB-128GB-Silver"),
@@ -254,7 +288,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 8 Plus",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-bw5nptgc-a6e3.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYO4x4kY8/ZLGeLeWEuwtGNFi-oBUscQ/view",
                     variants = listOf(
                         Variant(variant = "3GB-256GB-Silver"),
                         Variant(variant = "3GB-128GB-Silver"),
@@ -275,7 +309,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone X",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-rbtsgpq4-fzgq.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYO0knLok/8vScaNwNZFobYKaKrmXEQA/view",
                     variants = listOf(
                         Variant(variant = "3GB-64GB-Silver"),
                         Variant(variant = "3GB-256GB-Silver"),
@@ -286,7 +320,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone XR",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-c3k2c29y-gvfh.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYO9MoqTQ/0je0kh-yJzi_eTau3kQlfQ/view",
                     variants = listOf(
                         Variant(variant = "3GB-64GB-Black"),
                         Variant(variant = "3GB-128GB-Black"),
@@ -315,7 +349,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone XS",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-y1wozpeh-wvgg.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYO7UVRuA/Us6gfa39fn3W5Tw3HejjMA/view",
                     variants = listOf(
                         Variant(variant = "4GB-64GB-Silver"),
                         Variant(variant = "4GB-256GB-Silver"),
@@ -328,11 +362,11 @@ class Data{
                         Variant(variant = "4GB-64GB-Space Grey"),
                         Variant(variant = "4GB-256GB-Space Grey"),
                         Variant(variant = "4GB-512GB-Space Grey"),
-                        )
+                    )
                 ),
                 Model(
                     name = "iPhone XS Max",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-c6ih9q0d-gyrf.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYO5nYu5E/maKdoJN7C8sLUy2Z3rVRrg/view",
                     variants = listOf(
                         Variant(variant = "4GB-64GB-Silver"),
                         Variant(variant = "4GB-256GB-Silver"),
@@ -349,7 +383,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 11",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-d1aqg8xw-hm4n.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPNJW3sM/jVe4ZFg5T5GwXZqr8Q78EQ/view",
                     variants = listOf(
                         Variant(variant = "4GB-64GB-Black"),
                         Variant(variant = "4GB-128GB-Black"),
@@ -378,7 +412,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 11 Pro",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-gw04hbhk-uxfr.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPEDY8b4/MEne_ReG4yUnScJaaTfGog/view",
                     variants = listOf(
                         Variant(variant = "4GB-64GB-Silver"),
                         Variant(variant = "4GB-256GB-Silver"),
@@ -399,7 +433,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 11 Pro Max",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-28w4wypo-vwqi.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPOCAd18/I-zikdLoG_77gIOeCfvFpg/view",
                     variants = listOf(
                         Variant(variant = "4GB-64GB-Silver"),
                         Variant(variant = "4GB-256GB-Silver"),
@@ -420,7 +454,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone SE 2nd Generation",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-29z2mb50-2bwu.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPLGVXNE/xnYR2HQub-4nbZSeOnAPQw/view",
                     variants = listOf(
                         Variant(variant = "3GB-64GB-Black"),
                         Variant(variant = "3GB-128GB-Black"),
@@ -437,7 +471,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 12",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-g0iq6da5-w5sp.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPIuYxAY/mMKvKcrkZzaWe12bomYScg/view",
                     variants = listOf(
                         Variant(variant = "4GB-64GB-Black"),
                         Variant(variant = "4GB-128GB-Black"),
@@ -463,11 +497,11 @@ class Data{
                         Variant(variant = "4GB-128GB-Purple"),
                         Variant(variant = "4GB-256GB-Purple"),
 
-                    )
+                        )
                 ),
                 Model(
                     name = "iPhone 12 Mini",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-g0iq6da5-w5sp.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPBBxK4E/3_JulD0r9u9eyuG_VfcwwQ/view",
                     variants = listOf(
                         Variant(variant = "4GB-64GB-Black"),
                         Variant(variant = "4GB-128GB-Black"),
@@ -496,7 +530,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 12 Pro",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-tzblmj5y-kbs1.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPA7WRnE/BkRD3hzbnVtuYx7nt4ffaA/view",
                     variants = listOf(
                         Variant(variant = "6GB-128GB-Silver"),
                         Variant(variant = "6GB-256GB-Silver"),
@@ -517,7 +551,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 12 Pro Max",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-5r41ayfq-mh4r.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPGjyVAA/ZulydPal4IaINfg2R58Jbg/view",
                     variants = listOf(
                         Variant(variant = "6GB-128GB-Silver"),
                         Variant(variant = "6GB-256GB-Silver"),
@@ -538,7 +572,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 13 Mini",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/e6d78dcb-e5c9.jpg?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPGlaJWc/FtZPgZs1ZPDyKFS1C30lgA/view",
                     variants = listOf(
                         Variant(variant = "4GB-128GB-Starlight"),
                         Variant(variant = "4GB-256GB-Starlight"),
@@ -566,7 +600,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 13",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-0mttz8sn-2c8e.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPGPm8w8/2kLDbzn8hO0o23kCt5-RTQ/view",
                     variants = listOf(
                         Variant(variant = "4GB-128GB-Starlight"),
                         Variant(variant = "4GB-256GB-Starlight"),
@@ -595,7 +629,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 13 Pro",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-3kglv4j8-f60m.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPEpwPpk/5nEP2LvHFL1QV-Di4I6b-A/view",
                     variants = listOf(
                         Variant(variant = "6GB-128GB-Graphite"),
                         Variant(variant = "6GB-256GB-Graphite"),
@@ -626,7 +660,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 13 Pro Max",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-4i0t8fto-04ar.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPJwRIHk/mrTidK45oS3k1DT9DjDKMA/view",
                     variants = listOf(
                         Variant(variant = "6GB-128GB-Graphite"),
                         Variant(variant = "6GB-256GB-Graphite"),
@@ -657,7 +691,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 14",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-3c4h9xyu-c8pe.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPMRoCQI/hAfkVfb3Pk2KrhAVZzMPdw/view",
                     variants = listOf(
                         Variant(variant = "6GB-128GB-Midnight"),
                         Variant(variant = "6GB-256GB-Midnight"),
@@ -680,7 +714,7 @@ class Data{
                         Variant(variant = "6GB-512GB-Blue"),
                         Variant(variant = "6GB-1TB-Blue"),
 
-                                Variant(variant = "6GB-128GB-Red"),
+                        Variant(variant = "6GB-128GB-Red"),
                         Variant(variant = "6GB-256GB-Red"),
                         Variant(variant = "6GB-512GB-Red"),
                         Variant(variant = "6GB-1TB-Red"),
@@ -693,7 +727,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 14 Pro",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-75qdy9md-gg3d.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPJxRyhQ/d0M_yA9Q6PqJaD5OJA6MFg/view",
                     variants = listOf(
                         Variant(variant = "6GB-128GB-Silver"),
                         Variant(variant = "6GB-256GB-Silver"),
@@ -719,7 +753,7 @@ class Data{
                 ),
                 Model(
                     name = "iPhone 14 Pro Max",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/csh-xw1bqtaw-5cl3.png?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPZy0WYo/_pR589u5q85ul2PMEmhKCA/view",
                     variants = listOf(
                         Variant(variant = "6GB-128GB-Silver"),
                         Variant(variant = "6GB-256GB-Silver"),
@@ -745,7 +779,7 @@ class Data{
                 ),
                 Model(
                     name = "Apple iPhone 14 Plus",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/5fc412f4-2fb5.jpg?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPZy0WYo/_pR589u5q85ul2PMEmhKCA/view",
                     variants = listOf(
                         Variant(variant = "6GB-128GB-Midnight"),
                         Variant(variant = "6GB-256GB-Midnight"),
@@ -774,7 +808,7 @@ class Data{
                 ),
                 Model(
                     name = "Apple iPhone 15",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/e2c7dff8-23a0.jpg?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPZy0WYo/_pR589u5q85ul2PMEmhKCA/view",
                     variants = listOf(
                         Variant(variant = "6GB-128GB-Black"),
                         Variant(variant = "6GB-256GB-Black"),
@@ -799,7 +833,7 @@ class Data{
                 ),
                 Model(
                     name = "Apple iPhone 15 Pro",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/f43b6269-c954.jpg?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPZy0WYo/_pR589u5q85ul2PMEmhKCA/view",
                     variants = listOf(
                         Variant(variant = "8GB-128GB-Black Titanium"),
                         Variant(variant = "8GB-256GB-Black Titanium"),
@@ -824,7 +858,7 @@ class Data{
                 ),
                 Model(
                     name = "Apple iPhone 15 Pro Max",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/e14bb4d9-988f.jpg?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPZy0WYo/_pR589u5q85ul2PMEmhKCA/view",
                     variants = listOf(
                         Variant(variant = "8GB-256GB-Black Titanium"),
                         Variant(variant = "8GB-512GB-Black Titanium"),
@@ -845,7 +879,7 @@ class Data{
                 ),
                 Model(
                     name = "Apple iPhone 15 Plus",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/a6db4974-1a86.jpg?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPZy0WYo/_pR589u5q85ul2PMEmhKCA/view",
                     variants = listOf(
                         Variant(variant = "6GB-128GB-Black"),
                         Variant(variant = "6GB-256GB-Black"),
@@ -870,7 +904,7 @@ class Data{
                 ),
                 Model(
                     name = "Apple iPhone 16",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/db36cde6-e6e5.jpg?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPZy0WYo/_pR589u5q85ul2PMEmhKCA/view",
                     variants = listOf(
                         Variant(variant = "8GB-128GB-Black"),
                         Variant(variant = "8GB-256GB-Black"),
@@ -895,7 +929,7 @@ class Data{
                 ),
                 Model(
                     name = "Apple iPhone 16 Plus",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/5c48706b-b04d.jpg?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPZy0WYo/_pR589u5q85ul2PMEmhKCA/view",
                     variants = listOf(
                         Variant(variant = "8GB-128GB-Black"),
                         Variant(variant = "8GB-256GB-Black"),
@@ -920,7 +954,7 @@ class Data{
                 ),
                 Model(
                     name = "Apple iPhone 16 Pro",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/c6842e95-7635.jpg?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPZy0WYo/_pR589u5q85ul2PMEmhKCA/view",
                     variants = listOf(
                         Variant(variant = "8GB-128GB-Black Titanium"),
                         Variant(variant = "8GB-256GB-Black Titanium"),
@@ -945,7 +979,7 @@ class Data{
                 ),
                 Model(
                     name = "Apple iPhone 16 Pro Max",
-                    imageUrl = "https://s3no.cashify.in/cashify/product/img/xhdpi/d197ee88-ccff.jpg?p=default&s=lg",
+                    imageUrl = "https://www.canva.com/design/DAGYPZy0WYo/_pR589u5q85ul2PMEmhKCA/view",
                     variants = listOf(
                         Variant(variant = "8GB-256GB-Black Titanium"),
                         Variant(variant = "8GB-512GB-Black Titanium"),

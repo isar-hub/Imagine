@@ -9,19 +9,9 @@
     android:orientation="vertical"
     tools:context=".billing.BillingPanelFragment">
 
-    <ExpandableListView
-        android:id="@+id/listViewBilling"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:padding="10dp"
-        android:clickable="true"
-        android:layout_marginTop="16dp"
-        tools:listheader="@android:layout/simple_expandable_list_item_1"
-         />
     <ScrollView
         android:id="@+id/scrollable"
         android:layout_width="match_parent"
-        android:layout_below="@+id/listViewBilling"
         android:layout_height="match_parent">
 
         <LinearLayout
@@ -30,21 +20,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+
             android:padding="16dp">
 
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/buttonAdd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Add More"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:backgroundTint="@color/white"
-                app:cornerRadius="5dp"
-
+            <ExpandableListView
+                android:id="@+id/listViewBilling"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:padding="10dp"
+                android:clickable="true"
+                android:nestedScrollingEnabled="true"
+                android:layout_marginTop="16dp"
+                tools:listheader="@android:layout/simple_expandable_list_item_1"
                 />
+
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:id="@+id/buttonAdd"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:text="Add More"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textStyle="bold"-->
+<!--                app:backgroundTint="@color/white"-->
+<!--                app:cornerRadius="5dp"-->
+
+<!--                />-->
 
 
             <!-- Variant Spinner -->
@@ -81,8 +83,11 @@
                 android:labelFor="@+id/notes_text"
                 android:padding="6dp"
                 android:background="@drawable/barcode_field_box"
-                android:inputType="number" />
+                android:inputType="text" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp"/>
 
         </LinearLayout>
 

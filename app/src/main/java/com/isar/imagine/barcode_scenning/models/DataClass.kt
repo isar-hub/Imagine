@@ -9,8 +9,10 @@ data class BillingDataModel(
     val model: String,
     val variant: String,
     val condition: String,
-    var purchasePrice: Double,
-    var sellingPrice: Double,
+    val imei1 : String,
+    val imei2 : String,
+    var purchasePrice: String,
+    var sellingPrice: String,
     var quantity: Long,
     var notes: String,
     val serialNumber: String
@@ -21,8 +23,10 @@ data class BillingDataModel(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readDouble(),
-        parcel.readDouble(),
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
         parcel.readLong(),
         parcel.readString()!!,
         parcel.readString()!!
@@ -34,8 +38,10 @@ data class BillingDataModel(
         parcel.writeString(model)
         parcel.writeString(variant)
         parcel.writeString(condition)
-        parcel.writeDouble(purchasePrice)
-        parcel.writeDouble(sellingPrice)
+        parcel.writeString(imei1)
+        parcel.writeString(imei2)
+        parcel.writeString(purchasePrice)
+        parcel.writeString(sellingPrice)
         parcel.writeLong(quantity)
         parcel.writeString(notes)
         parcel.writeString(serialNumber)
@@ -63,10 +69,12 @@ fun mapToBillingDataModel(data: Map<String, Any?>,id : String): BillingDataModel
         model = data["model"] as? String ?: "",
         variant = data["variant"] as? String ?: "",
         condition = data["condition"] as? String ?: "",
-        purchasePrice = data["purchasePrice"] as? Double ?: 0.0,
-        sellingPrice = data["sellingPrice"] as? Double ?: 0.0,
+        purchasePrice = data["purchasePrice"] as? String ?: "0.0",
+        sellingPrice = data["sellingPrice"] as? String ?: "0.0",
         quantity = data["quantity"] as? Long ?: 0,
         notes = data["notes"] as? String ?: "",
-        serialNumber = data["serialNumber"] as? String ?: ""
+        serialNumber = data["serialNumber"] as? String ?: "",
+        imei1 = data["imei1"] as? String?: "",
+        imei2 = data["imei2"] as? String ?: ""
     )
 }

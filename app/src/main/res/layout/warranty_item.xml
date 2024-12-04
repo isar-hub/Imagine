@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="6dp"
+    app:cardCornerRadius="10dp"
+    android:elevation="1dp"
+    app:cardBackgroundColor="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp"
+            android:gravity="center"
+            android:paddingVertical="5dp"
+            >
+            <TextView
+                android:id="@+id/txtStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Processing"
+                android:textAlignment="textStart"
+                android:textColor="@color/ColorPrimary"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/viewWarranty"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="View"
+                android:textSize="14sp"
+                android:layout_gravity="end"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/black"
+                android:backgroundTint="@android:color/transparent"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            >
+
+            <TextView
+                android:id="@+id/txtReason"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="Neque porro quisquam est qui dolorem"
+                android:textAlignment="textStart"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+            <TextView
+                android:id="@+id/txtDate"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Date"
+                android:textAlignment="textStart"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="If you use this site regularly and would like to help keep the site on the Internet, please consider donating a small sum to help pay for the hosting and bandwidth bill. There is no minimum donation, any sum is appreciated - click here to donate using PayPal. Thank you for your support. Donate bitcoin: 16UQLq1HZ3CNwhvgrarV6pMoA2CDjb4tyF"
+            android:textAlignment="textStart"
+            android:maxLines="3"
+            android:minLines="3"
+            android:textColor="@color/object_detected_bg_gradient_end"
+            android:textSize="12sp" />
+
+
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

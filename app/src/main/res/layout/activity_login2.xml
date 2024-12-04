@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/red"
-    tools:context=".LoginActivity">
+    tools:context=".others.views.LoginActivity">
 
     <View
         android:layout_width="180dp"

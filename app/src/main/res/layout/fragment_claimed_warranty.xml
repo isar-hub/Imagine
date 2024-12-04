@@ -3,14 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".warranty.ClaimedWarranty">
+    android:id="@+id/fragmentContainer"
+    tools:context=".warranty.views.ClaimedWarranty">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_transaction_history"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:scrollbars="vertical"
-        tools:listitem="@layout/item_transaction"
+        tools:listitem="@layout/warranty_item"
         tools:itemCount="10"
         />
 
+    <TextView
+        android:id="@+id/emptyView"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/barcode_field_box"
+        android:textSize="26sp"
+        android:textStyle="bold"
+
+        android:visibility="gone"
+        android:text="No Warranty Claimed 🚫"
+        />
 </FrameLayout>

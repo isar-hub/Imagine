@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/red"
-    tools:context=".inventory.InventoryFragment">
+    tools:context=".inventory.view.InventoryFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -17,110 +17,116 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Brand Name Spinner -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:text="Brand Name" />
-
-            <!-- Model Spinner -->
-            <AutoCompleteTextView
-                android:id="@+id/spinner_brand_name"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/dropdown_bg"
-                android:layout_marginBottom="8dp"
-                android:padding="5dp"
-                android:hint="@string/brand" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:text="Model" />
-
-            <AutoCompleteTextView
-                android:id="@+id/spinner_model"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/model"
-                android:padding="5dp"
-                android:background="@drawable/dropdown_bg"
-                android:layout_marginBottom="8dp" />
-
-            <!-- Variant Spinner -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:text="Variant" />
-
-            <AutoCompleteTextView
-                android:id="@+id/spinner_variant"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/variant"
-                android:padding="5dp"
-                android:completionThreshold="1"
-                android:background="@drawable/dropdown_bg"
-                android:dropDownSelector="@color/white"
-                android:layout_marginBottom="8dp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
 
+                    <!-- Brand Name Spinner -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Brand Name"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
-            <!-- Condition Spinner -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:text="Condition" />
+                    <!-- Model Spinner -->
+                    <AutoCompleteTextView
+                        android:id="@+id/spinner_brand_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/dropdown_bg"
+                        android:hint="@string/brand"
+                        android:padding="5dp" />
 
-            <Spinner
-                android:id="@+id/spinner_condition"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:dropDownSelector="@color/white"
-                android:padding="5dp"
-                android:background="@drawable/dropdown_bg"
-                android:prompt="@string/condition"
-                android:layout_marginBottom="8dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Model"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <AutoCompleteTextView
+                        android:id="@+id/spinner_model"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/dropdown_bg"
+                        android:hint="@string/model"
+                        android:padding="5dp" />
+
+                    <!-- Variant Spinner -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Variant"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <AutoCompleteTextView
+                        android:id="@+id/spinner_variant"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/dropdown_bg"
+                        android:completionThreshold="1"
+                        android:dropDownSelector="@color/white"
+                        android:hint="@string/variant"
+                        android:padding="5dp" />
 
 
+                    <!-- Condition Spinner -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Condition"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
 
+                    <Spinner
+                        android:id="@+id/spinner_condition"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/dropdown_bg"
+                        android:dropDownSelector="@color/white"
+                        android:padding="5dp"
+                        android:prompt="@string/condition" />
 
-            <!-- Price EditText -->
-            <!-- Price EditText -->
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="16dp"-->
-<!--                android:textColor="@color/w"-->
-<!--                android:textStyle="bold"-->
-<!--                android:text="Purchase Price" />-->
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/productImage"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/baseline_mobile_friendly_24" />
+
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/edittext_purchase_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="8dp"
                 android:backgroundTint="@color/white"
-                android:layout_marginTop="16dp"
-                android:textSize="12sp"
-            android:textColorHint="@color/white"
+                android:drawableStart="@drawable/billing"
+                android:drawableTint="@color/white"
                 android:hint="Purchase price"
-
-                android:inputType="numberDecimal" />
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:paddingBottom="8dp"-->
-<!--                android:text="Selling Price" />-->
+                android:inputType="numberDecimal"
+                android:textColorHint="@color/white"
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/edittext_price"
@@ -128,18 +134,52 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:backgroundTint="@color/white"
-                android:textSize="12sp"
-                android:textColorHint="@color/white"
+                android:drawableStart="@drawable/billing"
+                android:drawableTint="@color/white"
                 android:hint=" Selling price"
-                android:inputType="number" />
+                android:inputType="number"
+                android:textColorHint="@color/white"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/imei_one"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/white"
+                android:drawableStart="@drawable/outline_notes_24"
+                android:drawableTint="@color/white"
+                android:hint="IMEI 1"
+                android:inputType="numberDecimal"
+                android:textColorHint="@color/white"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/imei_two"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/white"
+                android:drawableStart="@drawable/outline_notes_24"
+                android:drawableTint="@color/white"
+                android:hint="IMEI 2"
+                android:inputType="numberDecimal"
+                android:textColorHint="@color/white"
+                android:textSize="14sp" />
+
+            <!--            <TextView-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:paddingBottom="8dp"-->
+            <!--                android:text="Selling Price" />-->
 
 
-<!--            &lt;!&ndash; Quantity EditText &ndash;&gt;-->
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:paddingBottom="8dp"-->
-<!--                android:text="Quantity" />-->
+            <!--            &lt;!&ndash; Quantity EditText &ndash;&gt;-->
+            <!--            <TextView-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:paddingBottom="8dp"-->
+            <!--                android:text="Quantity" />-->
 
             <EditText
                 android:id="@+id/edittext_quantity"
@@ -147,16 +187,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:backgroundTint="@color/white"
-                android:textSize="12sp"
-                android:textColorHint="@color/white"
+                android:drawableStart="@drawable/rounded_production_quantity_limits_24"
+                android:drawableTint="@color/white"
                 android:hint="  quantity"
-                android:inputType="number" />
-<!--            &lt;!&ndash; Description EditText &ndash;&gt;-->
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:paddingBottom="8dp"-->
-<!--                android:text="Notes" />-->
+                android:inputType="number"
+                android:textColorHint="@color/white"
+                android:textSize="14sp" />
+            <!--            &lt;!&ndash; Description EditText &ndash;&gt;-->
+            <!--            <TextView-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:paddingBottom="8dp"-->
+            <!--                android:text="Notes" />-->
 
             <EditText
                 android:id="@+id/notes"
@@ -164,10 +206,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:backgroundTint="@color/white"
-                android:textSize="12sp"
+                android:drawableStart="@drawable/outline_text_snippet_24"
+                android:drawableTint="@color/white"
+                android:hint="Additional Notes"
                 android:textColorHint="@color/white"
-                android:hint="Additional Notes" />
-
+                android:textSize="14sp" />
 
 
             <!-- Add Button -->
@@ -175,14 +218,12 @@
                 android:id="@+id/buttonAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:text="Add"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 app:backgroundTint="@color/white"
-                app:cornerRadius="5dp"
-                android:layout_centerInParent="true"
-                />
-
+                app:cornerRadius="5dp" />
 
 
             <TextView
@@ -190,7 +231,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Total :" />
+                android:background="@drawable/barcode_field_box"
+                android:paddingHorizontal="5dp"
+                android:text="Total :"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
 
             <ExpandableListView
@@ -200,7 +246,24 @@
                 android:layout_marginTop="16dp"
                 android:dividerHeight="1dp"
                 android:nestedScrollingEnabled="true"
+                android:visibility="gone"
                 tools:listheader="@layout/expandable_list_header" />
+
+            <TextView
+                android:id="@+id/emptyView"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/barcode_field_box"
+                android:gravity="center"
+                android:text="Add Item to See🚫"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
 
 
         </LinearLayout>
@@ -211,30 +274,29 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/black"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
-        >
+        android:background="@color/black">
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/submit"
             android:layout_width="140dp"
             android:layout_height="40dp"
+            android:layout_centerInParent="true"
             android:text="Save"
             android:textColor="@color/black"
             android:textStyle="bold"
             app:backgroundTint="@color/white"
-            app:cornerRadius="5dp"
-            android:layout_centerInParent="true"
-            />
+            app:cornerRadius="5dp" />
 
 
     </RelativeLayout>
+
     <ProgressBar
         android:id="@+id/loader"
         android:layout_width="wrap_content"
-        android:visibility="gone"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        />
+        android:visibility="gone" />
 
 </RelativeLayout>

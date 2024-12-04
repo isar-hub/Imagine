@@ -14,10 +14,9 @@
     <string name="hint_clear">Clear</string>
     <string name="hint_save">Save</string>
     <string name="condition">Please Select Condition</string>
-    <string name="brand">Please Select Brand Name</string>
-    <string name="model">Please Select Model Name</string>
-    <string name="variant">Please Select Variation</string>
-    <string name="color">Please Select Color</string>
+    <string name="brand">Brand</string>
+    <string name="model">Model</string>
+    <string name="variant">Variation</string>
 
     <string-array name="programming_languages">
         <item>vivo</item>
@@ -162,5 +161,8 @@
     <string name="pref_title_delay_loading_barcode_result">Delay loading barcode result</string>
     <string name="pref_summary_delay_loading_barcode_result">Will show the loading spinner for 2s</string>
     <string name="company_info">RED CAT HOSPITALITY PRIVATE LIMITED\nRegd Office- T-05/0603 Emaar Gardens, Sector 83\nGurgaon- 122004\nCorporate Office- Astra Tower,ASO-715,Action\nArea IIC, Akhankha, New Town,Kolkata-700161\nHaryana - 122004, India\nGSTIN/UIN: 06AAKCR9587Q1Z4\nState Name : Haryana, Code : 06\nCIN: U51909HR2021PTC094649\nE-Mail : care@redcathospitality.com</string>
+    <string name="dialog_permission_title">Permission required</string>
+    <string name="dialog_permission_default_message">Default message</string>
+    <string name="dialog_permission_button_positive">OK</string>
 
 </resources>

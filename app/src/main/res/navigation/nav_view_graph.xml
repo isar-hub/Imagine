@@ -7,16 +7,16 @@
 
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="dashboard.DashboardFragment"
+        android:name="com.isar.imagine.dashboard.DashboardFragment"
         android:label="Dashboard"
-        tools:layout="@layout/fragment_dashboard"/>
+        tools:layout="@layout/fragment_dashboard2"/>
 
     <fragment
         android:id="@+id/inventoryFragment"
-        android:name="com.isar.imagine.inventory.InventoryFragment"
+        android:name="com.isar.imagine.inventory.view.InventoryFragment"
         android:label="Inventory"
 
-        tools:layout="@layout/fragment_inventory">
+        tools:layout="@layout/fragment_inventory2">
 
     </fragment>
 
@@ -24,17 +24,25 @@
 
     <fragment
         android:id="@+id/transactionsFragment"
-        android:name="com.isar.imagine.transactions.TransactionsFragment"
+        android:name="com.isar.imagine.transactions.views.TransactionsFragment"
         android:label="transactions"
         tools:layout="@layout/fragment_transactions"/>
     <fragment
         android:id="@+id/warrantyFragment"
-        android:name="com.isar.imagine.warranty.WarrantyFragment"
+        android:name="com.isar.imagine.warranty.views.WarrantyFragment"
         android:label="Warranty"
         tools:layout="@layout/fragment_warranty"/>
+
+    <fragment
+        android:id="@+id/productViewFragment"
+        android:name="com.isar.imagine.warranty.views.ProductView"
+        android:label="Claim Warranty"
+        tools:layout="@layout/fragment_product_view"
+
+        />
     <fragment
         android:id="@+id/retailerFragment"
-        android:name="com.isar.imagine.Fragments.RetailerFragment"
+        android:name="com.isar.imagine.retailers.views.RetailerFragment"
         android:label="Retailers"
         tools:layout="@layout/fragment_retailer">
         <action
@@ -43,13 +51,27 @@
     </fragment>
     <fragment
         android:id="@+id/customerFragment"
-        android:name="com.isar.imagine.Fragments.CustomerFragment"
+        android:name="com.isar.imagine.others.views.CustomerFragment"
         android:label="Customers"
         tools:layout="@layout/fragment_customer"/>
     <fragment
         android:id="@+id/userDetailsActivity"
-        android:name="com.isar.imagine.UserDetailsActivity"
+        android:name="com.isar.imagine.retailers.views.UserDetailsActivity"
         android:label="Create Retailers"
         tools:layout="@layout/activity_user_details" />
+    <fragment
+        android:id="@+id/allProductFragment"
+        android:name="com.isar.imagine.all_products.view.AllProductFragment"
+        android:label="fragment_all_product"
+        tools:layout="@layout/fragment_all_product" >
+        <action
+            android:id="@+id/action_allProductFragment_to_singleProductView"
+            app:destination="@id/singleProductView" />
+    </fragment>
+    <fragment
+        android:id="@+id/singleProductView"
+        android:name="com.isar.imagine.SingleProductView"
+        android:label="fragment_single_product_view"
+        tools:layout="@layout/fragment_single_product_view" />
 
 </navigation>

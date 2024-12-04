@@ -74,6 +74,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     kapt(libs.androidx.room.compiler)
     implementation (libs.pdf.invoice.generator)
+    implementation (libs.circleimageview)
     implementation(libs.androidx.room.ktx.v252)
     //dexter
     implementation(libs.dexter)
@@ -93,6 +94,8 @@ dependencies {
     //pdf generator library
     implementation(libs.pdf.invoice.generator)
     implementation (libs.kernel.android)
+    implementation (libs.glide)
+
     implementation (libs.layout.android)
     implementation(libs.pdf.viewer)
 // Barcode scanning API

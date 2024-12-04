@@ -35,9 +35,7 @@ import java.util.Locale
 object Invoice {
 
     fun Context.createPdf(
-        userInformation: UserInformation,
-        productList: List<ProductInformation>,
-        quantity: Int
+        userInformation: UserInformation, productList: List<ProductInformation>, quantity: Int
     ): String {
 
 
@@ -47,7 +45,10 @@ object Invoice {
         if (!directory.exists()) {
             directory.mkdirs()
         }
-        val file = File(directory, "bill.pdf")
+        val file = File(directory, "bill${userInformation.transactionNumber}.pdf")
+        if (!file.exists()) {
+            directory.mkdirs()
+        }
         val outPutStream = FileOutputStream(file)
 
 
@@ -113,7 +114,7 @@ object Invoice {
         table1.addCell(
             Cell(2, 2).add(
                 Paragraph(
-                    "Buyer (Bill to)\n" + "${userInformation.name}\n"+"${userInformation.address}\n" + "State Name : ${userInformation.stateName}, Code : ${userInformation.code}\n" + "Place of Supply :${userInformation.placeOfSupply}\n"
+                    "Buyer (Bill to)\n" + "${userInformation.name}\n" + "${userInformation.address}\n" + "State Name : ${userInformation.stateName}, Code : ${userInformation.code}\n" + "Place of Supply :${userInformation.placeOfSupply}\n"
                 ).setFontSize(10f)
             )
         )
@@ -142,20 +143,25 @@ object Invoice {
 
         val totalQuantity = productList.sumOf { it.quantity }
 
-        val totalPrice = productList.sumOf {( it.total * it.quantity * (1 - it.discount / 100.0) ) + (calculatePercentage(it.total*it.quantity,it.gst_rate)) }
+        val totalPrice = productList.sumOf {
+            (it.total * it.quantity * (1 - it.discount / 100.0)) + (calculatePercentage(
+                it.total * it.quantity,
+                it.gst_rate
+            ))
+        }
 
         val totalWithoutGst = productList.sumOf { it.total * it.quantity }
         for (i in 1..quantity) {
             val productInformation = productList[i - 1]
             table2.addCell(Cell().add(Paragraph("$i")))
-            table2.addCell(Cell().add(barCode(productInformation.serialNumber)))
+            table2.addCell(Cell().add(Paragraph(productInformation.serialNumber).setBold()))
             table2.addCell(Cell().add(Paragraph(productInformation.description)))
             table2.addCell(Cell().add(Paragraph("85238020")))
             table2.addCell(Cell().add(Paragraph("${productInformation.gst_rate} %")))
             table2.addCell(Cell().add(Paragraph("${productInformation.quantity} PCS")))
             table2.addCell(Cell().add(Paragraph("${productInformation.rate}")))
             table2.addCell(Cell().add(Paragraph("${productInformation.discount} %")))
-            table2.addCell(Cell().add(Paragraph("${productInformation.total*productInformation.quantity}").setBold()))
+            table2.addCell(Cell().add(Paragraph("${productInformation.total * productInformation.quantity}").setBold()))
 
             table2.addCell(Cell().add(Paragraph()))
             table2.addCell(Cell().add(Paragraph()))
@@ -165,12 +171,18 @@ object Invoice {
             table2.addCell(Cell().add(Paragraph()))
             table2.addCell(Cell().add(Paragraph()))
             table2.addCell(Cell().add(Paragraph()))
-            table2.addCell(Cell().add(Paragraph("${
-                calculatePercentage(
-                    productInformation.total*productInformation.quantity,
-                    productInformation.gst_rate
+            table2.addCell(
+                Cell().add(
+                    Paragraph(
+                        "${
+                            calculatePercentage(
+                                productInformation.total * productInformation.quantity,
+                                productInformation.gst_rate
+                            )
+                        }"
+                    ).setBold()
                 )
-            }").setBold()))
+            )
         }
 
 
@@ -186,11 +198,10 @@ object Invoice {
         table2.addCell(Cell().add(Paragraph("₹ $totalPrice").setBold()))
 
 
-        val priceInWords = totalPrice.toWords("en","US")
+        val priceInWords = totalPrice.toWords("en", "US")
         table2.addCell(
             Cell(
-                1,
-                9
+                1, 9
             ).add(Paragraph("Amount Chargeable (in words) : $priceInWords").setFontSize(10f))
         )
 
@@ -216,8 +227,7 @@ object Invoice {
                 Paragraph(
                     "${
                         calculatePercentage(
-                            totalWithoutGst,
-                            productList[0].gst_rate
+                            totalWithoutGst, productList[0].gst_rate
                         )
                     }"
                 )
@@ -228,8 +238,7 @@ object Invoice {
                 Paragraph(
                     "${
                         calculatePercentage(
-                            totalWithoutGst,
-                            productList[0].gst_rate
+                            totalWithoutGst, productList[0].gst_rate
                         )
                     }"
                 )
@@ -244,8 +253,7 @@ object Invoice {
                 Paragraph(
                     "${
                         calculatePercentage(
-                            totalWithoutGst,
-                            productList[0].gst_rate
+                            totalWithoutGst, productList[0].gst_rate
                         )
                     }"
                 )
@@ -256,8 +264,7 @@ object Invoice {
                 Paragraph(
                     "${
                         calculatePercentage(
-                            totalWithoutGst,
-                            productList[0].gst_rate
+                            totalWithoutGst, productList[0].gst_rate
                         )
                     }"
                 )
@@ -272,13 +279,11 @@ object Invoice {
                 Paragraph(
                     "Tax Amount (in words) : ${
                         calculatePercentage(
-                            totalWithoutGst,
-                            productList[0].gst_rate
-                        ).toWords("en","US")
+                            totalWithoutGst, productList[0].gst_rate
+                        ).toWords("en", "US")
                     }"
                 )
-            )
-                .setBorder(Border.NO_BORDER)
+            ).setBorder(Border.NO_BORDER)
         )
 
 
@@ -301,8 +306,20 @@ object Invoice {
         table5.setBorder(topBorder)
         table5.setFontSize(10f)
 
-        table5.addCell(Cell().add(Paragraph("\n \n \n Customer’s Seal and Signature").setTextAlignment(TextAlignment.CENTER)))
-        table5.addCell(Cell().add(Paragraph("\n \n \n  Authorised Signatory").setTextAlignment(TextAlignment.CENTER)))
+        table5.addCell(
+            Cell().add(
+                Paragraph("\n \n \n Customer’s Seal and Signature").setTextAlignment(
+                    TextAlignment.CENTER
+                )
+            )
+        )
+        table5.addCell(
+            Cell().add(
+                Paragraph("\n \n \n  Authorised Signatory").setTextAlignment(
+                    TextAlignment.CENTER
+                )
+            )
+        )
 
 
         val table6 = Table(floatArrayOf(560f))
@@ -339,18 +356,18 @@ object Invoice {
 
     }
 
-    fun Double.toWords(language: String, country: String): String {
+    private fun Double.toWords(language: String, country: String): String {
         val formatter = MessageFormat(
-            "{0,spellout,currency}",
-            Locale(language, country)
+            "{0,spellout,currency}", Locale(language, country)
         )
         return formatter.format(arrayOf(this))
     }
-    fun calculatePercentage(totalAmount: Double, percentage: Double): Double {
+
+    private fun calculatePercentage(totalAmount: Double, percentage: Double): Double {
         return (totalAmount * percentage) / 100
     }
 
-    fun Context.drawableToImage(drawable: Int): Image {
+    private fun Context.drawableToImage(drawable: Int): Image {
         val drawable = ResourcesCompat.getDrawable(resources, drawable, theme)
         val bitmap = (drawable as BitmapDrawable).bitmap
         val stream = ByteArrayOutputStream()
@@ -358,38 +375,6 @@ object Invoice {
         val imageData: ImageData = ImageDataFactory.create(stream.toByteArray())
         return Image(imageData).scaleToFit(100f, 120f).setBorder(Border.NO_BORDER)
     }
-
-
-    fun barCode(serialNumber: String): Image? {
-        val multiFormatWriter = MultiFormatWriter()
-        return try {
-            val bitMatrix: BitMatrix = multiFormatWriter.encode(serialNumber, BarcodeFormat.CODE_128, 100, 50)
-            val bitmap = Bitmap.createBitmap(100, 50, Bitmap.Config.RGB_565)
-
-            // Loop through the bitMatrix to set pixel values
-            for (i in 0 until 100) {
-                for (j in 0 until 50) {
-                    val color = if (bitMatrix[i, j]) Color.BLACK else Color.WHITE
-                    bitmap.setPixel(i, j, color)
-                }
-            }
-
-            // Convert the Bitmap to PNG format
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-            val byteArray = byteArrayOutputStream.toByteArray()
-
-            // Convert byte array to iText Image (using ImageDataFactory for iText 7)
-            val imageData = ImageDataFactory.create(byteArray)
-            Image(imageData)
-
-        } catch (e: Exception) {
-            // Handle any exceptions
-            e.printStackTrace()
-            null
-        }
-    }
-
 
 
     data class UserInformation(
